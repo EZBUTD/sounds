@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>About &amp; Sources — Spoken Sounds Across the World</title>
-<link rel="stylesheet" href="shared.css?v=d949b745">
+<link rel="stylesheet" href="shared.css?v=c0395948">
 <style>
   .srctable { width: 100%; border-collapse: collapse; font-size: .84rem;
     margin: .9rem 0; }
@@ -53,7 +53,7 @@
     <strong>food</strong> and <strong>hood</strong> can both be said as フード
     <em>fūdo</em> in Japanese. I wanted to know whether this was a coincidence or something
     systematic that can happen across languages (more info on the
-    <a href="allophones.html">Allophones</a> page).</p>
+    <a href="allophones.html">Sound Variants</a> page).</p>
   </div>
 </div>
 
@@ -91,12 +91,12 @@
     </tr>
     <tr>
       <td><a href="https://commons.wikimedia.org">Wikimedia Commons</a></td>
-      <td class="what">Audio for all 117 chart symbols. 109 are isolated-phoneme
+      <td class="what">Audio for all 117 chart symbols. 109 are isolated reference-phone
       recordings; the 8 English diphthongs are word examples, since Commons has no
       systematic isolated recordings for those. Plus 3 whole-word recordings
       (<em>top</em>, <em>stop</em>, <em>butter</em>) by a single speaker,
       <a href="https://commons.wikimedia.org/wiki/User:Dvortygirl">Dvortygirl</a>,
-      used on the Allophones page to demonstrate one phoneme with three
+      used on the Sound Variants page to demonstrate one phoneme with three
       allophones — two of those allophones exist only inside a word. The same
       <em>top</em> and <em>stop</em> recordings are analysed on the Seeing Sounds
       page.</td>
@@ -196,20 +196,23 @@
   “typical” analysis rather than the most maximal one. English is pinned to the
   Received Pronunciation inventory so its count matches the familiar 44.</li>
 
-  <li><strong>Match sounds at the base-symbol level.</strong> Sources differ on
-  whether to write <code>p</code> or <code>pʰ</code>, so diacritics and length
-  marks are stripped before comparing. This is why South Asian languages show
-  fewer chart cells than raw phonemes — their aspirated series merges into the
-  base cells, and the headline says so.</li>
+  <li><strong>Compare broad categories without erasing contrasts.</strong> Source
+  entries are grouped by the IPA reference square they occupy and matched
+  one-for-one. English <code>pʰ</code> can therefore match Spanish <code>p</code>
+  under broad <code>/p/</code>. If a source records both <code>p</code> and
+  <code>pʰ</code> as distinct categories, its second entry remains an additional
+  contrast rather than disappearing. Entries without a chart square retain their
+  source label.</li>
 
-  <li><strong>Count consistently.</strong> Allophones aren't counted as phonemes,
-  long and doubled forms are excluded from headline counts, and tones are counted
-  separately and flagged. The aim is a figure comparable to the ones textbooks
-  quote: Hindi 46, English 44.</li>
+  <li><strong>Count consistently.</strong> Allophones aren't added to the phoneme
+  inventory, long and doubled forms are collapsed, and standalone tone rows are
+  excluded and flagged. The aim is a segmental figure comparable to the ones
+  textbooks quote: Hindi 46, English 44.</li>
 
-  <li><strong>Compare every pair.</strong> All 561 pairs get a shared count and a
-  size-normalised overlap score, plus a rarity-weighted version where sharing a
-  click counts for more than sharing <span class="ipa">m</span>.</li>
+  <li><strong>Compare every pair.</strong> All 561 pairs get a shared-label count
+  and a size-normalised overlap score. The Sound Chart shows the five highest and
+  five lowest pairs to make the range tangible without turning it into a claim
+  about identical pronunciation.</li>
 
   <li><strong>Check the claims against the data.</strong> Six test suites run the
   real page code and assert the figures quoted in the prose, so a finding that
@@ -225,6 +228,12 @@
     reflects one analysis among several. PHOIBLE
     <a href="https://phoible.org/faq">documents why its sources differ</a>; the
     numbers here will not match every textbook.</li>
+  <li><strong>A broad category match is not phonetic identity.</strong> Two
+    languages can organize or pronounce the same reference category differently.
+    The one-to-one grouping also cannot determine that two language-specific
+    phonemes are functionally identical; it is an approximate comparison of
+    sound-system structure, with each source's original transcription retained
+    in the tooltips.</li>
     <li><strong>2,177 languages is a sample, not a census</strong>, and
     documentation is geographically uneven. Global rarity percentages carry real
     uncertainty.</li>
@@ -251,11 +260,11 @@
 
 
 <div class="pagenav">
-  <a href="difficulty.html">&larr; Language Learners</a>
+  <a href="map.html">&larr; World Map</a>
   <span class="spacer"></span>
   <a href="index.html">Back to the Sound Chart &rarr;</a>
 </div>
 
-<script src="nav.js?v=aae3ed8a"></script>
+<script src="nav.js?v=3651bfbb"></script>
 </body>
 </html>

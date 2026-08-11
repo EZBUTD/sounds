@@ -2,9 +2,9 @@
 """
 Build prototype/data.js for the FULL-IPA-chart interactive visual.
 
-Design (v2): the official IPA chart is the universe; every language (English
-included) is a subset lighting up cells. Two selectable languages -> pair
-states computed client-side:
+Design (v3): the IPA chart supplies reference-phone cells; every language
+projects its selected phoneme inventory onto those cells. Two selectable
+languages -> pair states computed client-side:
   BOTH / L1-only / L2-only / NEITHER (+ "variant" badge when a language has
   the sound only as an allophone).
 
@@ -12,7 +12,8 @@ Data emitted:
   - consonant table layout (place x manner, voiceless/voiced pairs, impossible cells)
   - vowel trapezoid coords
   - other-symbols sections (co-articulated, affricates, clicks & implosives)
-  - per-language base-normalized phoneme/allophone sets + off-chart extras
+  - per-language source inventories, broad comparison groups, projected chart
+    cells, allophone cells, and source segments represented by each chart cell
   - audio file per symbol (from audio_manifest.csv) + articulatory names
   - English anchor words + hand-written stories
 """
@@ -53,13 +54,11 @@ LANG_INVENTORIES = {
     "Zulu": "147",
 }
 
-# NOT DONE, deliberately: importing English's allophones from PHOIBLE inventory
-# 160 into the chart. Attempted 2026-08-10 and reverted. Inv 160 documents variants
-# for 68% of its English phonemes, so the data exists, but transplanting it into
-# the chart's symbol space produced wrong sounds:
-#   - `ç` (palatal fricative) carries a COMBINING CEDILLA, so the chart's
-#     diacritic-stripping normalisation turns it into `c`, the palatal STOP —
-#     a sound English does not have.
+# English's allophones from PHOIBLE inventory 160 are deliberately not imported
+# into this chart. Inv 160 documents variants for 68% of its phonemes, but it is
+# a different inventory analysis from the RP inventory used here. Earlier code
+# also exposed a normalization bug by turning `ç` into the palatal stop `c`; exact
+# chart-symbol matching now prevents that error everywhere.
 #   - 96 of the inventory's 121 allophone entries simply restate their own
 #     phoneme, and counting those as variants added /x/, /ʍ/, /ʔ/ and /ɐ/.
 #   - `ɪi` and `ʊu` are two-segment sequences with no single chart cell.
@@ -112,7 +111,7 @@ IMPOSSIBLE = [  # shaded on the official chart
 ]
 
 OTHER_SECTIONS = [
-    ("Co-articulated", ["w", "ʍ", "ɥ", "ɕ", "ʑ", "ɺ"]),
+    ("Other symbols", ["w", "ʍ", "ɥ", "ɕ", "ʑ", "ɺ"]),
     ("Affricates", ["ts", "dz", "tʃ", "dʒ", "tɕ", "dʑ"]),
     ("Clicks & implosives", ["ʘ", "ǀ", "ǃ", "ǂ", "ǁ", "ɓ", "ɗ", "ʄ", "ɠ", "ʛ"]),
 ]
@@ -171,9 +170,9 @@ GLOSSARY = {
     "Central": "The tongue's high point is in the middle — like the lazy 'uh' of 'about'.",
     "Back": "The tongue's high point is toward the back ('oo').",
     # other sections
-    "Co-articulated": "Made at two places in the mouth at the same time — like w (lips + back of tongue).",
+    "Other symbols": "A selection from the IPA's Other Symbols panel. Some are co-articulated (w, ʍ, ɥ); ɕ and ʑ are alveolo-palatal fricatives, and ɺ is a lateral flap.",
     "Affricates": "A stop and a hiss glued together — like ch (t + sh) or j (d + zh).",
-    "Clicks & implosives": "Clicks pull air inward with the tongue (the 'tsk' sound); implosives gulp air in at the throat. Ordinary consonants in languages like Zulu.",
+    "Clicks & implosives": "Clicks use a tongue-made pressure pocket; implosives combine an oral closure with a lowering glottis. They are ordinary consonants in languages such as Zulu.",
     "Consonants": "Sounds made by obstructing airflow somewhere in the mouth. Columns = where; rows = how.",
     "Vowels": "Sounds made with an open mouth. Position on the chart = where your tongue sits.",
 }
@@ -212,7 +211,7 @@ EXAMPLES_BY_LANG = {
     "French|ʒ": "jour 'day'",
     # German
     "German|x": "Bach — the composer",
-    "German|c": "ich 'I' — the soft ch",   # this source writes [ç] under /c/
+    "German|ç": "ich 'I' — the soft ch",
     "German|ʁ": "rot 'red'",
     "German|y": "über 'over'",
     "German|ø": "schön 'beautiful'",
@@ -280,14 +279,48 @@ STORIES = {
 }
 
 
+TONE_CHARS = set("˥˦˧˨˩")
+LENGTH_MARKS = set("ːˑ")
+CLICK_SYMBOLS = "ʘǀǃǂǁ"
+
+
+def comparison_segment(seg: str) -> str:
+    """Return the segment used for inventory comparison.
+
+    Length/gemination is deliberately collapsed so inventory sizes remain close
+    to familiar textbook counts (for example Hindi 46). Every other feature
+    written by the selected source is preserved: aspiration, nasalization,
+    dentality, breathy voice, palatalization, and so on. NFC keeps precomposed
+    IPA bases such as ç intact.
+    """
+    decomposed = unicodedata.normalize("NFD", seg)
+    out = unicodedata.normalize(
+        "NFC", "".join(c for c in decomposed if c not in LENGTH_MARKS)
+    )
+    # Some inventories double the complete segment instead of writing ː.
+    if len(out) % 2 == 0 and out[:len(out) // 2] == out[len(out) // 2:]:
+        out = out[:len(out) // 2]
+    return out
+
+
 def norm(seg: str) -> str:
-    """Base-normalize a PHOIBLE segment: strip combining diacritics (Mn),
-    modifier letters (Lm: aspiration, length...) and modifier symbols
-    (Sk: rhotic hook a˞). Collapse geminates (cc -> c) left by length marks."""
-    seg = unicodedata.normalize("NFD", seg)
-    out = "".join(c for c in seg if unicodedata.category(c) not in ("Mn", "Lm", "Sk"))
-    if len(out) == 2 and out[0] == out[1]:  # geminate leftover
-        out = out[0]
+    """Project one PHOIBLE segment onto the nearest base chart symbol.
+
+    This is only for coloring the finite chart and attaching reference audio. It
+    is not used for overlap. Exact chart symbols are checked first so a base such
+    as ç never decomposes into, and gets confused with, the different symbol c.
+    """
+    seg = comparison_segment(seg)
+    if seg in chart_symbols():
+        return seg
+    decomposed = unicodedata.normalize("NFD", seg)
+    out = unicodedata.normalize(
+        "NFC",
+        "".join(c for c in decomposed
+                if unicodedata.category(c) not in ("Mn", "Lm", "Sk")),
+    )
+    if len(out) % 2 == 0 and out[:len(out) // 2] == out[len(out) // 2:]:
+        out = out[:len(out) // 2]
     return out
 
 
@@ -317,6 +350,42 @@ def chart_symbols():
     return syms
 
 
+def comparison_key(seg: str, onchart=None) -> str:
+    """Return the broad category used for cross-language matching.
+
+    Source transcriptions that project to the same IPA reference square share a
+    key. Click clusters such as Zulu kǀ use the bare click square. Entries that
+    have no square (for example diphthongs) retain their source label.
+    """
+    onchart = onchart or chart_symbols()
+    base = norm(seg)
+    if base in onchart:
+        return base
+    for click in CLICK_SYMBOLS:
+        if click in seg:
+            return click
+    return seg
+
+
+def comparison_groups(segments, onchart=None):
+    """Group source entries by broad key while retaining contrast multiplicity."""
+    onchart = onchart or chart_symbols()
+    groups = defaultdict(set)
+    for segment in segments:
+        groups[comparison_key(segment, onchart)].add(segment)
+    return {key: sorted(values) for key, values in groups.items()}
+
+
+def broad_pair_metrics(groups_a, groups_b):
+    """Match entries one-for-one inside each broad category."""
+    keys = set(groups_a) | set(groups_b)
+    shared = sum(min(len(groups_a.get(k, ())), len(groups_b.get(k, ())))
+                 for k in keys)
+    union = sum(max(len(groups_a.get(k, ())), len(groups_b.get(k, ())))
+                for k in keys)
+    return shared, (shared / union if union else 0)
+
+
 def main():
     rows_by_inv = defaultdict(list)
     with open(PHOIBLE, newline="", encoding="utf-8") as f:
@@ -330,68 +399,93 @@ def main():
         if not rows:
             print(f"!! inventory {inv_id} ({name}) not found, skipping")
             continue
-        CLICKS = "ʘǀǃǂǁ"
-        phonemes, allophones = set(), set()
+        comparison_phonemes, phonemes, allophones = set(), set(), set()
+        cell_phonemes = defaultdict(set)
+        # Chart cell -> the source phoneme rows that list that phone as an
+        # allophone. This lets the UI say "recorded variant of /x/" rather than
+        # making the unsupported language-wide claim "exists only as an
+        # allophone". PHOIBLE's coverage remains explicitly source-bound.
+        allophone_of = defaultdict(set)
         for r in rows:
-            seg = norm(r["Phoneme"])
-            phonemes.add(seg)
+            raw = r["Phoneme"]
+            if any(c in raw for c in TONE_CHARS):
+                continue
+            exact = comparison_segment(raw)
+            comparison_phonemes.add(exact)
+            seg = norm(exact)
+            if seg:
+                phonemes.add(seg)
+                if seg in onchart:
+                    cell_phonemes[seg].add(exact)
             # PHOIBLE writes clicks as clusters (Zulu kǀ, kǃ...) — credit the bare click
-            for c in CLICKS:
-                if c in seg:
+            for c in CLICK_SYMBOLS:
+                if c in exact:
                     phonemes.add(c)
+                    cell_phonemes[c].add(exact)
             if r["Allophones"] not in ("", "NA"):
                 for a in r["Allophones"].split():
-                    allophones.add(norm(a))
+                    a_cell = norm(a)
+                    if a_cell:
+                        allophones.add(a_cell)
+                        if a_cell in onchart:
+                            allophone_of[a_cell].add(exact)
         has_allo = any(r["Allophones"] not in ("", "NA") for r in rows)
 
-        # Allophone supplement, for languages whose CHARTED inventory records no
-        # variants even though PHOIBLE documents them elsewhere for that language.
-        # English is the case here: the RP inventory (2252) chosen for its familiar
-        # 44-phoneme count lists none, while the SPA inventory (160) records
-        # variants for 68% of its English phonemes. Without this the chart marked
-        # English with a "no variants recorded" asterisk, which readers reasonably
-        # took to mean English has no allophones — it does, and the Allophones page
-        # already draws on inv 160 for exactly this reason. Phonemes always come
-        # from the charted inventory; only the variant set is supplemented, and the
-        # mixed source is disclosed in the method notes.
+        # A phone already represented by a phoneme row is not marked V even if it
+        # also appears in an Allophones cell. Do not supplement from a different
+        # inventory: the UI wording deliberately reports only what this selected
+        # source records, because allophone coverage varies sharply across sources.
         allophones -= phonemes
+        allophone_of = {
+            s: sorted(parents) for s, parents in allophone_of.items()
+            if s in allophones
+        }
         # ---- headline accounting (see SCOPING.md "counting policy") ----
         # PHOIBLE sources differ in whether they list long/geminate consonants
         # (bː kʰː) as separate phonemes. Textbook counts ("Hindi has ~46
         # phonemes") do NOT count length twice. For cross-language consistency
         # the headline uses the LENGTH-COLLAPSED count; the raw source count is
         # reported alongside. Allophones are NEVER included in any count.
-        TONE_CHARS = set("˥˦˧˨˩")
         raw_segs = [r["Phoneme"] for r in rows]
         n_tones = sum(1 for s in raw_segs if any(c in TONE_CHARS for c in s))
         nontone = [s for s in raw_segs if not any(c in TONE_CHARS for c in s)]
 
-        def strip_length(s):
-            s2 = unicodedata.normalize("NFD", s)
-            out = "".join(c for c in s2 if c not in "ːˑ")
-            return out[0] if len(out) == 2 and out[0] == out[1] else out
-
-        length_collapsed = {strip_length(s) for s in nontone}
+        length_collapsed = {comparison_segment(s) for s in nontone}
         n_length_variants = len(nontone) - len(length_collapsed)
         # distinctions beyond length that the base cells still merge
         # (aspiration, breathy voice, palatalization...)
         base_set = {norm(s) for s in nontone}
         n_merged = len(length_collapsed) - len(base_set)
-        extras = sorted(s for s in phonemes if s not in onchart and s and not s.startswith("˥")
-                        and not all(unicodedata.category(c) == "Sk" or c in "˥˦˧˨˩" for c in s))
-        tones = any(c in "˥˦˧˨˩" for s in phonemes for c in s)
+        extras = sorted(s for s in comparison_phonemes
+                        if norm(s) not in onchart and s)
+        modified = sorted(s for s in comparison_phonemes
+                          if norm(s) in onchart and s != norm(s))
+        broad_groups = comparison_groups(comparison_phonemes, onchart)
         languages.append({
             "name": name,
             "allophoneData": has_allo,
+            # Exact, length-collapsed source strings retained for provenance and
+            # tooltips. Phoneme categories themselves remain language-specific.
+            "comparisonPhonemes": sorted(comparison_phonemes),
+            # Source spellings grouped into broad comparison categories. Pair
+            # overlap matches the entries in each group one-for-one, so English
+            # pʰ can match Spanish p under /p/ without erasing a true two-way
+            # p/pʰ contrast in an inventory that records both.
+            "comparisonGroups": broad_groups,
+            # Coarse projections used only to light up the fixed chart cells.
+            "chartPhonemes": sorted(phonemes & onchart),
             "phonemes": sorted(phonemes & onchart),
             "allophones": sorted(allophones & onchart),
-            "extras": extras[:24],
+            "allophoneOf": allophone_of,
+            "cellPhonemes": {s: sorted(v) for s, v in cell_phonemes.items()},
+            "modifiedPhonemes": modified,
+            "extras": extras,
             "rawCount": len(raw_segs),
             "soundCount": len(length_collapsed),      # headline number
             "lengthVariantCount": n_length_variants,  # long/doubled forms in source
             "mergedCount": n_merged,                  # aspiration/breathy/etc. merges
             "toneCount": n_tones,
-            "tones": tones,
+            "tones": n_tones > 0,
             "inventoryId": inv_id,
             "source": rows[0]["Source"],
         })
@@ -410,16 +504,16 @@ def main():
             if r.get("commons_file") and r["commons_file"] != "(cached)":
                 names[r["phoneme"]] = r["commons_file"].rsplit(".", 1)[0]
 
-    # pairwise overlap (all pairs): shared count + jaccard, for the
-    # distribution/percentile panel
-    lang_sets = {l["name"]: set(l["phonemes"]) for l in languages}
+    # Pairwise overlap matches entries one-for-one inside broad IPA categories.
+    # A spelling difference alone cannot create an exclusive category, while
+    # multiple entries in one group preserve the source's contrast count.
+    lang_groups = {l["name"]: l["comparisonGroups"] for l in languages}
     pair_overlap = {}
-    lang_names_sorted = sorted(lang_sets)
+    lang_names_sorted = sorted(lang_groups)
     for i, a in enumerate(lang_names_sorted):
         for b in lang_names_sorted[i + 1:]:
-            inter = len(lang_sets[a] & lang_sets[b])
-            union = len(lang_sets[a] | lang_sets[b])
-            pair_overlap[f"{a}|{b}"] = [inter, round(inter / union, 3)]
+            shared, jaccard = broad_pair_metrics(lang_groups[a], lang_groups[b])
+            pair_overlap[f"{a}|{b}"] = [shared, round(jaccard, 3)]
 
     data = {
         "places": PLACES, "manners": MANNERS,
@@ -434,7 +528,7 @@ def main():
         "examplesByLang": merged_examples(),
         "glossary": GLOSSARY,
         "stories": STORIES,
-        "pairOverlap": pair_overlap,  # "A|B" (alphabetical) -> [shared, jaccard]
+        "pairOverlap": pair_overlap,  # broad one-to-one comparison -> [shared, jaccard]
     }
 
     # validate curated example keys map to sounds the language actually has

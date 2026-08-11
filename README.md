@@ -1,7 +1,8 @@
 # Spoken Sounds Across the World
 
-An interactive look at the sounds human languages use — which ones they share,
-which are rare, and what happens to a learner caught between two inventories.
+An interactive look at speech sounds around the world — which broad sound
+categories selected language descriptions share, which are rare, and what they
+may mean for learners.
 Built for VizCon 2026.
 
 **Live site:** https://ezbutd.github.io/sounds/
@@ -12,9 +13,9 @@ Seven pages, all static HTML:
 
 | Page | What it shows |
 |---|---|
-| **Sound Chart** | An IPA grid for any two of 34 languages side by side, with 117 playable recordings |
+| **Sound Chart** | An IPA reference grid comparing two of 34 selected language descriptions, with original source transcriptions available as detail |
 | **World Map** | Where each language's speakers are, and how its sounds compare to its neighbours' |
-| **Allophones** | Why two languages can "share" a sound and still sound different |
+| **Sound Variants** | Why matching broad IPA labels can still have different phonetic realizations |
 | **Seeing Sounds** | Spectrograms — what these sounds look like as sound |
 | **History of English** | A flow diagram of sounds entering and leaving English since 400 CE |
 | **Difficulty in Learning** | Whether an unfamiliar sound inventory predicts how many people learn a language (mostly, it doesn't) |
@@ -46,6 +47,11 @@ inventory is used per language, so "English" here means one analysis of Received
 Pronunciation rather than English in general. Where two sources disagree, the
 seams are documented rather than smoothed over — see
 [About & Sources](https://ezbutd.github.io/sounds/about.html) and `SCOPING.md`.
+The overlap score matches inventory entries one-for-one inside broad IPA categories.
+That reduces false differences caused by source transcription detail while retaining
+additional contrasts when a source records more than one entry in a category. It is
+not a claim that two languages possess one cross-language phoneme or pronounce the
+matching categories identically.
 
 ## Running it locally
 
@@ -67,7 +73,7 @@ safer option.
 docs/            the site itself — this is what GitHub Pages serves
   *.html         seven pages
   *.js           generated data bundles + page scripts
-  audio/         117 phoneme recordings (Wikimedia Commons)
+  audio/         117 IPA sound recordings (Wikimedia Commons)
   shared.css
 build/           the Python that generates the data bundles in docs/
   *.py

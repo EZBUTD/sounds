@@ -684,24 +684,6 @@
     const s = SPECTRO.settings;
     const w = SPECTRO.words;
     el.innerHTML =
-      `<strong>Method.</strong> The two reference spectrograms are computed ` +
-      `offline by <code>analyze_spectrograms.py</code> and shipped as data, not ` +
-      `analysed in your browser: Safari could not decode Ogg Vorbis audio before ` +
-      `version 18.4, and an in-browser version would show some readers an empty ` +
-      `canvas with no explanation. Settings are a ${s.winMs} ms window, ` +
-      `${s.hopMs} ms hop, ${s.bands} linear frequency bands from 0 to ` +
-      `${s.fmax / 1000} kHz, floored at ${s.dbFloor} dB below each recording's ` +
-      `loudest point. Frequency is spaced linearly rather than on a mel scale ` +
-      `precisely because the aspiration this page is about lives in the high ` +
-      `bands that a mel scale compresses. ` +
-      `Release and voicing onset are measured by locating the vowel, stepping ` +
-      `back to the stop closure, and taking the release as the first frame whose ` +
-      `energy above 3 kHz rises clear of that closure; three earlier detectors ` +
-      `that failed are documented in the script. Measured here: ` +
-      w.map((x) => `<em>${x.word}</em> ${Math.round(x.votMs)} ms`).join(", ") +
-      `. Recordings are the same speaker as the Allophones page ` +
-      `(<a href="https://commons.wikimedia.org/wiki/User:Dvortygirl">Dvortygirl</a>, ` +
-      `General American, CC BY-SA 3.0). ` +
       `<strong>Microphone.</strong> Live analysis runs entirely in your browser ` +
       `through the Web Audio API. Nothing is uploaded, and no audio is retained ` +
       `after you stop. Formants are estimated by smoothing the spectrum and ` +

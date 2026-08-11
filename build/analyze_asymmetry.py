@@ -15,13 +15,11 @@ the backlog's "hardest language pair / asymmetric gaps" item, and it reframes
 the project's takeaway: when a language feels hard to English speakers, that is
 often a small gap being felt from the easy side of a steep hill.
 
-Two refinements over a raw missing-sound count:
-  1. NEW-SOUND LOAD weights each missing sound by how rare it is worldwide, since
-     a sound almost no language has is likely to be genuinely unfamiliar rather
-     than merely absent from one inventory.
-  2. BRIDGE CREDIT (from the allophone analysis) discounts missing sounds the
-     learner's language already produces as a positional variant -- those are
-     easier to acquire than sounds a speaker has never made at all.
+NEW-SOUND LOAD weights each missing sound by how rare it is worldwide, since a
+sound almost no language has is likely to be unfamiliar rather than merely absent
+from one inventory. Allophone matches are kept as qualitative examples elsewhere;
+they receive no numerical credit here because an inventory entry does not measure
+a learner's perception or deliberate control of a contrast.
 
 CAVEATS
   - Phonetic workload is ONE component of difficulty, and not the largest.
@@ -29,20 +27,30 @@ CAVEATS
     usually dominate. This measures the sound layer only, and says nothing about
     tone, prosody, syllable structure or phonotactics -- Japanese speakers find
     English consonant clusters hard even where every individual sound is shared.
-  - Counts are at the base-symbol level, so aspiration and length contrasts are
-    merged (see the main page's counting policy).
+  - Counts use the same one-to-one broad-category groups as the main comparison.
+    Additional entries within a group remain additional contrasts; length follows
+    the declared counting policy.
 """
 import csv
 import json
-import math
 from collections import defaultdict
 
-from build_chart_data import LANG_INVENTORIES, norm
+from build_chart_data import (LANG_INVENTORIES, TONE_CHARS, comparison_groups,
+                              comparison_segment)
 
 PHOIBLE = "data/phoible.csv"
-GEO = "geo_analysis.json"
-ALLO = "allophone_analysis.json"
-TONE_CHARS = set("˥˦˧˨˩")
+COMPARISON = "comparison_analysis.json"
+
+
+def group_units(groups):
+    units = set()
+    for category, entries in groups.items():
+        if not entries:
+            continue
+        units.add(category)
+        units.update(f"{category}#contrast{rank}"
+                     for rank in range(2, len(entries) + 1))
+    return units
 
 
 def main():
@@ -52,23 +60,15 @@ def main():
 
     sets = {}
     for name, inv in LANG_INVENTORIES.items():
-        sets[name] = {s for s in (norm(r["Phoneme"]) for r in rows_by_inv[inv])
-                      if s and not any(c in TONE_CHARS for c in s)}
+        segments = {
+            comparison_segment(r["Phoneme"])
+            for r in rows_by_inv[inv]
+            if not any(c in r["Phoneme"] for c in TONE_CHARS)
+        }
+        sets[name] = group_units(comparison_groups(segments))
 
-    geo = json.load(open(GEO, encoding="utf-8"))
-    freq = geo["globalFreq"]
-    allo = json.load(open(ALLO, encoding="utf-8"))["pairs"]
-
-    def bridges_for(learner, target):
-        """target-only sounds the learner already produces as an allophone."""
-        p = allo.get(f"{learner}|{target}")
-        if p:
-            return set(p["aBridges"])          # learner is side A
-        p = allo.get(f"{target}|{learner}")
-        if p:
-            return set(p["bBridges"])          # learner is side B
-        return set()
-
+    comparison = json.load(open(COMPARISON, encoding="utf-8"))
+    freq = comparison["comparisonFreq"]
     names = list(sets)
     rows = []
     for a in names:                             # a = learner's native language
@@ -76,13 +76,12 @@ def main():
             if a == b:
                 continue
             new = sets[b] - sets[a]
-            br = bridges_for(a, b) & new
-            # rarity-weighted load: rarer sounds are likely genuinely unfamiliar;
-            # bridge sounds count half since the learner can already produce them
-            load = sum((1 - freq.get(s, 0)) * (0.5 if s in br else 1.0) for s in new)
+            # Rarity is only a descriptive weighting; allophone entries do not
+            # discount the score because they do not establish learner ability.
+            load = sum(1 - freq.get(s, 0) for s in new)
             rows.append({
                 "learner": a, "target": b,
-                "newSounds": len(new), "bridged": len(br),
+                "newSounds": len(new),
                 "load": round(load, 3),
                 "sounds": sorted(new),
             })
@@ -114,13 +113,13 @@ def main():
     print("=" * 78)
     eng = sorted((r for r in rows if r["learner"] == "English"),
                  key=lambda r: r["load"])
-    print(f"{'target':<20} {'new sounds':>10} {'already make':>13} {'load':>7}  reverse")
+    print(f"{'target':<20} {'new sounds':>10} {'load':>7}  reverse")
     for r in eng[:8] + [None] + eng[-6:]:
         if r is None:
             print(f"{'…':<20}")
             continue
         rev = by_pair[(r["target"], "English")]
-        print(f"{r['target']:<20} {r['newSounds']:>10} {r['bridged']:>13} "
+        print(f"{r['target']:<20} {r['newSounds']:>10} "
               f"{r['load']:>7.1f}  (they need {rev['newSounds']} of ours)")
 
     print("\n" + "=" * 78)
@@ -154,7 +153,7 @@ def main():
 
     payload = {
         "pairs": {f"{r['learner']}|{r['target']}": {
-            "newSounds": r["newSounds"], "bridged": r["bridged"],
+            "newSounds": r["newSounds"],
             "load": r["load"], "sounds": r["sounds"][:14],
         } for r in rows},
         "englishOutMean": round(sum(out_load) / len(out_load), 2),

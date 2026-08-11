@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>A Short History of English Sounds — Spoken Sounds Across the World</title>
-<link rel="stylesheet" href="shared.css?v=d949b745">
+<link rel="stylesheet" href="shared.css?v=c0395948">
 <style>
   /* ================= the sound-flow diagram ================= */
   /* SVG for the lines, absolutely-positioned HTML for the labels (they need to
@@ -131,15 +131,13 @@ English dropped.</p>
 
 <div class="block">
   <p>Branches above the line arrive; branches below it leave. Each carries the
-  sound itself — click to hear it — and the words that show it, in English and in
+  sound itself and the words that show it, in English and in
   the language on the other end.</p>
   <p class="deffoot"><strong>Two ways a sound arrives.</strong> An arriving branch
   labelled <em>from Norman French</em> or <em>from French</em> means
-  <strong>contact</strong>: borrowed words brought the sound with them, and English
-  kept it. A branch labelled <strong><em>from inside English</em></strong> means that
-  the sound <strong>developed out of a sound English already had</strong>, as speakers
-  gradually shifted how they pronounced it in certain positions, until the result
-  counted as a separate sound.</p>
+  <strong>contact</strong>: borrowed words brought the sound with them. A branch labelled <strong><em>from inside English</em></strong> means that
+  the sound developed out of a sound English already had, as speakers
+  gradually shifted how they pronounced it in certain positions.</p>
 </div>
 
 <div class="flowwrap">
@@ -185,9 +183,9 @@ English dropped.</p>
   <a href="difficulty.html">Language Learners &rarr;</a>
 </div>
 
-<script src="data.js?v=6518c281"></script>
-<script src="rarity.js?v=776d7c52"></script>
-<script src="history_data.js?v=02d74ed7"></script>
+<script src="data.js?v=c5c3b09e"></script>
+<script src="rarity.js?v=5eda637c"></script>
+<script src="history_data.js?v=4bf01ccc"></script>
 <script>
 // Chip building + audio + tooltip. Defined BEFORE history_flow.js runs, and
 // handed to it via window.__flowChip / __flowBind, so the diagram's labels are
@@ -301,7 +299,7 @@ English dropped.</p>
   window.__histBind = bindChips;
 })();
 </script>
-<script src="history_flow.js?v=e617a3ae"></script>
+<script src="history_flow.js?v=00b46518"></script>
 <script>
 // Everything on the page other than the diagram itself.
 (function () {
@@ -349,15 +347,7 @@ English dropped.</p>
       .map(f => f.srcRoster))];
     const unver = HIST.unverifiedLangs || [];
     $("flowNote").innerHTML =
-      `<strong>How the ends of the branches were checked.</strong> ` +
-      `All ${ins.length} arriving sounds are confirmed present in English's ` +
-      `charted inventory today, and every language named on a departing branch ` +
-      `is confirmed to still have that sound, in ` +
-      `<a href="https://phoible.org">PHOIBLE</a>. ` +
-      `${donors.join(" and ")} are in this site's roster too, which is how the ` +
-      `<span class="ipa">dʒ</span> branch can say something the timeline alone ` +
-      `could not: French handed English that sound and then changed, so English ` +
-      `now keeps a sound its donor gave up. ` ;
+      ` ` ;
   }
 
   // ---------- the compact timeline ----------
@@ -394,45 +384,10 @@ English dropped.</p>
 
   bindChips();
 
-  // ---------- sources ----------
-  $("hist-notes").innerHTML =
-    `<strong>Sources.</strong> The dates and sound changes are compiled from ` +
-    `Wikipedia's <a href="https://en.wikipedia.org/wiki/Phonological_history_of_English">phonological ` +
-    `history of English</a> and its companions on the ` +
-    `<a href="https://en.wikipedia.org/wiki/Great_Vowel_Shift">Great Vowel Shift</a>, ` +
-    `<a href="https://en.wikipedia.org/wiki/Phonological_history_of_English_consonants">English ` +
-    `consonants</a>, <a href="https://en.wikipedia.org/wiki/Phonological_history_of_English_close_front_vowels">close ` +
-    `front vowels</a> and <a href="https://en.wikipedia.org/wiki/Gh_(digraph)">the ⟨gh⟩ ` +
-    `digraph</a>; the <a href="https://en.wikipedia.org/wiki/High_German_consonant_shift">High ` +
-    `German consonant shift</a> and <a href="https://en.wikipedia.org/wiki/Middle_Dutch">Middle ` +
-    `Dutch</a> for the continental relatives; ` +
-    `<a href="https://www.britannica.com/topic/Great-Vowel-Shift">Britannica</a> on the ` +
-    `vowel shift; the University of Toronto's ` +
-    `<a href="https://cpercy.artsci.utoronto.ca/courses/MEPhonology.htm">Middle English ` +
-    `phonology notes</a> for the voiced fricatives becoming separate sounds; ` +
-    `a <a href="https://www.cambridge.org/core/journals/english-language-and-linguistics/article/old-english-cg-and-its-sound-correspondences-in-old-english-and-middle-english/1BCD6753AABC4655380379A8DAA00435">Cambridge ` +
-    `study of Old English ⟨cg⟩</a> for the French contribution to ` +
-    `<span class="ipa">dʒ</span>; and Wiktionary's ` +
-    `<a href="https://en.wiktionary.org/wiki/Appendix:English_doublets">English ` +
-    `doublets</a> for the shirt/skirt pairs. Caxton's 1476 press follows ` +
-    `<a href="https://en.wikipedia.org/wiki/William_Caxton">Wikipedia</a>; ` +
-    `cognates were checked against Wiktionary entries word by word. ` +
-    `<strong>What the sources do not settle:</strong> the causes. Why the long ` +
-    `vowels moved, and why <em>kn</em> simplified when it did, are open ` +
-    `questions — the accounts describe what changed and roughly when, which is ` +
-    `as far as the evidence reaches. One arrival is argued over in its own ` +
-    `right: how much of {{dʒ}} English already had before 1066. ` +
-    `The present-day figures ` +
-    `(${xLangs.length} of ${nLangs} languages with <span class="ipa">x</span>, ` +
-    `${thLangs.length} with both <em>th</em> sounds, and the diagram's branch ` +
-    `ends) come from ` +
-    `<a href="https://phoible.org">PHOIBLE 2.0</a>, one inventory per language, ` +
-    `describing those languages as spoken now. Audio is Wikimedia Commons, ` +
-    `credited on the <a href="about.html">About page</a>.`;
-  $("hist-notes").innerHTML = expand($("hist-notes").innerHTML);
+
   bindChips();
 })();
 </script>
-<script src="nav.js?v=aae3ed8a"></script>
+<script src="nav.js?v=3651bfbb"></script>
 </body>
 </html>

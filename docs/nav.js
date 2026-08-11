@@ -4,8 +4,7 @@
 (function () {
   const PAGES = [
     ["index.html",    "chart",      "Sound Chart"],
-    ["map.html",      "map",        "World Map"],
-    ["allophones.html", "allophones", "Allophones"],
+    ["allophones.html", "allophones", "Sound Variants"],
     ["spectrograms.html", "spectrograms", "Seeing Sounds"],
     ["history.html",   "history",    "History of English"],
     // Filename stays difficulty.html so existing links keep working; the label is
@@ -13,6 +12,7 @@
     // predict difficulty of acquisition, and calling it "Difficulty" asserted the
     // connection the page spends its length taking apart.
     ["difficulty.html", "difficulty", "Language Learners"],
+    ["map.html",      "map",        "World Map"],
     ["about.html",     "about",      "About &amp; Sources"],
   ];
   const current = document.body.dataset.nav || "";

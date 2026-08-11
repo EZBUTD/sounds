@@ -2,10 +2,12 @@
 """
 Pairwise overlap analysis across all 36 languages (630 pairs).
 
-Two metrics per pair (on-chart base phonemes):
-  shared  = |A ∩ B|            (absolute count — what the headline shows)
-  jaccard = |A ∩ B| / |A ∪ B|  (size-normalized — fair comparison metric,
-            since a big-inventory language shares more sounds with everyone)
+Two metrics per pair (one-to-one matches inside broad IPA categories):
+  shared  = sum(min(entriesA, entriesB))
+  jaccard = shared / sum(max(entriesA, entriesB))
+
+This lets differently detailed source spellings match without discarding extra
+contrastive entries when a language records more than one in the same category.
 
 Prints: top/bottom pairs by jaccard, distribution stats, per-language
 "best friend / stranger", and English's ranked list.
@@ -16,13 +18,16 @@ from itertools import combinations
 
 raw = open("prototype/data.js", encoding="utf-8").read()
 D = json.loads(raw[len("const DATA = "):-2])
-langs = {l["name"]: set(l["phonemes"]) for l in D["languages"]}
+langs = {l["name"]: l["comparisonGroups"] for l in D["languages"]}
 names = sorted(langs)
 
 pairs = []
 for a, b in combinations(names, 2):
-    inter = len(langs[a] & langs[b])
-    union = len(langs[a] | langs[b])
+    keys = set(langs[a]) | set(langs[b])
+    inter = sum(min(len(langs[a].get(k, ())), len(langs[b].get(k, ())))
+                for k in keys)
+    union = sum(max(len(langs[a].get(k, ())), len(langs[b].get(k, ())))
+                for k in keys)
     pairs.append({"a": a, "b": b, "shared": inter, "jaccard": inter / union})
 
 jac = [p["jaccard"] for p in pairs]

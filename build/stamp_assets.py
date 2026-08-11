@@ -22,7 +22,10 @@ import io
 import os
 import re
 
-PROTO = "prototype"
+# Resolve the deployed site relative to this script so the command works from
+# either the repository root or build/. The old "prototype" path belonged to an
+# earlier layout and silently stamped zero pages in the current repository.
+SITE = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "docs"))
 # only local assets we generate or edit; skip external URLs
 ASSET_RE = re.compile(
     r'(?P<attr>src|href)="(?P<file>[A-Za-z0-9_\-]+\.(?:js|css))(?:\?v=[0-9a-f]+)?"')
@@ -34,16 +37,16 @@ def digest(path):
 
 
 def main():
-    pages = sorted(p for p in os.listdir(PROTO) if p.endswith(".html"))
+    pages = sorted(p for p in os.listdir(SITE) if p.endswith(".html"))
     hashes, changed = {}, 0
 
     for page in pages:
-        path = os.path.join(PROTO, page)
+        path = os.path.join(SITE, page)
         src = io.open(path, encoding="utf-8").read()
 
         def sub(m):
             fn = m.group("file")
-            target = os.path.join(PROTO, fn)
+            target = os.path.join(SITE, fn)
             if not os.path.exists(target):
                 return m.group(0)          # leave unknown refs alone
             if fn not in hashes:

@@ -136,9 +136,11 @@ moraic /ɴ/
          transcription w/ diphthongs + /ɹ/). SPA inv 160 rejected:
          idiosyncratic vowels (e̞ o̞ː ɐ) + marginal x/ʍ/ʔ.
        - Dedup rule = per language, inventory with most allophone-bearing rows.
-       - Matching = BASE match (strip Mn diacritics + Lm modifiers via unicodedata)
-         because sources differ in convention (EA writes /pʰ/, L1 sources /p/).
-         Strict match kept as a column for methodology.
+       - Historical prototype rule stripped every modifier. Exact-string matching
+         then replaced it, but made source detail look like a language difference
+         (English pʰ vs Spanish p). Current rule: group entries by broad IPA
+         reference category and match them one-for-one; extra entries within a
+         category preserve contrast multiplicity.
 2. [x] Top-30+ L1 list picked (34 langs; Urdu/Marathi/Yoruba flagged 2-state,
        no allophone data in any source)
 3. [x] matrix.csv (1,496 rows) + matrix_summary.csv generated
@@ -347,7 +349,9 @@ Remaining future ideas:
 analyze_allophones.py → why same-inventory languages still sound different.
 - **English–Hindi share 27 phonemes but 92% are realized differently.** That
   divergence, not the inventory gap, is what an accent mostly is.
-- Hindi+Punjabi: 65% phoneme overlap, **100%** realization divergence.
+- Historical base-cell result: Hindi+Punjabi showed 65% overlap and **100%**
+  documented realization divergence. This is qualitative evidence only and is
+  not the current broad-category overlap score.
 - Overlap does NOT predict divergence (scatter is flat) — 465 usable pairs.
 - **Bridges**: sounds that are phonemes in L2 but allophones in L1 → the learner
   already produces them. Eng–Hindi overlap 52%→61% crediting bridges at half.
@@ -746,12 +750,14 @@ What goes into each number — consistent across ALL languages:
        South Asian langs (Hindi 74 raw → 35 cells + 39 merged; Punjabi 73;
        Amharic 68) — this is a DESIGN CHOICE (chart shows base articulations),
        not data loss; (c) tones counted separately (Cantonese 5, Vietnamese 8).
-       Headline now shows honest full accounting: "Hindi distinguishes 74
-       sounds in this source — 35 base sounds on this chart, 39 variations
-       (aspiration, length…) shown merged into their base cells."
-       ⚠️ Note for methodology: pair-comparison counts (share N / lacks M)
-       operate at base-symbol level — Hindi /t̪/ vs /ʈ/ retroflex contrast
-       partially survives (both on chart) but aspirated series does not.
+       The current headline separates 46 length-collapsed segmental phoneme
+       entries from the 35 reference cells they light; it also reports the 28
+       long/doubled source rows collapsed by the counting policy.
+       ⚠️ Current comparison policy (revised 2026-08-12): pair counts match
+       source entries one-for-one within broad IPA reference categories. English
+       pʰ and Spanish p can contribute one shared /p/ category. Hindi p and pʰ
+       remain two counted entries, so a comparison language with only one labial
+       stop category can match one while Hindi keeps an additional contrast.
 8. [ ] Accessibility: don't rely on color alone; alt text per cell; keyboard nav
 9. [ ] GenAI log: document Kiro/LLM usage throughout (Best Use of GenAI award)
 

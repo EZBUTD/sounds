@@ -38,12 +38,13 @@ import json
 import unicodedata
 from collections import defaultdict
 
-from build_chart_data import LANG_INVENTORIES, norm
+from build_chart_data import (
+    LANG_INVENTORIES, TONE_CHARS, comparison_segment, norm,
+)
 
 PHOIBLE = "data/phoible.csv"
 GLOTTO = "data/glottolog_languages.csv"
 SPEAKERS = "data/speakers_ethnologue.json"
-TONE_CHARS = set("˥˦˧˨˩")
 VOWEL_CHARS = set("iyɨʉɯuɪʏʊeøɘɵɤoəɛœɜɞʌɔæɐaɶɑɒ")
 CLICK_CHARS = set("ʘǀǃǂǁ")
 
@@ -121,7 +122,11 @@ def load_phoible():
 
 
 def global_frequencies(rows_by_inv, inv_glotto):
-    """base symbol -> share of world languages having it (dedup by Glottocode).
+    """Return chart-projection and exact-segment frequencies by language.
+
+    Both are deduplicated by Glottocode. Chart frequencies support the reference
+    sound/rarity UI; exact length-collapsed frequencies support the inventory
+    overlap and learner-gap calculations without erasing written contrasts.
 
     CLICKS need special handling. PHOIBLE writes them as clusters with their
     accompaniment (Zulu has kǀ, kǁ, kǃ -- never a bare ǀ), but the chart credits
@@ -139,14 +144,17 @@ def global_frequencies(rows_by_inv, inv_glotto):
         if g not in best or len(rows) > len(rows_by_inv[best[g]]):
             best[g] = inv
     counts = defaultdict(int)
+    comparison_counts = defaultdict(int)
     for g, inv in best.items():
         syms = set()
+        comparison_syms = set()
         raw = []
         for r in rows_by_inv[inv]:
             seg = r["Phoneme"]
             if any(c in seg for c in TONE_CHARS):
                 continue
             raw.append(seg)
+            comparison_syms.add(comparison_segment(seg))
             s = norm(seg)
             if s:
                 syms.add(s)
@@ -156,8 +164,14 @@ def global_frequencies(rows_by_inv, inv_glotto):
                 syms.add(click)
         for s in syms:
             counts[s] += 1
+        for s in comparison_syms:
+            comparison_counts[s] += 1
     n = len(best)
-    return {s: c / n for s, c in counts.items()}, n
+    return (
+        {s: c / n for s, c in counts.items()},
+        {s: c / n for s, c in comparison_counts.items()},
+        n,
+    )
 
 
 def load_geo():
@@ -175,7 +189,7 @@ def load_geo():
 
 def main():
     rows_by_inv, inv_glotto = load_phoible()
-    freq, n_world = global_frequencies(rows_by_inv, inv_glotto)
+    freq, comparison_freq, n_world = global_frequencies(rows_by_inv, inv_glotto)
     geo = load_geo()
     speakers = json.load(open(SPEAKERS, encoding="utf-8"))
 
@@ -301,16 +315,19 @@ def main():
     print("=" * 78)
     sets = {}
     for name, inv in LANG_INVENTORIES.items():
-        sets[name] = {s for s in (norm(r["Phoneme"]) for r in rows_by_inv[inv])
-                      if s and not any(c in TONE_CHARS for c in s)}
+        sets[name] = {
+            comparison_segment(r["Phoneme"])
+            for r in rows_by_inv[inv]
+            if not any(c in r["Phoneme"] for c in TONE_CHARS)
+        }
     names = list(sets)
     pairs = []
     for i, a in enumerate(names):
         for b in names[i + 1:]:
             inter, union = sets[a] & sets[b], sets[a] | sets[b]
             plain = len(inter) / len(union)
-            wi = sum(1 - freq.get(s, 0) for s in inter)
-            wu = sum(1 - freq.get(s, 0) for s in union)
+            wi = sum(1 - comparison_freq.get(s, 0) for s in inter)
+            wu = sum(1 - comparison_freq.get(s, 0) for s in union)
             pairs.append((a, b, plain, wi / wu if wu else 0))
     # NOTE: weighting can only LOWER the ratio -- every language shares the
     # universal sounds, so down-weighting them shrinks the numerator faster than
@@ -423,7 +440,11 @@ def main():
                           for v, s in eng_single[:10]],
         "languages": out,
         "globalFreq": {s: round(v, 5) for s, v in freq.items()
-                       if s in ours},   # only symbols our languages use
+                        if s in ours},   # only symbols our languages use
+        "comparisonFreq": {
+            s: round(comparison_freq.get(s, 0), 5)
+            for s in set().union(*sets.values())
+        },
         "weightedPairs": {f"{a}|{b}": {"plain": round(p, 4), "weighted": round(w, 4)}
                           for a, b, p, w in pairs},
     }

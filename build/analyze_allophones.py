@@ -167,9 +167,6 @@ def pair_report(a, b):
         # share of shared phonemes that are actually realized differently
         "divergence_rate": (len(diverged) / documented) if documented else None,
         "a_bridges": a_bridges, "b_bridges": b_bridges,
-        # overlap if we credit bridges as partial matches
-        "bridged_jaccard": (len(shared) + 0.5 * (len(a_bridges) + len(b_bridges)))
-                           / len(a["phonemes"] | b["phonemes"]),
     }
 
 
@@ -223,18 +220,15 @@ def main():
         print(f"  divergence rate: {rep['divergence_rate']:.0%} of documented shared phonemes")
     print(f"\nbridges — Hindi phonemes English has only as a variant: {rep['b_bridges']}")
     print(f"bridges — English phonemes Hindi has only as a variant:  {rep['a_bridges']}")
-    print(f"overlap crediting bridges at half weight: {rep['bridged_jaccard']:.0%} "
-          f"(vs {rep['jaccard']:.0%} phoneme-only)")
+    print("bridge candidates are qualitative only; they receive no overlap or "
+          "learner-difficulty credit")
     print("\nsample realization splits (same phoneme, different variants):")
     for d in rep["diverged"][:12]:
         print(f"  /{d['phoneme']}/  English: {' '.join(d['a_variants']) or '—':<22}"
               f"  Hindi: {' '.join(d['b_variants']) or '—'}")
 
-    # ---- all pairs: does the allophone layer change the similarity story? ----
-    print("\n" + "=" * 72)
-    print("ALL PAIRS: biggest bridge counts (inventories look far apart,")
-    print("but speakers already produce the other's sounds as variants)")
-    print("=" * 72)
+    # Build all pairs for the coverage-gated descriptive output. Bridge lists are
+    # retained as qualitative examples, never ranked or converted into a score.
     # bridges are computed over every language with any allophone data (missing
     # data can only undercount a bridge). Divergence is gated on coverage and is
     # suppressed for thin pairs via divergenceRate = None.
@@ -246,15 +240,9 @@ def main():
                 r["divergence_rate"] = None
             pairs.append((n1, n2, r))
 
-    top_bridge = sorted(pairs, key=lambda t: -(len(t[2]["a_bridges"]) + len(t[2]["b_bridges"])))
-    print(f"{'pair':<38} {'phon':>5} {'bridged':>8} {'+bridges':>9}")
-    for n1, n2, r in top_bridge[:12]:
-        nb = len(r["a_bridges"]) + len(r["b_bridges"])
-        print(f"{n1 + ' + ' + n2:<38} {r['jaccard']:>5.0%} {r['bridged_jaccard']:>8.0%} {nb:>9}")
-
     print("\n" + "=" * 72)
     print("SIMILAR ON PAPER, DIVERGENT IN THE MOUTH")
-    print("(high phoneme overlap BUT high realization divergence)")
+    print("(high base-cell overlap BUT high realization divergence)")
     print("=" * 72)
     cand = [t for t in pairs if t[2]["jaccard"] >= 0.5
             and t[2]["divergence_rate"] is not None
@@ -279,7 +267,6 @@ def main():
                  for ld, n, npho, nv in load},
         "pairs": {f"{n1}|{n2}": {
             "shared": r["shared"], "jaccard": round(r["jaccard"], 4),
-            "bridgedJaccard": round(r["bridged_jaccard"], 4),
             "aBridges": r["a_bridges"], "bBridges": r["b_bridges"],
             "nDiverged": r["n_diverged"], "nIdentical": r["n_identical"],
             "nUndocumented": r["n_undocumented"],

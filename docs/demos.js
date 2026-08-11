@@ -33,10 +33,10 @@ const DEMOS = {
   // A WITHIN-ONE-LANGUAGE example, used at the definition so a reader meets
   // "phoneme vs allophone" before meeting any cross-language comparison.
   //
-  // Everything else in this file compares ONE phoneme across TWO languages,
-  // which readers were mistaking for phoneme-vs-allophone. This strip is the
-  // real thing: a single English phoneme /t/ in three positions, none of which
-  // changes a word's meaning.
+  // The other sections compare phones, phoneme labels or learner substitutions
+  // across languages. This strip is the direct phoneme-vs-allophone case: a
+  // single English phoneme /t/ in three positions, none of which changes a
+  // word's meaning.
   //
   // Each variant plays a real recording of the WHOLE WORD, not an isolated IPA
   // segment. That is the only honest way to demonstrate this: these allophones
@@ -82,8 +82,7 @@ const DEMOS = {
     ]
   },
 
-  // "Same sounds, different mouths" — both languages list the phoneme on the
-  // chart; the everyday realization differs.
+  // Broad transcription labels and spelling can hide different phonetic targets.
   realization: [
     {
       title: "The letter b",
@@ -95,13 +94,13 @@ const DEMOS = {
       why: "Spanish /b/ is a hard stop at the start of an utterance but softens to a fricative between vowels, so <em>Habana</em> has no full lip closure at all. Both languages list /b/ on the chart, and Spanish speakers hear no difference between the two versions — but an English speaker pronouncing every /b/ as a hard stop is instantly identifiable. The same rule applies to Spanish /d/ and /g/."
     },
     {
-      title: "The letter r",
-      sound: "both have an /r/",
+      title: "Two kinds of r",
+      sound: "English /ɹ/ and Spanish /r/",
       sides: [
         { lang: "English", symbol: "ɹ", desc: "approximant — tongue bunched, never touching", word: "“red”" },
         { lang: "Spanish", symbol: "r", desc: "trill — tongue tip vibrating on the ridge", word: "“perro” (dog)" }
       ],
-      why: "Chart matching puts these in the same slot, but they are made in completely different ways: English never lets the tongue contact the roof of the mouth, while Spanish taps it repeatedly. Spanish also contrasts the trill with a single tap — <em>perro</em> (dog) versus <em>pero</em> (but) — a distinction English uses only accidentally, in the middle of words like “butter”."
+      why: "These occupy different chart cells and are different phonemes in their respective language systems: the selected English inventory uses the approximant /ɹ/, while Spanish /r/ is a trill. Spanish also contrasts it with the tap /ɾ/ — <em>perro</em> (dog) versus <em>pero</em> (but). Some broad English transcriptions write its rhotic phoneme as /r/, but that is a conventional label, not a claim that English speakers produce the trill [r]."
     },
     {
       title: "The letter h",
@@ -123,26 +122,26 @@ const DEMOS = {
     }
   ],
 
-  // "The chart undersells you" — sounds an English speaker already produces
-  // as accidental variants, which are full contrastive phonemes in Hindi.
+  // Qualitative bridge candidates: a familiar gesture may help, but an inventory
+  // cannot establish an individual learner's perception or deliberate control.
   bridges: [
     {
       title: "Retroflex t",
-      sound: "Hindi phoneme /ʈ/ · English accidental variant",
+      sound: "Hindi phoneme /ʈ/ · possible English near-match",
       sides: [
         { lang: "Hindi", symbol: "ʈ", desc: "a full phoneme — it changes word meaning", word: "टीका “ṭīkā”" },
         { lang: "English", symbol: "t", desc: "plain /t/, dragged back before r", word: "“tree”" }
       ],
-      why: "In “tree” the following r pulls an English speaker's tongue back off the alveolar ridge toward the retroflex position. You already produce something close to Hindi's /ʈ/ — you have just never had to tell it apart from /t/, because English never uses that difference to separate two words."
+      why: "For some English speakers, the following /ɹ/ retracts the /t/ in “tree”, providing a possible articulatory reference for Hindi /ʈ/. That does not mean every speaker produces the Hindi phone or can perceive and control the Hindi contrast; it is a comparison to test by listening."
     },
     {
       title: "The tap",
-      sound: "Hindi phoneme /ɾ/ · English accidental variant",
+      sound: "Hindi phoneme /ɾ/ · English allophone [ɾ]",
       sides: [
         { lang: "Hindi", symbol: "ɾ", desc: "a phoneme in its own right", word: "in most positions" },
         { lang: "English", symbol: "t", desc: "/t/ becomes a tap between vowels", word: "“butter”, “water”" }
       ],
-      why: "Most North American English speakers pronounce the middle of “butter” as a tap rather than a /t/ — physically the same gesture as Hindi's /ɾ/. The sound is already in your motor repertoire; what is new is having to use it to tell words apart."
+      why: "Many North American English speakers realize /t/ in “butter” with an alveolar tap [ɾ], which can be a useful reference for Hindi /ɾ/. Familiarity in that English context does not by itself show that a learner can use the phone deliberately as a Hindi contrast."
     }
   ]
 };

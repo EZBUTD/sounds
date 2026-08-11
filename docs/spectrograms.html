@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Seeing sounds — Spoken Sounds Across the World</title>
-<link rel="stylesheet" href="shared.css?v=d949b745">
+<link rel="stylesheet" href="shared.css?v=c0395948">
 <style>
   .specwrap { margin: 1rem 0 .4rem; }
   .spec-card { border: 1px solid #e0d9cc; border-radius: 10px; background: #fdfcfa;
@@ -90,9 +90,9 @@
 
 <h1>Seeing sounds</h1>
 <p class="subtitle">A spectrogram is a picture of sound: time runs left to right,
-pitch runs bottom to top, and darker means more energy at that pitch and moment.
+frequency runs bottom to top, and darker means more energy at that frequency and moment.
 This page uses one to measure a difference the
-<a href="allophones.html">Allophones page</a> asks you to hear —
+<a href="allophones.html">Sound Variants page</a> asks you to hear —
 <strong>two allophones of the single phoneme <span class="ipa">/t/</span></strong>,
 the <em>t</em> of <em>top</em> against the <em>t</em> of <em>stop</em>.</p>
 
@@ -105,8 +105,8 @@ the <em>t</em> of <em>top</em> against the <em>t</em> of <em>stop</em>.</p>
   each.</strong> Those two sounds are <strong>allophones</strong> of
   <span class="ipa">/t/</span>: alternative pronunciations that never distinguish
   two English words, so most English speakers hear them as one <em>t</em>. The
-  <a href="allophones.html">Allophones page</a> introduces the idea and lets you
-  hear all three; this page measures two of them.</p>
+  <a href="allophones.html">Sound Variants page</a> introduces the idea and lets you
+  hear all three; this page visualizes two of them.</p>
   <p class="deffoot">The notation is the quickest way to keep the two levels
   apart. <span class="ipa">/slashes/</span> mark a <strong>phoneme</strong>, the
   category the language stores. <span class="ipa">[brackets]</span> mark an
@@ -119,15 +119,11 @@ the <em>t</em> of <em>top</em> against the <em>t</em> of <em>stop</em>.</p>
   <span class="ipa">/s/</span> suppresses it, giving plain
   <span class="ipa">[t]</span>. The gap between the release and the start of
   voicing is called <strong>voice onset time</strong>, and it is the standard way
-  phoneticians measure aspiration. It is the one number that separates these two
-  allophones.</p>
+  phoneticians measure aspiration. It is the main measurement used here to compare
+  these two tokens, alongside the visible release and aspiration noise.</p>
   <p class="sub">Press play and a cursor tracks across the image in time with the
   audio, so you can hear which part of the picture you are looking at — the
-  aspiration is the shaded stretch the cursor crosses between the two markers.
-  Both recordings are the same speaker in the same accent, so the difference
-  between the two pictures is the allophone rather than the voice. The markers are
-  measured from these files, not copied from a reference table; the method and its
-  failure modes are in <code>analyze_spectrograms.py</code>.</p>
+  aspiration is the shaded stretch the cursor crosses between the two markers.</p>
   <div id="spec-cards" class="specwrap"></div>
   <p class="sub" id="spec-summary"></p>
 </div>
@@ -136,11 +132,11 @@ the <em>t</em> of <em>top</em> against the <em>t</em> of <em>stop</em>.</p>
 
 <div class="block">
   <h3>Where your vowel actually lands</h3>
-  <p>The vowel chart on the Sound Chart page is not decorative: its two axes are
-  measurable. A vowel's first resonance (<strong>F1</strong>) tracks how open your
-  mouth is, and the second (<strong>F2</strong>) tracks how far forward your
-  tongue sits. Estimating both from a microphone puts your vowel at a point on
-  that same chart.</p>
+  <p>A vowel's first resonance (<strong>F1</strong>) broadly tracks vowel
+  height (and therefore mouth opening), while the second (<strong>F2</strong>)
+  broadly tracks tongue frontness; lip rounding and vocal-tract shape also affect
+  them. Estimating both from a microphone puts your vowel at a point on that same
+  chart.</p>
   <p>Hold a steady vowel — <em>ee</em>, <em>ah</em>, <em>oo</em> — for about a
   second. Your position appears as a moving dot against the reference vowels.
   Audio is analysed in your browser and never uploaded or stored.</p>
@@ -174,30 +170,22 @@ the <em>t</em> of <em>top</em> against the <em>t</em> of <em>stop</em>.</p>
   </div>
 
   <div class="caveat" style="margin-top:1rem">
-    <strong>There is no score here, on purpose.</strong> It is tempting to print a
-    percentage for how closely you matched a sound, and we deliberately do not.
-    A single similarity number over a microphone signal is dominated by your
-    pitch, vocal tract length, microphone and room — not by how you articulated
-    the sound. It would look precise and measure the wrong thing. F1 and F2 are
-    shown instead because they correspond to something real and checkable: how
-    open your mouth is and how far forward your tongue sits. Even then, treat the
-    position as approximate. Formant estimates vary with voice and hardware, and
-    the reference vowels are idealised chart positions rather than one speaker's
-    measurements.
+    <strong>There is no score here, on purpose.</strong> 
+Treat the position as approximate. Estimates vary with voice, hardware, and other factors. 
   </div>
 </div>
 
 <p class="note" id="spec-notes"></p>
 
 <div class="pagenav">
-  <a href="allophones.html">&larr; Allophones</a>
+  <a href="allophones.html">&larr; Sound Variants</a>
   <span class="spacer"></span>
   <a href="history.html">History of English &rarr;</a>
 </div>
 
-<script src="data.js?v=6518c281"></script>
-<script src="spectro.js?v=16c89a81"></script>
-<script src="spectrograms.js?v=8575e1df"></script>
-<script src="nav.js?v=aae3ed8a"></script>
+<script src="data.js?v=c5c3b09e"></script>
+<script src="spectro.js?v=58aa17ce"></script>
+<script src="spectrograms.js?v=414d6525"></script>
+<script src="nav.js?v=3651bfbb"></script>
 </body>
 </html>

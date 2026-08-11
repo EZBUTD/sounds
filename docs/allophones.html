@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Allophones — Spoken Sounds Across the World</title>
-<link rel="stylesheet" href="shared.css?v=d949b745">
+<title>Sound Variants: Phonemes and Allophones — Spoken Sounds Across the World</title>
+<link rel="stylesheet" href="shared.css?v=c0395948">
 <style>
   /* listening demos */
   .demos { display: grid; gap: .9rem; margin: 1rem 0;
@@ -72,29 +72,23 @@
   .allo-strip .trans .ipa.narrow { color: var(--accent); font-weight: 600; }
   .credit { font-size: .72rem; color: #a8a094; margin: .1rem 0 0; }
   /* .deffoot (terminology note) now lives in shared.css — three pages use it */
-  .bridge-list { margin: .9rem 0 .2rem; font-size: .82rem; }
-  .bridge-row { display: grid; grid-template-columns: 15em 5.5em 1fr; gap: .5rem;
-    padding: .3rem 0; border-top: 1px solid #efe9df; align-items: baseline; }
-  .bridge-row.head { font-weight: 600; color: #8a8275; border-top: 0; }
-  .bridge-row .gain { color: var(--accent); font-weight: 600; }
-  .bridge-row .syms { font-family: var(--ipa-font); color: #6b6459; }
 </style>
 </head>
 <body data-nav="allophones">
 
-<h1>Allophones and variations on sounds</h1>
+<h1>Sound variants: phonemes and allophones</h1>
 
 <h2 class="section">Phoneme or allophone?</h2>
 
 <div class="block">
   <h3>Two kinds of sound difference</h3>
-  <p>A <strong>phoneme</strong> is a sound a language uses to tell words apart.
+  <p>A <strong>phoneme</strong> is a sound category a language uses to tell words apart.
   Swap one for another and the word changes: English <em>pat</em> and <em>bat</em>
   differ by one phoneme. Phonemes are written in slashes: <span class="ipa">/t/</span>.</p>
   <p>An <strong>allophone</strong> is one of the ways a single phoneme actually gets
-  pronounced, depending on where it sits in a word. Swapping one allophone for
-  another doesn't change which word you've said — it changes how it sounds, in the
-  way an accent does. Allophones are written in square brackets:
+  pronounced in a particular context, accent, or speaking style. Changing the
+  allophone does not by itself change which word listeners recognize — it changes
+  how that word sounds. Allophones are written in square brackets:
   <span class="ipa">[tʰ]</span>.</p>
 
 
@@ -118,34 +112,30 @@
   the word intact, which is the standard test for whether a difference is allophonic
   rather than phonemic.</p>
 
-  <p><strong>This is part of why two languages can share a sound on the chart and
-  still sound quite different:</strong> they agree on the phoneme, but their
-  allophones can differ.</p>
+  <p><strong>This is part of why two languages can light the same reference cell on the
+  chart and still sound quite different:</strong> a shared cell means that the two
+  selected descriptions use the same broad IPA category. It does not create one
+  cross-language phoneme, and the phonetic realizations can differ.</p>
 </div>
 
-<h2 class="section">Similar sounds, different mouth — across two languages</h2>
+<h2 class="section">Similar labels, different sounds — across two languages</h2>
 
 <div class="block">
-  <p>Each card below is <strong>one phoneme in two languages</strong>. Both list
-  it on the Sound Chart, so the chart counts it as shared, but the sound differs
-  enough to hear. This is the cross-language counterpart to the
-  /t/ strip above: there, one language pronounced one phoneme three ways depending
-  on position; here, we show that two languages can pronounce the same phoneme differently.</p>
+  <p>These cards show why a spelling letter or broad IPA label does not guarantee
+  the same speech sound across languages. Phonemes belong to particular language
+  systems; the chart maps their source transcriptions onto IPA reference cells.
+  A generic recording demonstrates the phone named by a symbol, not every
+  language's exact realization of a phoneme.</p>
   <div id="demo-realization" class="demos"></div>
 </div>
 
-<h2 class="section">Sounds you already make</h2>
+<h2 class="section">Possible allophone bridges</h2>
 
 <div class="block">
-  <p>This works in the learner's favour too. A sound can be a full phoneme in one
-  language and merely an allophone in another, which means
-  <strong>a speaker may already produce it without having needed to learn it.</strong>
-  Counting these "bridges" at half credit, English–Hindi sound overlap goes from
-  <span id="a-jbefore"></span>% to <span id="a-jafter"></span>%. Producing a sound
-  by habit isn't the same as controlling it deliberately, so the half weighting is
-  a rough allowance rather than a measurement.</p>
+  <p>Some sounds can be contrastive in one language and occur as an 
+  allophone in another. That can make it a useful bridge for some learners:
+  the articulatory gesture may already be familiar. </p>
   <div id="demo-bridges" class="demos"></div>
-  <div id="allo-bridges" class="bridge-list"></div>
 </div>
 
 <p class="note" id="allo-notes"></p>
@@ -156,22 +146,14 @@
   <a href="spectrograms.html">Seeing Sounds &rarr;</a>
 </div>
 
-<script src="data.js?v=6518c281"></script>
-<script src="deep.js?v=f13cd68b"></script>
-<script src="demos.js?v=508a4ab7"></script>
+<script src="data.js?v=c5c3b09e"></script>
+<script src="deep.js?v=46fa87f9"></script>
+<script src="demos.js?v=2942cb39"></script>
 <script>
 (function () {
   const $ = id => document.getElementById(id);
-  const pct = x => Math.round(100 * x);
   if (typeof DEEP === "undefined") return;
   const A = DEEP.allophones;
-
-  const eh = A.featured.find(f => (f.a === "English" && f.b === "Hindi") ||
-                                  (f.a === "Hindi" && f.b === "English"));
-  if (eh) {
-    $("a-jbefore").textContent = pct(eh.jaccard);
-    $("a-jafter").textContent = pct(eh.bridgedJaccard);
-  }
 
   // ---- audio playback shared by every demo button ----
   let current = null;
@@ -273,57 +255,8 @@
   renderDemos("demo-realization", DEMOS.realization);
   renderDemos("demo-bridges", DEMOS.bridges);
 
-  // bridges for the featured pair (both directions)
-  if (eh) {
-    const rows = [
-      [`Hindi phonemes English has only as an allophone`, eh.bBridges],
-      [`English phonemes Hindi has only as an allophone`, eh.aBridges],
-    ];
-    $("allo-bridges").innerHTML =
-      `<div class="bridge-row head"><span>direction</span><span>count</span>` +
-      `<span>sounds</span></div>` +
-      rows.map(([label, syms]) =>
-        `<div class="bridge-row"><span>${label}</span>` +
-        `<span class="gain">${syms.length}</span>` +
-        `<span class="syms">${syms.join(" ") || "—"}</span></div>`).join("");
-  }
-
-  // coverage note, generated from the data so it can't go stale
-  const c = A.coverage;
-  $("allo-notes").innerHTML =
-    `<strong>Sources and limits.</strong> The contrasts above come from standard ` +
-    `descriptive grammars rather than from mining a dataset. Each recording is a ` +
-    `separate Wikimedia Commons file for that IPA symbol, so the two sides of ` +
-    `each pair are different audio. The three English /t/ words are ` +
-    `whole-word recordings by a single speaker ` +
-    `(<a href="https://commons.wikimedia.org/wiki/User:Dvortygirl">Dvortygirl</a>, ` +
-    `General American, CC BY-SA 3.0) rather than isolated segments, because these ` +
-    `allophones only exist in context: the <span class="ipa">[t]</span> of ` +
-    `<em>stop</em> is unaspirated precisely because of the <em>s</em> in front of ` +
-    `it, and the tap in <em>butter</em> is a positional allophone rather than a ` +
-    `segment IPA references list for English. The words were chosen so that the ` +
-    `allophone is <em>obligatory</em> rather than optional: an earlier version used ` +
-    `<em>cat</em> for an unreleased <span class="ipa">[t̚]</span>, but word-final ` +
-    `release in English is a speaker's choice, so the recording did not dependably ` +
-    `contain it. Transcriptions are Wiktionary's, and the tap is ` +
-    `General American — many British speakers use a full ` +
-    `<span class="ipa">t</span> in <em>butter</em>. Elsewhere on this page the audio is ` +
-    `isolated IPA segments, which are careful laboratory productions; a ` +
-    `<span class="ipa">β</span> between vowels in running Spanish is usually ` +
-    `softer than the demo suggests. The bridge overlap figure uses PHOIBLE's ` +
-    `allophone records, where coverage is uneven: ` +
-    `${c.with_allophones} of ${c.total} languages have them, and ` +
-    `${c.excluded.join(" and ")} have none in any inventory. English is a ` +
-    `particular case — the Received Pronunciation inventory used for the Sound ` +
-    `Chart (PHOIBLE 2252) lists no allophones, while PHOIBLE's ` +
-    `<a href="https://phoible.org/inventories/view/160">SPA inventory 160</a> ` +
-    `documents them for 68% of its English phonemes. The English allophones here come ` +
-    `from that second inventory, which agrees with the charted one on 32 of 51 ` +
-    `phonemes. Counting a bridge at half credit is a rough allowance rather than a ` +
-    `measurement: producing a sound as an allophone is a step toward a ` +
-    `contrast, but not the same as controlling it.`;
 })();
 </script>
-<script src="nav.js?v=aae3ed8a"></script>
+<script src="nav.js?v=3651bfbb"></script>
 </body>
 </html>

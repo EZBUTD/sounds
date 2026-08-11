@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Language Learners — Spoken Sounds Across the World</title>
-<link rel="stylesheet" href="shared.css?v=d949b745">
+<link rel="stylesheet" href="shared.css?v=c0395948">
 <style>
   .controls { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
     margin: .8rem 0; font-size: .88rem; }
@@ -17,10 +17,11 @@
 <body data-nav="difficulty">
 
 <h1>Language learners</h1>
-<p class="subtitle">Sound overlap is symmetric: English and Japanese share the same
-16 sounds in either direction. The list of sounds a learner has to learn isn't — it
-depends on what your first language is. This page looks at that asymmetry, and then at
-whether unusual sounds have a correlation with how many people take a language up.
+<p class="subtitle">Sound-system overlap is symmetric: a pair has the same matching
+IPA sound labels in either direction. The sounds a learner may need to
+learn are not symmetric — they depend on the learner's first language. This page
+looks at that asymmetry, and then at whether unusual sounds correlate with how many
+people take a language up.
 </p>
 
 <div class="deffoot" style="margin-bottom:1.2rem">
@@ -97,12 +98,10 @@ whether unusual sounds have a correlation with how many people take a language u
   <h3>A whole layer of contrast sits outside every number on this site</h3>
   <p>Every figure here counts <strong>segments</strong> — consonants and vowels.
   <strong>Pitch is a separate system, and it is excluded throughout.</strong>
-  PHOIBLE records tone as its own category, and this project drops those rows
-  before computing anything: the chart grid has no axis for pitch, and the
-  symbol-normalising step reduces a tone mark to nothing, so
-  <span class="ipa">a˥</span> and <span class="ipa">a˩</span> both become
-  <span class="ipa">a</span>. Phoneme counts, overlap percentages and the rarity
-  axis above are all segmental-only figures.</p>
+  PHOIBLE records standalone tone entries as their own category, and this project
+  drops those rows before computing anything because the chart grid has no axis
+  for pitch. Phoneme counts, overlap percentages and the rarity axis above are
+  therefore all segmental-only figures.</p>
   <p>That matters most for exactly the languages where pitch does the most work.
   <span id="tone-lead"></span></p>
   <div id="tonetable"></div>
@@ -123,7 +122,7 @@ whether unusual sounds have a correlation with how many people take a language u
 
 <div class="block takeaway">
   <h3>What to make of an unfamiliar sound system</h3>
-  <p>English and Spanish have one of the lower sound overlaps in this dataset, and
+  <p>English and Spanish have one of the lower sound-system overlaps in this dataset, and
   Spanish is also the language English speakers study most — a useful check on how
   much weight sound distance deserves. It's a real factor, and largely what an
   accent consists of, but vocabulary, grammar, writing system, shared loanwords and
@@ -149,10 +148,10 @@ whether unusual sounds have a correlation with how many people take a language u
 <div class="pagenav">
   <a href="history.html">&larr; History of English</a>
   <span class="spacer"></span>
-  <a href="index.html">Back to the Sound Chart &rarr;</a>
+  <a href="map.html">World Map &rarr;</a>
 </div>
 
-<script src="mapdata.js?v=5a0b0f32"></script>
+<script src="mapdata.js?v=4919090d"></script>
 <script>
 (function () {
   const $ = id => document.getElementById(id);
@@ -178,8 +177,8 @@ whether unusual sounds have a correlation with how many people take a language u
   function renderAsym(learner) {
     const rows = names.filter(n => n !== learner).map(t => {
       const out = A.pairs[`${learner}|${t}`], back = A.pairs[`${t}|${learner}`];
-      return { t, out: out.newSounds, load: out.load, back: back.newSounds };
-    }).sort((a, b) => a.load - b.load);
+      return { t, out: out.newSounds, back: back.newSounds };
+    }).sort((a, b) => a.out - b.out || a.t.localeCompare(b.t));
     const maxN = Math.max(...rows.map(r => Math.max(r.out, r.back)));
     const bar = (v, cls) =>
       `<span class="bar ${cls}" style="width:${Math.round(90 * v / maxN)}px"></span>`;
@@ -201,9 +200,9 @@ whether unusual sounds have a correlation with how many people take a language u
         `<td>${bar(r.out, "")} ${r.out}</td>` +
         `<td>${bar(r.back, "l2")} ${r.back}</td></tr>`).join("") +
       `</tbody></table>` +
-      `<p class="sub">Sorted by rarity-weighted workload, lightest first: a pair ` +
-      `near the top asks ${art} ${learner} speaker for few new sounds, and the ` +
-      `rare ones count for more than the common ones.</p>`;
+      `<p class="sub">Sorted by the number of new IPA sound labels under the same counting rules, fewest first. ` +
+      `Pronunciation-variant matches are presented qualitatively on the Sound Variants page and ` +
+      `receive no numerical discount here.</p>`;
   }
 
   // ---- rarity vs L2 scatter ----
@@ -389,6 +388,6 @@ whether unusual sounds have a correlation with how many people take a language u
   })();
 })();
 </script>
-<script src="nav.js?v=aae3ed8a"></script>
+<script src="nav.js?v=3651bfbb"></script>
 </body>
 </html>
