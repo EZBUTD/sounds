@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spoken Sounds Across the World </title>
+<link rel="stylesheet" href="shared.css?v=d949b745">
+<style>
+  :root {
+    --l1: #1a7f6b;         /* language 1 only */
+    --l2: #7b4bbf;         /* language 2 only */
+    --both: #23558c;       /* in both */
+    --none-bg: #f1ede6;    /* in neither */
+    --none-text: #a09a8e;
+    --imposs: #dcd6cb;
+    --bg: #faf8f4;
+    --ink: #2b2620;
+    --accent: #b3542e;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0 auto; padding: 2rem 1.5rem 4rem; max-width: 1180px;
+    font-family: "Avenir Next", "Segoe UI", system-ui, sans-serif;
+    background: var(--bg); color: var(--ink);
+  }
+  h1 { font-size: 1.85rem; margin: 0 0 .3rem; }
+  .subtitle { color: #6b6459; margin: 0 0 1.4rem; max-width: 68ch; }
+  h2.section { font-size: .95rem; letter-spacing: .1em; text-transform: uppercase;
+    color: #8a8275; margin: 2rem 0 .6rem; }
+
+  .controls { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; margin-bottom: .8rem; }
+  .controls .ctl { display: flex; align-items: center; gap: .5rem; }
+  .controls label { font-weight: 600; }
+  select { font-size: .95rem; padding: .4rem .6rem; border-radius: 8px;
+    border: 2px solid #c9c2b6; background: white; color: var(--ink); }
+  select:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+  #sel1 { border-color: var(--l1); } #sel2 { border-color: var(--l2); }
+
+  .headline { font-size: 1.02rem; margin: .3rem 0 1rem; min-height: 1.4em; }
+  .headline strong { color: var(--accent); }
+
+  .legend { display: flex; gap: 1.1rem; flex-wrap: wrap; font-size: .85rem; margin-bottom: 1.2rem; }
+  .key { display: inline-flex; align-items: center; gap: .4rem; }
+  .sw { width: 1.25em; height: 1.25em; border-radius: 4px; border: 1.5px solid rgba(0,0,0,.25); }
+  .sw.both { background: var(--both); } .sw.l1 { background: var(--l1); }
+  .sw.l2 { background: var(--l2); } .sw.none { background: var(--none-bg); }
+
+  /* consonant table */
+  .ctable { border-collapse: collapse; width: 100%; font-size: .92rem; }
+  .ctable th { font-weight: 600; font-size: .72rem; padding: .3rem .2rem; color: #6b6459; }
+  .ctable th.place { writing-mode: initial; }
+  .hoverable { cursor: help; text-decoration: underline dotted #b3a893 1.5px;
+    text-underline-offset: 3px; }
+  .ctable td { border: 1px solid #cfc8bb; height: 46px; padding: 2px; text-align: center; vertical-align: middle; }
+  .ctable td.manner { text-align: left; font-size: .75rem; font-weight: 600; color: #6b6459;
+    padding: 0 .4rem; white-space: nowrap; border-left: none; }
+  .ctable td.imposs { background: var(--imposs); }
+  .pair { display: flex; gap: 3px; justify-content: center; }
+
+  /* sound buttons (shared by table, vowels, strips) */
+  button.snd {
+    position: relative; min-width: 34px; height: 38px; padding: 0 6px;
+    border-radius: 7px; border: 1.5px solid rgba(0,0,0,.2);
+    background: var(--none-bg); color: var(--none-text);
+    font-size: 1.15rem; font-family: inherit; cursor: pointer;
+  }
+  button.snd:hover { transform: translateY(-1px); }
+  button.snd:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  button.snd.s-both { background: var(--both); color: #fff; border-color: #163a63; }
+  button.snd.s-l1 { background: var(--l1); color: #fff; border-color: #10604f; }
+  button.snd.s-l2 { background: var(--l2); color: #fff; border-color: #55348a; }
+  button.snd .v { position: absolute; top: -1px; right: 1px; font-size: .6rem; font-weight: 700; }
+  button.snd.playing { box-shadow: 0 0 0 4px rgba(179,84,46,.45); }
+  button.snd:disabled { cursor: default; opacity: .35; }
+
+  /* vowel trapezoid — labels live in a padded gutter outside the shape */
+  .vowelwrap { max-width: 760px; margin: 0 auto; }
+  .vowelbox { position: relative; height: 400px;
+    margin: 1.6rem 3.2rem 1.2rem 5.5rem; }
+  .vowelbox svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .vowelbox button.snd { position: absolute; transform: translate(-50%, -50%); }
+  .vlabel { position: absolute; font-size: .78rem; color: #6b6459; font-weight: 700;
+    white-space: nowrap; }
+  .vlabel.axis-x { top: -1.55rem; }             /* Front / Central / Back above the shape */
+  .vlabel.axis-y { right: calc(100% + .9rem); text-align: right; } /* Close..Open in left gutter */
+  .vlabel.hoverable { cursor: help; text-decoration: underline dotted #b3a893 1.5px;
+    text-underline-offset: 3px; }
+
+  .strip { display: flex; flex-wrap: wrap; gap: .45rem; align-items: center; }
+  .strip .strip-name { font-size: .78rem; font-weight: 700; color: #6b6459; margin-right: .5rem; min-width: 150px; }
+
+  .extras { font-size: .9rem; margin-top: .6rem; color: #6b6459; }
+  .extras .chip { display: inline-block; background: #fff; border: 1px solid #cfc8bb;
+    border-radius: 6px; padding: .1rem .45rem; margin: .12rem; font-size: 1.05rem; }
+
+  .tooltip { position: fixed; z-index: 10; max-width: 330px; background: var(--ink); color: #faf8f4;
+    border-radius: 10px; padding: .7rem .9rem; font-size: .85rem; line-height: 1.45;
+    pointer-events: none; opacity: 0; transition: opacity .12s; }
+  .tooltip.show { opacity: 1; }
+  .t-head { font-weight: 700; margin-bottom: .25rem; }
+  .t-tags span { display: inline-block; border-radius: 4px; padding: 0 .35rem; margin-right: .3rem;
+    font-size: .75rem; font-weight: 700; }
+  .t-tags .tg-l1 { background: var(--l1); } .t-tags .tg-l2 { background: var(--l2); }
+  .t-tags .tg-var { background: #d9a441; color: #2b2620; }
+
+  /* pair-distribution strip plot */
+  .dist { margin: .4rem 0 1.2rem; max-width: 720px; display: none; }
+  .dist.show { display: block; }
+  .dist .dist-title { font-size: .85rem; color: #6b6459; margin-bottom: .35rem; }
+  .dist .track { position: relative; height: 44px; background: #f1ede6;
+    border-radius: 8px; border: 1px solid #ddd6c9; }
+  .dist .dot { position: absolute; top: 50%; width: 9px; height: 9px;
+    border-radius: 50%; background: #b9b2a4; opacity: .55;
+    transform: translate(-50%, -50%); cursor: help; }
+  .dist .dot.hl { width: 16px; height: 16px; background: var(--l2);
+    opacity: 1; border: 2.5px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.35); z-index: 2; }
+  .dist .axis { display: flex; justify-content: space-between; font-size: .7rem;
+    color: #8a8275; margin-top: .2rem; }
+  .dist .verdict { font-size: .85rem; margin-top: .35rem; }
+
+  /* findings section */
+  .fam-legend { display: flex; flex-wrap: wrap; gap: .4rem 1rem; margin: .6rem 0;
+    font-size: .8rem; }
+  .fam-legend .fkey { display: inline-flex; align-items: center; gap: .35rem; }
+  .fam-legend .fsw { width: .95em; height: .95em; border-radius: 3px;
+    border: 1px solid rgba(0,0,0,.25); }
+  #findings .finding { max-width: 74ch; margin-bottom: 2rem; }
+  #findings h3 { font-size: 1.15rem; margin: 0 0 .4rem; color: var(--accent); }
+  #findings p { line-height: 1.6; margin: 0; }
+  #findings .takeaway { background: #eef3ec; border-left: 4px solid var(--l1);
+    padding: 1rem 1.2rem; border-radius: 8px; }
+
+  #findings .sub { font-size: .8rem; color: #8a8275; margin-top: .5rem; }
+  .ipa-inline { font-family: var(--ipa-font);
+    background: #f0ece4; padding: 0 .25em; border-radius: 3px; }
+
+  /* ---- shared / only comparison ---- */
+  .vcols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .9rem; }
+  .vmeter { height: 5px; background: #ece7dd; border-radius: 3px; margin: 0 0 .55rem;
+    overflow: hidden; }
+  .vmeter i { display: block; height: 100%; border-radius: 3px; }
+  .vmeter i.m1 { background: var(--l1); }
+  .vmeter i.m2 { background: var(--l2); }
+  .vmeter i.mb { background: var(--both); }
+  @media (max-width: 760px) { .vcols { grid-template-columns: 1fr; } }
+  .vcol h4 { margin: 0 0 .4rem; font-size: .85rem; text-transform: uppercase;
+    letter-spacing: .05em; }
+  .vcol h4 span { color: #8a8275; font-weight: 400; }
+  .vcol h4.c1 { color: var(--l1); } .vcol h4.c2 { color: var(--l2); }
+  .vcol h4.cb { color: var(--both); }
+  .vgroup { display: flex; flex-wrap: wrap; gap: .3rem; }
+  .vgroup.solo { max-width: 100%; }
+  .vnone { font-size: .8rem; color: #b3aa9c; }
+  button.vchip { font-family: var(--ipa-font); font-size: .95rem;
+    min-width: 2em; padding: .18rem .35rem; border-radius: 5px; cursor: pointer;
+    background: #fff; color: var(--ink); border: 2px solid #ddd6c8; }
+  button.vchip.l1 { background: rgba(26,127,107,.14); }
+  button.vchip.l2 { background: rgba(123,75,191,.14); }
+  button.vchip.both { background: rgba(35,85,140,.14); }
+  button.vchip:hover { transform: translateY(-1px); }
+  button.vchip.playing { box-shadow: 0 0 0 4px rgba(179,84,46,.45); }
+  button.vchip:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  /* rarity = border treatment, so it never relies on fill colour alone */
+  button.vchip.t-very-rare { border-color: var(--rare); border-style: solid; }
+  button.vchip.t-rare { border-color: #d98f6a; }
+  button.vchip.t-uncommon { border-color: #c9c2b6; }
+  button.vchip.t-common { border-color: #e8e2d7; border-style: dashed; }
+  .rarity-legend { display: flex; flex-wrap: wrap; align-items: center;
+    gap: .35rem .9rem; font-size: .76rem; color: #8a8275; margin-top: .7rem; }
+  .rarity-legend .rkey { display: inline-flex; align-items: center; gap: .3rem; }
+  .rarity-legend i { width: 1em; height: 1em; border-radius: 4px; background: #fff;
+    border: 2px solid #ddd6c8; display: inline-block; }
+  .rarity-legend i.t-very-rare { border-color: var(--rare); }
+  .rarity-legend i.t-rare { border-color: #d98f6a; }
+  .rarity-legend i.t-uncommon { border-color: #c9c2b6; }
+  .rarity-legend i.t-common { border-color: #e8e2d7; border-style: dashed; }
+  .cards { display: grid; gap: .7rem; margin: .9rem 0;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+  .card { border: 1px solid #e0d9cc; border-radius: 8px; padding: .7rem .8rem;
+    background: #fdfcfa; }
+  .card h4 { margin: 0 0 .3rem; font-size: .92rem; }
+  .card .big { font-size: 1.5rem; color: var(--accent); font-weight: 600; }
+  .card p { font-size: .8rem; color: #6b6459; margin: .2rem 0 0; line-height: 1.45; }
+  table.data { border-collapse: collapse; font-size: .84rem; margin: .8rem 0; }
+  table.data th, table.data td { padding: .3rem .6rem; text-align: left;
+    border-bottom: 1px solid #e8e2d7; }
+  table.data th { color: #8a8275; font-weight: 600; }
+  table.data td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  table.data .sym { font-family: var(--ipa-font); }
+  /* the rare-sounds table reuses the Venn chip so its sounds are playable and
+     carry the same tooltip; drop the cell's own font so the chip's applies */
+  table.data td.sym { font-family: inherit; padding-top: .2rem;
+    padding-bottom: .2rem; }
+  table.data td.sym button.vchip { margin: 0; }
+  #findings .sub, .block .sub { font-size: .8rem; color: #8a8275; margin-top: .5rem; }
+  .block { max-width: 78ch; margin-bottom: 1.6rem; }
+  .block h3 { font-size: 1.15rem; margin: 0 0 .4rem; color: var(--accent); }
+  .block p { line-height: 1.6; margin: 0 0 .6rem; }
+
+  /* opening preface: sets up phoneme + IPA for readers new to both */
+  .preface { max-width: 74ch; margin: 1.6rem 0 0; padding: 1.2rem 1.4rem;
+    background: #f6f3ec; border-radius: 10px; border: 1px solid #e6e0d4; }
+  .preface h2 { margin: 0 0 .7rem; font-size: .78rem; text-transform: uppercase;
+    letter-spacing: .09em; color: #8a8275; font-weight: 600; }
+  .preface p { margin: 0 0 .85rem; font-size: .93rem; line-height: 1.62;
+    max-width: none; }
+  .preface p:last-child { margin-bottom: 0; }
+  .preface strong { color: var(--ink); }
+  .lede { max-width: 74ch; font-size: .92rem; color: #6b6459; margin: .2rem 0 1rem; }
+  .note { font-size: .8rem; color: #8a8275; margin-top: 2.5rem; max-width: 74ch; }
+  .note a { color: var(--accent); }
+  @media (prefers-reduced-motion: reduce) { button.snd, .tooltip, button.vchip { transition: none; } }
+</style>
+</head>
+<body data-nav="chart">
+<h1>Spoken Sounds Across the World</h1>
+<p class="subtitle">A look at the raw materials of human speech: which sounds each
+language uses, how much any two languages have in common, and what that means for
+anyone learning one. No background in linguistics needed — the preface below covers
+everything the charts assume.</p>
+
+<div class="preface">
+  <h2>Before the charts</h2>
+
+  <p><strong>Roughly 7,000 languages are spoken today.</strong> They connect people
+  and they also divide them, which is why this seemed a reasonable fit for a theme
+  about how the world lives, thrives and connects. Sound is the layer where that
+  connection is most physical: before you can exchange anything with someone, one of
+  you has to make noises the other can recognise.</p>
+
+  <p><strong>What a phoneme is.</strong> Say <em>pat</em>, then <em>bat</em>. One
+  small change at the front changes the word entirely. That difference — the one
+  your language treats as meaningful — is a <em>phoneme</em>: the smallest unit of
+  sound that can change what a word means. English has around 44 of them. Every
+  language has its own set, and no language uses more than a fraction of what a
+  human mouth can produce.</p>
+
+  <p><strong>What the chart below is.</strong> Linguists needed one notation for
+  every sound in every language, since spelling is no help — English
+  <em>through</em>, <em>though</em> and <em>tough</em> share four letters and three
+  different sounds. That notation is the
+  <strong>International Phonetic Alphabet</strong>, and one symbol always means one
+  sound. The grid arranges those symbols by <em>how</em> they're made: across, by
+  where in the mouth the sound happens (lips on the left, throat on the right);
+  down, by what the air is doing (fully blocked, squeezed through a gap, and so on).
+  You don't need to read the labels to use it. Pick two languages and the pattern of
+  what they share, and don't, is visible at a glance.</p>
+
+  <p><strong>Sound is one layer of a language, not the whole of it.</strong> Tone,
+  rhythm, grammar, writing system, vocabulary, politeness conventions and cultural
+  context all shape how hard a language is to learn and how it feels to use. This
+  project measures sounds because that is what there is good comparable data for, so
+  treat it as one useful view rather than a verdict on any language.</p>
+
+  <p><strong>The data has real gaps, and they aren't evenly spread.</strong>
+  Everything here draws on <a href="https://phoible.org">PHOIBLE</a>, which
+  catalogues sound inventories for 2,177 languages — a large sample, but not a
+  census, and skewed toward languages that have received sustained academic
+  attention. Widely-studied languages appear in several analyses that disagree with
+  each other; many others are described once, or not at all. The 34 languages
+  compared here are mostly the world's largest, so the patterns describe this
+  selection rather than all human speech. Where a number depends on a choice we
+  made, the method notes say so.</p>
+</div>
+
+<h2 class="section" style="margin-top:2.5rem">Compare two languages</h2>
+<p class="lede">Pick two languages to see which sounds they share. Click any sound
+to hear it.</p>
+
+<div class="controls">
+  <div class="ctl"><label for="sel1">Language 1</label><select id="sel1"></select></div>
+  <div class="ctl"><label for="sel2">Language 2</label><select id="sel2"><option value="">— none —</option></select></div>
+</div>
+<p class="headline" id="headline" aria-live="polite"></p>
+<div class="dist" id="dist" role="img">
+  <div class="dist-title" id="distTitle"></div>
+  <div class="track" id="distTrack"></div>
+  <div class="axis"><span>least similar</span><span id="distMetric">sound overlap (share of combined sounds)</span><span>most similar</span></div>
+  <div class="verdict" id="distVerdict"></div>
+</div>
+<div class="legend" id="legend">
+  <span class="key"><span class="sw both"></span> In both</span>
+  <span class="key"><span class="sw l1"></span> <span id="leg1">Language 1</span> only</span>
+  <span class="key"><span class="sw l2"></span> <span id="leg2">Language 2</span> only</span>
+  <span class="key"><span class="sw none"></span> In neither</span>
+  <span class="key">◐ = exists only as an <a href="allophones.html">allophone</a></span>
+</div>
+
+<h2 class="section">Consonants</h2>
+<table class="ctable" id="ctable" aria-label="Pulmonic consonants by place and manner of articulation"></table>
+
+<h2 class="section">Vowels <span style="font-weight:400; text-transform:none; letter-spacing:0">— position = where your tongue sits</span></h2>
+<div class="vowelwrap">
+<div class="vowelbox" id="vowelbox">
+  <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+    <polygon points="8,5 82,5 82,84 34,84" fill="none" stroke="#cfc8bb" stroke-width="0.4"/>
+    <line x1="22" y1="32" x2="82" y2="32" stroke="#e4ded2" stroke-width="0.35"/>
+    <line x1="28" y1="58" x2="82" y2="58" stroke="#e4ded2" stroke-width="0.35"/>
+  </svg>
+  <!-- x axis: tongue frontness (above the shape) -->
+  <span class="vlabel axis-x hoverable" data-term="Front" style="left:8%; transform:translateX(-50%)">Front</span>
+  <span class="vlabel axis-x hoverable" data-term="Central" style="left:46%; transform:translateX(-50%)">Central</span>
+  <span class="vlabel axis-x hoverable" data-term="Back" style="left:82%; transform:translateX(-50%)">Back</span>
+  <!-- y axis: mouth openness (left gutter) -->
+  <span class="vlabel axis-y hoverable" data-term="Close" style="top:5%; transform:translateY(-50%)">Close</span>
+  <span class="vlabel axis-y hoverable" data-term="Close-mid" style="top:32%; transform:translateY(-50%)">Close-mid</span>
+  <span class="vlabel axis-y hoverable" data-term="Open-mid" style="top:58%; transform:translateY(-50%)">Open-mid</span>
+  <span class="vlabel axis-y hoverable" data-term="Open" style="top:84%; transform:translateY(-50%)">Open</span>
+</div>
+</div>
+
+<h2 class="section">Other sounds</h2>
+<div id="strips"></div>
+
+<div class="extras" id="extras"></div>
+
+<div class="tooltip" id="tooltip" role="tooltip"></div>
+
+<section id="findings">
+<h2 class="section" style="margin-top:3rem">Two inventories side by side</h2>
+
+<div class="block">
+  <h3>What they share, what each one keeps to itself</h3>
+  <p>The chart above places both languages against the full range of human speech.
+  This view splits the same comparison into three groups and <strong>outlines each
+  sound by how rare it is worldwide</strong>, which helps distinguish sounds that
+  are globally unusual from sounds that are common but happen to be missing from
+  the other language. Hover any sound for an example word.</p>
+  <p class="sub" id="vennHeadline" aria-live="polite"></p>
+  <div id="vennWrap"></div>
+  <div id="vennLegend" class="rarity-legend"></div>
+</div>
+
+<h2 class="section" style="margin-top:3rem">Rare sounds</h2>
+
+<div class="block">
+  <h3>The rarest sounds on the chart</h3>
+  <p>Counted across <strong><span id="worldN"></span> languages</strong> in
+  PHOIBLE, using one inventory per language so that heavily-studied languages
+  don't count more than once. Some sounds are close to universal:
+  <span class="ipa">k</span> appears in about 99% of them,
+  <span class="ipa">m</span> and <span class="ipa">i</span> in about 97%. Others
+  appear in only a handful. These shares reflect the languages PHOIBLE documents,
+  which is a large sample but not an even one.</p>
+  <div id="raretable"></div>
+</div>
+
+<div class="block">
+  <h3>English is one of the unusual ones</h3>
+  <p>If English is your first language, it's easy to hear it as the ordinary case
+  and other languages as the unusual ones. By this measure it sits on the other
+  side. English's <span class="ipa">θ</span> (<em>think</em>) appears in about 4%
+  of the world's languages, its <span class="ipa">ð</span> (<em>this</em>) in 6%,
+  and its <span class="ipa">ɹ</span> (<em>red</em>) in 6%. Weighting each sound by
+  how rare it is worldwide, <strong>English has the
+  <span id="engRank"></span>-most unusual inventory among the 34 here</strong> —
+  which suggests learners of English are working on much the same kind of problem
+  English speakers describe when learning others.</p>
+  <div class="cards" id="engCards"></div>
+</div>
+
+<div class="block">
+  <h3>Not all overlap is equal</h3>
+  <p>The comparisons above count every shared sound equally. But sharing
+  <span class="ipa">m</span> says little — nearly every language has it — while
+  sharing a click says more. Re-scoring overlap so that rarer sounds carry more
+  weight gives a different view of which pairs are alike in an unusual way rather
+  than in a common one. Scores drop across the board once universal sounds stop
+  earning full credit, so the ranking below uses the re-scored number, highest to
+  lowest.</p>
+  <div id="weightedtable"></div>
+  <p class="sub">The <em>Drop</em> column shows how much each pair lost in the
+  re-scoring. It is a different ordering: a pair can fall a long way and still
+  finish near the top (Indonesian + Amharic drops 20 points and still ranks
+  second), while a pair that started low has less to lose. The weighted score is
+  what the rows are sorted on.</p>
+</div>
+
+<h2 class="section" style="margin-top:3rem">Patterns in the data</h2>
+
+<div class="finding">
+  <h3>Ancestry is a weak predictor of how a language sounds</h3>
+  <p>Grouping these languages by ancestry (their <span class="hoverable" tabindex="0"
+  data-glossary="A group of languages descended from a common ancestor — like Indo-European (English, Hindi, Spanish, Russian...) or Afro-Asiatic (Arabic, Hebrew, Amharic...). Established by comparing vocabulary and grammar, not sounds.">language families</span>)
+  gives a reasonable expectation that relatives will sound alike. In this dataset
+  that holds less often than you might expect:
+  <strong><span id="f-nnSame"></span> of the 34 languages here have their closest
+  sound-relative inside their own family.</strong> Related languages do share a
+  little more on average (median overlap <span id="f-sameMed"></span>% against
+  <span id="f-crossMed"></span>% for unrelated pairs), and
+  <span id="f-beat"></span>% of unrelated pairs score above the related-pair
+  median. A fair reading is that ancestry sets a starting point, and drift,
+  contact and borrowing over long spans do much of the rest.</p>
+</div>
+
+<div class="finding">
+  <h3>The sound heatmap: 561 comparisons at once</h3>
+  <p>Each cell compares two languages, darker where they share more sounds. Rows
+  are ordered by <em>sound similarity</em> rather than ancestry, so the darker
+  blocks are groups of languages with similar inventories — "sound
+  neighborhoods". The colored strip along the edges shows each language's
+  ancestral family. If ancestry closely tracked sound, those colors would line up
+  with the blocks; here they mostly don't.</p>
+  <div class="fam-legend" id="famLegend" aria-label="Language family color legend"></div>
+  <div id="heatmapWrap" style="overflow-x:auto">
+    <canvas id="heatmap" width="900" height="900" style="max-width:100%"></canvas>
+  </div>
+  <div id="heatmapTip" class="tooltip"></div>
+</div>
+
+<div class="finding">
+  <h3>The sound family tree: grouping by sound instead of ancestry</h3>
+  <p>This is a family tree built from <strong>sound alone</strong> — no history, no
+  vocabulary, no geography. The languages are the labels down the right-hand side;
+  every fork to their left is the point where two branches merged, drawn at the
+  <strong>average overlap between everything on one side and everything on the
+  other</strong> (scale along the bottom). So <strong>forks near the right join
+  languages that are very much alike</strong>, and forks far to the left join
+  groups that have little in common on average — even if one or two individual
+  pairs across the gap score higher.</p>
+  <p>The colors show each language's ancestral family. If sound closely followed
+  ancestry, the branches would tend toward single colors. Mostly they are mixed:
+  Swahili sits within a branch of Romance and Slavic languages, Amharic pairs with
+  Indonesian, and Telugu falls next to Hindi and Punjabi from a different family.
+  Cutting the tree at <span id="t-cut"></span>% overlap gives the "sound
+  neighborhoods" referred to elsewhere on this page, and
+  <span id="t-mixed"></span>.</p>
+  <p>One group runs the other way, and it's worth noting:
+  <strong>Dutch, French and German</strong> form the only neighborhood here that is
+  a single family. Long contact between neighbors can pull sound systems together
+  as well — it just isn't the general pattern in this set.</p>
+  <p><strong>Why does <span id="t-loner">one language</span> sit on its own?</strong>
+  This is a reasonable thing to wonder about, and there are two parts to it. The
+  first concerns how to read the chart: <strong>a fork's position is the
+  <em>average</em> overlap across all the pairs it spans, not the closest
+  pair.</strong> So the leftmost fork at <span id="t-rootPct"></span>% isn't
+  <span id="t-loner2"></span>'s distance from its nearest neighbour — it's
+  <span id="t-loner3"></span>'s average across all
+  <span id="t-lonerRest"></span> other languages, which is what that number
+  becomes when a language joins the rest of the set at once.</p>
+  <p>The second part is that it has no especially close match in this set. Its
+  nearest is <span id="t-lonerBest"></span>, which is the lowest "nearest match"
+  here — the others each have a partner above <span id="t-lonerFloor"></span>%.
+  Its nearest neighbours are also closer to each other than to it:
+  <span id="t-lonerPairMsg"></span> Since a tree places every language somewhere,
+  a language without a close match ends up joining late, on its own branch.
+  Worth noting that this is a property of these 34 languages rather than of the
+  language itself: with a closer relative in the roster it would likely sit
+  differently.</p>
+  <div class="fam-legend" id="famLegend2" aria-label="Language family color legend"></div>
+  <div id="treeWrap" style="overflow-x:auto">
+    <canvas id="soundtree" width="900" height="760" style="max-width:100%"
+      aria-label="Dendrogram of 34 languages clustered by sound-inventory similarity, leaf labels coloured by real language family"></canvas>
+  </div>
+  <p class="sub">Hover any fork to see which languages it joins and at what
+  overlap. This section previously used a scatter plot. Projecting 561 pairwise
+  distances onto two axes kept only part of the structure (r = 0.67) and left the
+  axes without a direct interpretation, which made it hard to read. A tree shows
+  the same clustering with each fork placed at a measured overlap value, though it
+  imposes a strict hierarchy that real relationships don't always have.</p>
+</div>
+
+<div class="finding">
+  <h3>Unrelated languages that sound alike</h3>
+  <p>The closest pair in this dataset is <strong>Amharic (Ethiopia) and
+  Indonesian</strong> at 90% overlap, from families with no common ancestor in
+  recorded history. Clustering turns up several groups like this:
+  <span id="f-clusters"></span>. There are a couple of likely reasons. All human
+  mouths favor the same easy sounds — nearly every language has m, k and a — so
+  mid-sized inventories built mostly from common sounds tend to resemble each
+  other. Languages in contact also borrow sounds along with words: retroflexes are
+  found across unrelated languages in South Asia, and clicks passed from Khoisan
+  languages into Zulu. Linguists call contact zones like these
+  <em>Sprachbünde</em>. So some of this resemblance is coincidence and some is
+  shared circumstance, and a 90% figure from one pair of inventories shouldn't be
+  read as more precise than it is.</p>
+</div>
+
+<div class="finding">
+  <h3>Why relatives often don't sound alike</h3>
+  <p>Sound systems tend to change faster than vocabulary or grammar. English and
+  Hindi separated roughly 6,000 years ago and today overlap more than English does
+  with German. English and Spanish, closer cousins, sit near the lower end of
+  English's similarity list at <span id="f-engSpa"></span>% overlap: Spanish uses
+  around 25 sounds with five vowels, while English uses around 44 with a much
+  larger vowel space. Because family trees are established from vocabulary and
+  grammar, which change more slowly, a shared family tells you less about sound
+  than you might assume.</p>
+</div>
+
+<div class="finding takeaway">
+  <h3>What this does and doesn't tell a learner</h3>
+  <p>English and Spanish have one of the lower sound overlaps in this dataset, and
+  Spanish is also the language English speakers study most. That combination is a
+  useful reminder that sound distance is one factor among several. It's a real one
+  — it's largely what an accent is made of — but vocabulary, grammar, writing
+  system, shared loanwords and how much you use the language day to day all matter
+  too, and none of them appear on this chart. People learn languages with very
+  different sound systems from their own routinely, and unfamiliar sounds are
+  learnable with practice. A large gap here suggests where the pronunciation work
+  will be, not whether the language is worth starting.</p>
+</div>
+
+<div class="finding" style="max-width:74ch">
+  <h3>Keep going</h3>
+  <p>Sharing a sound isn't the same as pronouncing it the same way —
+  <a href="allophones.html"><strong>Allophones</strong></a> covers that gap, and
+  <a href="spectrograms.html"><strong>Seeing Sounds</strong></a> makes one of those
+  differences visible in a spectrogram.
+  <a href="difficulty.html"><strong>Language Learners</strong></a> looks at
+  why the two directions of a language pair aren't the same amount of work, and
+  <a href="map.html"><strong>World Map</strong></a> shows where these languages
+  are spoken and learned.</p>
+</div>
+</section>
+
+<p class="note"><strong>Method notes:</strong> Sound inventories from
+<a href="https://phoible.org">PHOIBLE 2.0</a> (CC BY-SA). Linguists analyse sound systems
+differently, so inventories vary by source
+(<a href="https://phoible.org/faq">PHOIBLE explains why</a>) and the counts here reflect one
+analysis per language rather than a settled figure. Audio from Wikimedia Commons (CC BY-SA);
+English diphthongs play whole words. An <em>allophone</em> (marked ◐) is a sound that occurs
+in the language but never distinguishes two words; some sources call these
+<em>variants</em> or <em>realizations</em>. Sounds are matched at the base-symbol
+level, setting aside length, aspiration and similar modifications, so two languages can
+share a cell here and still pronounce it noticeably differently; the
+<a href="allophones.html">Allophones</a> page covers that. Shaded consonant cells are
+articulations generally judged not producible.</p>
+
+<script src="data.js?v=6518c281"></script>
+<script src="analysis.js?v=807348e5"></script>
+<script src="rarity.js?v=776d7c52"></script>
+<script>
+(function () {
+  const $ = id => document.getElementById(id);
+  const tooltip = $("tooltip");
+  const buttons = {};   // symbol -> [button, ...]
+  let current = null;   // playing audio
+
+  // ---------- selectors ----------
+  const sel1 = $("sel1"), sel2 = $("sel2");
+  // alphabetical: DATA.languages is in analysis order, which is not a useful
+  // order for someone hunting for their own language in a 34-item list
+  const pickerLangs = DATA.languages.slice()
+    .sort((a, b) => a.name.localeCompare(b.name));
+  for (const l of pickerLangs) {
+    for (const sel of [sel1, sel2]) {
+      const o = document.createElement("option");
+      // No "*" marker. It flagged languages whose chosen PHOIBLE inventory left
+      // the allophone column empty, which is a gap in one source rather than a
+      // property of the language — and readers took it to mean the language has no
+      // variants. English is the clearest case: the inventory charted here records
+      // none, while PHOIBLE's SPA inventory records them for 68% of its phonemes.
+      // Variant coverage is discussed on the Allophones page, where it can be
+      // explained properly.
+      o.value = o.textContent = l.name;
+      sel.appendChild(o);
+    }
+  }
+  // Open on a comparison rather than a single inventory. With Language 2 unset the
+  // chart shows one colour and the pair-overlap strip, the Venn and the two-language
+  // headline all stay hidden, so the page's central idea — that two languages carve
+  // up the same space differently — is invisible until the reader finds the second
+  // picker. English + Japanese is the pair the rest of the site already builds on
+  // (the /t/ allophone demos, the food/hood case), and at 16 shared sounds it is a
+  // genuinely low overlap, so the first thing a reader sees is a real contrast.
+  sel1.value = "English";
+  sel2.value = "Japanese";
+
+  // ---------- helpers ----------
+  const langByName = n => DATA.languages.find(l => l.name === n);
+  function mkBtn(sym) {
+    const b = document.createElement("button");
+    b.className = "snd";
+    b.dataset.sym = sym;          // lets chart_extras.js find + flash this button
+    b.innerHTML = `${sym}<span class="v" aria-hidden="true"></span>`;
+    const a = DATA.audio[sym];
+    b.setAttribute("aria-label", labelFor(sym));
+    if (a) b.addEventListener("click", () => play(a.file, b));
+    else b.disabled = true;
+    b.addEventListener("mouseenter", e => showTip(sym, e));
+    b.addEventListener("mousemove", positionTip);
+    b.addEventListener("mouseleave", hideTip);
+    b.addEventListener("focus", () => showTip(sym, null, b));
+    b.addEventListener("blur", hideTip);
+    (buttons[sym] ??= []).push(b);
+    return b;
+  }
+  function labelFor(sym) {
+    const name = DATA.names[sym] || "";
+    const ex = DATA.examples[sym];
+    return sym + (name ? ", " + name : "") + (ex ? `, as in ${ex}` : "") + ". Click to hear.";
+  }
+  function play(file, btn) {
+    if (current) { current.a.pause(); current.b.classList.remove("playing"); }
+    const a = new Audio(file);
+    current = { a, b: btn };
+    btn.classList.add("playing");
+    a.addEventListener("ended", () => btn.classList.remove("playing"));
+    a.play();
+  }
+
+  // ---------- glossary tooltips (chart terminology) ----------
+  function attachGlossary(el, term) {
+    const def = DATA.glossary[term];
+    if (!def) return;
+    el.classList.add("hoverable");
+    el.setAttribute("tabindex", "0");
+    el.setAttribute("aria-label", term + ": " + def);
+    const show = e => {
+      tooltip.innerHTML = `<div class="t-head">${term}</div><div>${def}</div>`;
+      tooltip.classList.add("show");
+      if (e && e.clientX !== undefined) positionTip(e);
+      else { const r = el.getBoundingClientRect(); positionTip({ clientX: r.right, clientY: r.top }); }
+    };
+    el.addEventListener("mouseenter", show);
+    el.addEventListener("mousemove", positionTip);
+    el.addEventListener("mouseleave", hideTip);
+    el.addEventListener("focus", () => show(null));
+    el.addEventListener("blur", hideTip);
+  }
+
+  // ---------- consonant table ----------
+  const table = $("ctable");
+  {
+    const thead = document.createElement("tr");
+    thead.appendChild(document.createElement("th"));
+    for (const p of DATA.places) {
+      const th = document.createElement("th");
+      th.className = "place"; th.textContent = p;
+      attachGlossary(th, p);
+      thead.appendChild(th);
+    }
+    table.appendChild(thead);
+    const impossible = new Set(DATA.impossible.map(([m, p]) => m + "|" + p));
+    for (const m of DATA.manners) {
+      const tr = document.createElement("tr");
+      const mtd = document.createElement("td");
+      mtd.className = "manner"; mtd.textContent = m;
+      attachGlossary(mtd, m);
+      tr.appendChild(mtd);
+      for (const p of DATA.places) {
+        const td = document.createElement("td");
+        if (impossible.has(m + "|" + p)) td.className = "imposs";
+        const cell = DATA.consonants[m][p];
+        if (cell) {
+          const wrap = document.createElement("div");
+          wrap.className = "pair";
+          for (const sym of cell) if (sym) wrap.appendChild(mkBtn(sym));
+          td.appendChild(wrap);
+        }
+        tr.appendChild(td);
+      }
+      table.appendChild(tr);
+    }
+  }
+
+  // ---------- vowels ----------
+  const vbox = $("vowelbox");
+  for (const v of DATA.vowels) {
+    const b = mkBtn(v.symbol);
+    b.style.left = v.x + "%";
+    b.style.top = v.y + "%";
+    vbox.appendChild(b);
+  }
+
+  // ---------- other strips ----------
+  const strips = $("strips");
+  for (const sec of DATA.otherSections) {
+    const row = document.createElement("div");
+    row.className = "strip";
+    const nm = document.createElement("span");
+    nm.className = "strip-name"; nm.textContent = sec.name;
+    attachGlossary(nm, sec.name);
+    row.appendChild(nm);
+    for (const sym of sec.symbols) row.appendChild(mkBtn(sym));
+    row.style.marginBottom = ".6rem";
+    strips.appendChild(row);
+  }
+
+  // vowel axis labels (already in HTML) get glossary handlers
+  for (const el of document.querySelectorAll("[data-term]")) {
+    attachGlossary(el, el.dataset.term);
+  }
+
+  // ---------- tooltip ----------
+  function showTip(sym, e, btn) {
+    const L1 = langByName(sel1.value), L2 = langByName(sel2.value);
+    let html = `<div class="t-head">${sym}${DATA.names[sym] ? " — " + DATA.names[sym] : ""}</div>`;
+    // example words: English anchor + selected-language words where curated
+    if (DATA.examples[sym]) html += `<div>English: as in “${DATA.examples[sym]}”</div>`;
+    for (const L of [L1, L2]) {
+      if (!L || L.name === "English") continue;
+      const ex = DATA.examplesByLang[L.name + "|" + sym];
+      if (ex) html += `<div>${L.name}: ${ex.text}` +
+        (ex.mined ? ` <span style="opacity:.65">(via Wiktionary)</span>` : "") + `</div>`;
+    }
+    const tags = [];
+    for (const [L, cls] of [[L1, "tg-l1"], [L2, "tg-l2"]]) {
+      if (!L) continue;
+      if (L.phonemes.includes(sym)) tags.push(`<span class="${cls}">${L.name}</span>`);
+      else if (L.allophones.includes(sym)) tags.push(`<span class="tg-var">${L.name}: allophone</span>`);
+    }
+    if (tags.length) html += `<div class="t-tags" style="margin-top:.3rem">${tags.join("")}</div>`;
+    for (const L of [L1, L2]) {
+      if (!L) continue;
+      const story = DATA.stories[L.name + "|" + sym];
+      if (story) html += `<div style="margin-top:.35rem">${story}</div>`;
+    }
+    if (!DATA.audio[sym]) html += `<div style="margin-top:.3rem;opacity:.7">(no audio available)</div>`;
+    tooltip.innerHTML = html;
+    tooltip.classList.add("show");
+    if (e) positionTip(e);
+    else if (btn) { const r = btn.getBoundingClientRect(); positionTip({ clientX: r.right, clientY: r.top }); }
+  }
+  function positionTip(e) {
+    tooltip.style.left = Math.min(e.clientX + 14, window.innerWidth - 350) + "px";
+    tooltip.style.top = (e.clientY + 14) + "px";
+  }
+  function hideTip() { tooltip.classList.remove("show"); }
+
+  // ---------- state painting ----------
+  function repaint() {
+    const L1 = langByName(sel1.value), L2 = langByName(sel2.value);
+    $("leg1").textContent = L1 ? L1.name : "Language 1";
+    $("leg2").textContent = L2 ? L2.name : "Language 2";
+    const p1 = new Set(L1 ? L1.phonemes : []), a1 = new Set(L1 ? L1.allophones : []);
+    const p2 = new Set(L2 ? L2.phonemes : []), a2 = new Set(L2 ? L2.allophones : []);
+    for (const [sym, btns] of Object.entries(buttons)) {
+      const in1 = p1.has(sym), in2 = p2.has(sym);
+      const cls = in1 && in2 ? "s-both" : in1 ? "s-l1" : in2 ? "s-l2" : null;
+      const variant = (!in1 && a1.has(sym)) || (!in2 && a2.has(sym));
+      for (const b of btns) {
+        b.classList.remove("s-both", "s-l1", "s-l2");
+        if (cls) b.classList.add(cls);
+        b.querySelector(".v").textContent = variant ? "◐" : "";
+      }
+    }
+    // headline
+    const h = $("headline");
+    if (L1 && L2) {
+      const both = L1.phonemes.filter(s => p2.has(s)).length;
+      const only1 = L1.phonemes.filter(s => !p2.has(s)).length;
+      const only2 = L2.phonemes.filter(s => !p1.has(s)).length;
+      h.innerHTML = `<strong>${L1.name}</strong> and <strong>${L2.name}</strong> share ` +
+        `<strong>${both}</strong> sounds. ${L1.name} has <strong>${only1}</strong> ${L2.name} lacks; ` +
+        `${L2.name} has <strong>${only2}</strong> ${L1.name} lacks.`;
+    } else if (L1) {
+      h.innerHTML = `<strong>${L1.name}</strong> has <strong>${L1.soundCount}</strong> ` +
+        `distinct sounds` + footnoteBits(L1) + `.`;
+    } else h.textContent = "";
+    function footnoteBits(L) {
+      const bits = [];
+      bits.push(`<strong>${L.phonemes.length}</strong> base sounds on this chart`);
+      if (L.extras.length) bits.push(`<strong>${L.extras.length}</strong> combination sounds below`);
+      if (L.mergedCount) bits.push(`<strong>${L.mergedCount}</strong> modified versions ` +
+        `(aspirated, breathy…) shown merged into their base cells`);
+      if (L.toneCount) bits.push(`<strong>${L.toneCount}</strong> tones, which live off this chart`);
+      let s = " — " + bits.join(", ");
+      if (L.lengthVariantCount) s += `. This source also lists ${L.lengthVariantCount} ` +
+        `long/doubled forms, not counted here`;
+      return s;
+    }
+    // extras: sounds beyond this chart (complex/doubled/tonal), per selected language
+    const ex = $("extras");
+    const parts = [];
+    for (const L of [L1, L2]) {
+      if (L && L.extras.length) {
+        parts.push(`<strong>${L.name}</strong> also uses <strong>${L.extras.length}</strong> ` +
+          `combination sounds built from chart symbols (the IPA chart writes these as ` +
+          `sequences rather than giving them their own cells): ` +
+          L.extras.map(s => `<span class="chip">${s}</span>`).join(""));
+      }
+    }
+    ex.innerHTML = parts.join("<br>");
+  }
+  // ---------- pair-distribution strip plot ----------
+  function pairKey(a, b) { return a < b ? a + "|" + b : b + "|" + a; }
+  function overlapsFor(name) {
+    // all 35 pairs involving `name`: [{other, shared, jaccard}]
+    return DATA.languages.filter(l => l.name !== name).map(l => {
+      const [shared, jaccard] = DATA.pairOverlap[pairKey(name, l.name)];
+      return { other: l.name, shared, jaccard };
+    });
+  }
+  function renderDist(L1, L2) {
+    const box = $("dist");
+    if (!L1 || !L2) { box.classList.remove("show"); return; }
+    box.classList.add("show");
+    const rows = overlapsFor(L1.name).sort((x, y) => x.jaccard - y.jaccard);
+    const idx = rows.findIndex(r => r.other === L2.name);
+    const pct = Math.round(100 * idx / (rows.length - 1));
+    const lo = rows[0].jaccard, hi = rows[rows.length - 1].jaccard;
+    const track = $("distTrack");
+    track.innerHTML = "";
+    for (const r of rows) {
+      const d = document.createElement("span");
+      d.className = "dot" + (r.other === L2.name ? " hl" : "");
+      const x = (r.jaccard - lo) / (hi - lo || 1);
+      d.style.left = (3 + 94 * x) + "%";
+      d.title = `${r.other}: ${r.shared} shared sounds (overlap ${Math.round(100 * r.jaccard)}%)`;
+      track.appendChild(d);
+    }
+    $("distTitle").textContent =
+      `How similar is ${L2.name} to ${L1.name}, compared with every other language here? ` +
+      `Each dot is one language.`;
+    const sel = rows[idx];
+    let verdict;
+    if (pct >= 85) verdict = `${L2.name} is among ${L1.name}'s closest sound-relatives`;
+    else if (pct >= 60) verdict = `${L2.name} is more similar to ${L1.name} than most languages here`;
+    else if (pct >= 40) verdict = `${L2.name} is about typical for ${L1.name}`;
+    else if (pct >= 15) verdict = `${L2.name} is less similar to ${L1.name} than most languages here`;
+    else verdict = `${L2.name} is among ${L1.name}'s most distant sound-relatives`;
+    $("distVerdict").innerHTML = `<strong>${verdict}</strong> — ` +
+      `more overlap than ${pct}% of the ${rows.length} other languages ` +
+      `(${sel.shared} shared sounds, ${Math.round(100 * sel.jaccard)}% of their combined sounds).`;
+    box.setAttribute("aria-label",
+      `${L2.name} shares ${sel.shared} sounds with ${L1.name}, more than ${pct}% of other languages.`);
+  }
+
+  // let chart_extras.js (Venn chips) reuse this page's audio
+  window.playSymbol = function (sym) {
+    const a = DATA.audio[sym];
+    if (!a) return;
+    // flash the clicked chip if there is one, else the chart button
+    const btn = document.querySelector(`.vchip[data-sym="${sym}"]`)
+      || document.querySelector(`button.snd[data-sym="${sym}"]`);
+    if (btn) play(a.file, btn);
+  };
+
+  function repaintAll() {
+    repaint();
+    renderDist(langByName(sel1.value), langByName(sel2.value));
+    if (typeof window.renderVenn === "function") window.renderVenn(sel1.value, sel2.value);
+  }
+  // chart_extras.js loads after this script, so it calls back once ready
+  window.__repaintAll = repaintAll;
+  sel1.addEventListener("change", repaintAll);
+  sel2.addEventListener("change", repaintAll);
+  repaintAll();
+
+  // ---------- findings section (needs analysis.js) ----------
+  if (typeof ANALYSIS !== "undefined") {
+    // fill stat placeholders
+    $("f-nnSame").textContent = ANALYSIS.nnSameFamilyCount;
+    $("f-sameMed").textContent = Math.round(100 * ANALYSIS.sameFamilyMedian);
+    $("f-crossMed").textContent = Math.round(100 * ANALYSIS.crossFamilyMedian);
+    $("f-beat").textContent = ANALYSIS.crossBeatingSameMedianPct;
+    const engSpa = DATA.pairOverlap[pairKey("English", "Spanish")];
+    $("f-engSpa").textContent = Math.round(100 * engSpa[1]);
+    const clNames = ANALYSIS.soundClusters.slice(0, 3)
+      .map(c => c.join(" + ")).join("; ");
+    $("f-clusters").textContent = clNames;
+
+    // glossary hover for inline data-glossary terms in findings
+    for (const el of document.querySelectorAll("[data-glossary]")) {
+      const term = el.textContent, def = el.dataset.glossary;
+      el.addEventListener("mouseenter", e => {
+        tooltip.innerHTML = `<div class="t-head">${term}</div><div>${def}</div>`;
+        tooltip.classList.add("show"); positionTip(e);
+      });
+      el.addEventListener("mousemove", positionTip);
+      el.addEventListener("mouseleave", hideTip);
+    }
+
+    // heatmap
+    const order = ANALYSIS.heatmapOrder;
+    const famColors = {};
+    const palette = ["#1a7f6b", "#7b4bbf", "#b3542e", "#23558c", "#d9a441",
+                     "#8a8275", "#c2536e", "#4a7c2f", "#5b5ea6", "#a67c52", "#2f8f8f"];
+    let pi = 0;
+    for (const f of [...new Set(Object.values(ANALYSIS.families))]) {
+      famColors[f] = palette[pi++ % palette.length];
+    }
+    const cv = $("heatmap"), ctx = cv.getContext("2d");
+    const n = order.length, M = 130, S = (cv.width - M - 10) / n;
+    ctx.fillStyle = "#faf8f4"; ctx.fillRect(0, 0, cv.width, cv.height);
+    ctx.font = "10px sans-serif";
+    const jacRange = { lo: 0.25, hi: 0.9 };
+    function jacColor(j) {
+      const t = Math.max(0, Math.min(1, (j - jacRange.lo) / (jacRange.hi - jacRange.lo)));
+      const l = 95 - 65 * t;   // light beige -> dark blue
+      return `hsl(215, ${20 + 50 * t}%, ${l}%)`;
+    }
+    for (let i = 0; i < n; i++) {
+      for (let k = 0; k < n; k++) {
+        if (i === k) { ctx.fillStyle = "#2b2620"; }
+        else {
+          const [, j] = DATA.pairOverlap[pairKey(order[i], order[k])];
+          ctx.fillStyle = jacColor(j);
+        }
+        ctx.fillRect(M + k * S, M + i * S, S - 1, S - 1);
+      }
+      // family strip + labels
+      ctx.fillStyle = famColors[ANALYSIS.families[order[i]]];
+      ctx.fillRect(M - 8, M + i * S, 6, S - 1);
+      ctx.fillRect(M + i * S, M - 8, S - 1, 6);
+      ctx.fillStyle = "#2b2620";
+      ctx.textAlign = "right";
+      ctx.fillText(order[i], M - 12, M + i * S + S / 2 + 3);
+      ctx.save();
+      ctx.translate(M + i * S + S / 2 + 3, M - 12);
+      ctx.rotate(-Math.PI / 2);
+      ctx.textAlign = "left";
+      ctx.fillText(order[i], 0, 0);
+      ctx.restore();
+    }
+    // family legend (color -> family name)
+    const legend = $("famLegend");
+    for (const [fam, col] of Object.entries(famColors)) {
+      const k = document.createElement("span");
+      k.className = "fkey";
+      k.innerHTML = `<span class="fsw" style="background:${col}"></span>${fam}`;
+      legend.appendChild(k);
+    }
+
+    // shared hover tooltip (heatmap cells + sound map dots)
+    const hTip = $("heatmapTip");
+
+    // ---- sound family tree (UPGMA dendrogram) ----
+    // Replaces an MDS scatter that only preserved r=0.67 of the true distances
+    // and whose axes meant nothing, so it read as random. Here every fork's
+    // x-position IS the measured similarity at which its two branches merged —
+    // no projection, nothing discarded.
+    // FAIL LOUDLY if the tree data is absent. This used to be a bare
+    // `if (ANALYSIS.tree)`, which meant a browser holding a CACHED pre-tree
+    // analysis.js rendered a blank canvas, empty placeholders and an empty
+    // legend with nothing logged anywhere — impossible to diagnose from the page.
+    // A visible message beats a silent no-op.
+    if (!ANALYSIS.tree) {
+      const w = $("treeWrap");
+      if (w) w.innerHTML =
+        `<p style="padding:1rem;border:1px solid #d9b8a8;border-radius:8px;` +
+        `background:#fdf3ee;font-size:.85rem;color:#8a4a2a">` +
+        `<strong>The sound tree could not be drawn.</strong> ` +
+        `<code>analysis.js</code> loaded without its <code>tree</code> key — ` +
+        `usually a cached copy from before this chart existed. ` +
+        `Hard-reload the page (⌘⇧R / Ctrl-F5). If it persists, re-run ` +
+        `<code>python3 analyze_families.py</code>.</p>`;
+      console.error("ANALYSIS.tree missing — stale analysis.js? " +
+        "Keys present: " + Object.keys(ANALYSIS).join(", "));
+    } else {
+      // second copy of the family legend, above the tree
+      const legend2 = $("famLegend2");
+      if (legend2) {
+        for (const [fam, col] of Object.entries(famColors)) {
+          const k = document.createElement("span");
+          k.className = "fkey";
+          k.innerHTML = `<span class="fsw" style="background:${col}"></span>${fam}`;
+          legend2.appendChild(k);
+        }
+      }
+
+      const CUT = ANALYSIS.tree.cut;
+      $("t-cut").textContent = Math.round(100 * CUT);
+
+      // ---- the lone branch, explained from the data ----
+      // A reader asked why Mandarin hangs off the root alone when it looks
+      // closer to Cantonese and Korean than the root's 36%. Everything below is
+      // computed, so if the inventories change the explanation follows rather
+      // than becoming a stale anecdote naming the wrong language.
+      (function explainLoner() {
+        const names = DATA.languages.map(l => l.name);
+        const ov = (a, b) => DATA.pairOverlap[pairKey(a, b)][1];
+        const bestOf = n => names.filter(o => o !== n)
+          .map(o => ({ o, j: ov(n, o) })).sort((a, b) => b.j - a.j);
+        // the loner is whichever child of the root is a single leaf; fall back to
+        // the language with the weakest best-match if the root splits two blocks
+        const kids = ANALYSIS.tree.root.children;
+        const solo = kids.find(c => !c.children);
+        const ranked = names.map(n => ({ n, best: bestOf(n)[0].j }))
+          .sort((a, b) => a.best - b.best);
+        const loner = solo ? solo.name : ranked[0].n;
+        const near = bestOf(loner);
+        const mean = a => a.reduce((s, x) => s + x, 0) / a.length;
+        const lonerMean = mean(names.filter(o => o !== loner).map(o => ov(loner, o)));
+        const allMean = mean(Object.values(DATA.pairOverlap).map(v => v[1]));
+        // the floor: weakest best-match among everyone else
+        const othersFloor = Math.min(...ranked.filter(r => r.n !== loner)
+          .map(r => r.best));
+        const pct1 = x => (100 * x).toFixed(0);
+        for (const id of ["t-loner", "t-loner2", "t-loner3"])
+          if ($(id)) $(id).textContent = loner;
+        $("t-lonerBest").textContent = `${near[0].o} at ${pct1(near[0].j)}%`;
+        $("t-lonerRest").textContent = names.length - 1;
+        $("t-lonerFloor").textContent = pct1(othersFloor);
+        $("t-rootPct").textContent = pct1(ANALYSIS.tree.root.sim);
+        // sanity: the root fork height must equal the loner's mean overlap, which
+        // is the claim the copy makes. Verified for all 33 forks offline; assert
+        // it here so the sentence can never contradict the drawing.
+        if (Math.abs(ANALYSIS.tree.root.sim - lonerMean) > 5e-3)
+          console.warn(`tree copy: root fork ${ANALYSIS.tree.root.sim} != ` +
+            `${loner}'s mean overlap ${lonerMean}; the "average, not closest" ` +
+            `explanation may no longer hold`);
+        // Name the neighbours the reader is most likely to expect to see it beside
+        // (its two closest that sit in the same branch as each other), and show why
+        // that branch closed without it.
+        const cand = near.slice(0, 6).map(r => r.o);
+        let pair = null;
+        for (let i = 0; i < cand.length && !pair; i++)
+          for (let k = i + 1; k < cand.length && !pair; k++)
+            if (ov(cand[i], cand[k]) > Math.max(ov(loner, cand[i]), ov(loner, cand[k])))
+              pair = [cand[i], cand[k]];
+        $("t-lonerPairMsg").textContent = pair
+          ? `${pair[0]} and ${pair[1]} share ${pct1(ov(pair[0], pair[1]))}% with ` +
+            `each other, against ` +
+            `${pct1(Math.min(ov(loner, pair[0]), ov(loner, pair[1])))}–` +
+            `${pct1(Math.max(ov(loner, pair[0]), ov(loner, pair[1])))}% with ` +
+            `${loner}, so they group together first.`
+          : `each sits closer to its own branch than to ${loner}.`;
+      })();
+      // is every cluster at the cut multi-family? (the section's whole claim)
+      const mixed = ANALYSIS.soundClusters.filter(c =>
+        new Set(c.map(n => ANALYSIS.families[n])).size > 1).length;
+      const nCl = ANALYSIS.soundClusters.length;
+      // stated as a fraction, generated from the data, so it cannot drift out of
+      // step with the clustering if the inventories or the cut ever change
+      $("t-mixed").textContent = mixed === nCl
+        ? `all ${nCl} of those groups contain more than one family`
+        : `${mixed} of those ${nCl} groups contain more than one family`;
+
+      const tc = $("soundtree"), tctx = tc.getContext("2d");
+      const root = ANALYSIS.tree.root;
+      const leaves = root.leaves;
+      const PL = 16, PR = 172, PT = 26, PB = 46;   // label room on the right
+      const rowH = (tc.height - PT - PB) / leaves.length;
+      const plotW = tc.width - PL - PR;
+      // x maps similarity -> pixels, ASCENDING: the root (least similar) sits at
+      // the left edge and the tightest merges sit near the leaves on the right,
+      // so x reads the same direction as the scale printed underneath.
+      // Do not reintroduce a (1 - t) flip here: that puts the root on the right
+      // and the leaf tips at x=PL, which draws every label on top of the
+      // branches and renders the chart unreadable.
+      const simLo = root.sim, simHi = 0.95;
+      const xOf = s => PL + plotW * ((s - simLo) / (simHi - simLo));
+      const yOf = i => PT + rowH * (i + 0.5);
+
+      tctx.fillStyle = "#faf8f4"; tctx.fillRect(0, 0, tc.width, tc.height);
+
+      // similarity gridlines + axis
+      tctx.font = "10px sans-serif"; tctx.textAlign = "center";
+      for (let s = 0.4; s <= 0.9001; s += 0.1) {
+        const x = xOf(s);
+        tctx.strokeStyle = "#ece7dd"; tctx.lineWidth = 1;
+        tctx.beginPath(); tctx.moveTo(x, PT - 8); tctx.lineTo(x, tc.height - PB + 4);
+        tctx.stroke();
+        tctx.fillStyle = "#8a8275";
+        tctx.fillText(`${Math.round(100 * s)}%`, x, tc.height - PB + 18);
+      }
+      tctx.fillStyle = "#2b2620";
+      // "average" is load-bearing: a fork sits at the mean overlap across every
+      // pair spanning its two branches (verified for all 33 forks), NOT at the
+      // closest pair. Without the word, a reader reasonably reads the leftmost
+      // fork as the loner's distance from its nearest neighbour and concludes the
+      // chart is wrong.
+      tctx.fillText("average sound overlap between the two branches a fork joins  →",
+                    PL + plotW / 2, tc.height - PB + 36);
+
+      // No cut line is drawn. The 60% threshold still defines the "sound
+      // neighbourhoods" cited in the prose, but drawing it as a vertical rule
+      // implied the number was meaningful in itself when it is just the slice we
+      // happened to pick. The tree reads better without it.
+
+      // draw the tree; returns the y of each node so parents can bracket them
+      const forks = [];   // {x, y0, y1, node} for hover
+      function draw(node) {
+        if (!node.children) return yOf(leaves.indexOf(node.name));
+        const [a, b] = node.children;
+        const ya = draw(a), yb = draw(b);
+        const x = xOf(node.sim);
+        const xa = a.children ? xOf(a.sim) : xOf(simHi);
+        const xb = b.children ? xOf(b.sim) : xOf(simHi);
+        tctx.strokeStyle = "#a89f90"; tctx.lineWidth = 1.4;
+        tctx.beginPath();
+        tctx.moveTo(x, ya); tctx.lineTo(xa, ya);      // arm to child A
+        tctx.moveTo(x, yb); tctx.lineTo(xb, yb);      // arm to child B
+        tctx.moveTo(x, ya); tctx.lineTo(x, yb);       // the fork itself
+        tctx.stroke();
+        forks.push({ x, y0: Math.min(ya, yb), y1: Math.max(ya, yb), node });
+        return (ya + yb) / 2;
+      }
+      draw(root);
+
+      // leaf labels, coloured by REAL family — the comparison the section makes
+      tctx.font = "11px sans-serif"; tctx.textAlign = "left";
+      const labelAt = {};
+      leaves.forEach((name, i) => {
+        const y = yOf(i), x = xOf(simHi);
+        tctx.fillStyle = famColors[ANALYSIS.families[name]];
+        tctx.beginPath(); tctx.arc(x + 7, y, 4, 0, 2 * Math.PI); tctx.fill();
+        tctx.fillStyle = "#2b2620";
+        tctx.fillText(name, x + 15, y + 4);
+        labelAt[name] = y;
+      });
+
+      // hover a fork: what it joins, and at what similarity
+      tc.addEventListener("mousemove", e => {
+        const r = tc.getBoundingClientRect();
+        const scale = tc.width / r.width;
+        const mx = (e.clientX - r.left) * scale, my = (e.clientY - r.top) * scale;
+        let hit = null, best = 9;
+        for (const f of forks) {
+          const dx = Math.abs(mx - f.x);
+          if (dx < 7 && my >= f.y0 - 4 && my <= f.y1 + 4 && dx < best) {
+            best = dx; hit = f;
+          }
+        }
+        if (hit) {
+          const [a, b] = hit.node.children;
+          const fams = new Set(hit.node.leaves.map(n => ANALYSIS.families[n]));
+          const side = g => g.children
+            ? `${g.leaves.length} languages (${g.leaves.slice(0, 3).join(", ")}` +
+              `${g.leaves.length > 3 ? ", …" : ""})`
+            : g.name;
+          hTip.innerHTML =
+            `<strong>${Math.round(100 * hit.node.sim)}% average overlap</strong><br>` +
+            `${side(a)}<br>joins<br>${side(b)}<br>` +
+            `<em>${fams.size === 1 ? "all " + [...fams][0]
+                  : fams.size + " different families: " + [...fams].join(", ")}</em>`;
+          hTip.classList.add("show");
+          hTip.style.left = Math.min(e.clientX + 14, window.innerWidth - 300) + "px";
+          hTip.style.top = (e.clientY + 14) + "px";
+        } else hTip.classList.remove("show");
+      });
+      tc.addEventListener("mouseleave", () => hTip.classList.remove("show"));
+    }
+
+    // hover tooltip on cells
+    cv.addEventListener("mousemove", e => {
+      const r = cv.getBoundingClientRect();
+      const scale = cv.width / r.width;
+      const x = (e.clientX - r.left) * scale, y = (e.clientY - r.top) * scale;
+      const k = Math.floor((x - M) / S), i = Math.floor((y - M) / S);
+      if (i >= 0 && i < n && k >= 0 && k < n && i !== k) {
+        const [shared, j] = DATA.pairOverlap[pairKey(order[i], order[k])];
+        hTip.innerHTML = `<strong>${order[i]} + ${order[k]}</strong><br>` +
+          `${shared} shared sounds (${Math.round(100 * j)}% overlap)`;
+        hTip.classList.add("show");
+        hTip.style.left = Math.min(e.clientX + 14, window.innerWidth - 260) + "px";
+        hTip.style.top = (e.clientY + 14) + "px";
+      } else hTip.classList.remove("show");
+    });
+    cv.addEventListener("mouseleave", () => hTip.classList.remove("show"));
+  }
+
+})();
+</script>
+<script src="chart_extras.js?v=ac20a73c"></script>
+<script src="nav.js?v=aae3ed8a"></script>
+</body>
+</html>

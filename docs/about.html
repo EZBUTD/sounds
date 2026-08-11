@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About &amp; Sources — Spoken Sounds Across the World</title>
+<link rel="stylesheet" href="shared.css?v=d949b745">
+<style>
+  .srctable { width: 100%; border-collapse: collapse; font-size: .84rem;
+    margin: .9rem 0; }
+  .srctable th, .srctable td { padding: .45rem .6rem; text-align: left;
+    vertical-align: top; border-bottom: 1px solid #e8e2d7; }
+  .srctable th { color: #8a8275; font-weight: 600; white-space: nowrap; }
+  .srctable td.lic { white-space: nowrap; color: #6b6459; }
+  .srctable .what { color: #6b6459; }
+  .steps { counter-reset: s; list-style: none; padding: 0; max-width: 78ch; }
+  .steps li { counter-increment: s; position: relative; padding-left: 2.1rem;
+    margin-bottom: .7rem; line-height: 1.55; font-size: .9rem; }
+  .steps li::before { content: counter(s); position: absolute; left: 0; top: 0;
+    width: 1.5rem; height: 1.5rem; border-radius: 50%; background: var(--both);
+    color: #fff; font-size: .78rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; }
+  .steps code { background: #f0ece4; padding: 0 .3em; border-radius: 3px;
+    font-size: .88em; }
+  .me { display: grid; grid-template-columns: auto 1fr; gap: 1.1rem;
+    align-items: start; max-width: 78ch; }
+  @media (max-width: 620px) { .me { grid-template-columns: 1fr; } }
+  .me .badge { width: 4.5rem; height: 4.5rem; border-radius: 50%;
+    background: linear-gradient(135deg, var(--both), var(--l1));
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-family: var(--ipa-font); font-size: 1.5rem; flex: none; }
+  .honest { border-left: 3px solid var(--rare); background: #fdf1ee;
+    padding: .7rem .9rem; border-radius: 0 6px 6px 0; font-size: .85rem;
+    line-height: 1.55; margin: .9rem 0; max-width: 78ch; }
+  .honest h4 { margin: 0 0 .3rem; font-size: .92rem; color: var(--rare); }
+  .honest ul { margin: .4rem 0 0; padding-left: 1.1rem; }
+  .honest li { margin-bottom: .3rem; }
+</style>
+</head>
+<body data-nav="about">
+
+<h1>About &amp; sources</h1>
+<p class="subtitle">What this is, where every number came from, what it can't tell
+you, and why I went looking in the first place.</p>
+
+<h2 class="section">Why I made this</h2>
+
+<div class="me">
+  <div class="badge" aria-hidden="true">ɸ</div>
+  <div>
+    <p>As a Chinese-American living in Japan, I've spent a lot of time hearing the
+    same language handled differently by different communities — and a lot of time
+    comparing notes with other learners about what makes a language hard to pick
+    up. The struggles people describe rarely match what a textbook says should be
+    difficult.</p>
+    <p>What actually sent me down this particular rabbit hole was a pattern in
+    Japanese loanwords. English words arrive in Japanese and sometimes collide:
+    <strong>food</strong> and <strong>hood</strong> both become フード
+    <em>fūdo</em>. Once you notice one, you start hearing them everywhere. I
+    wanted to know whether that was a handful of coincidences or something
+    systematic — and if it was systematic, whether the same thing happens in every
+    other language too.</p>
+    <p>That question is what this project grew out of, even though the answer isn't
+    on it. A page that tried to predict those collisions across all 34 languages was
+    built and then <a href="#cut">cut</a>, because the model was wrong in ways that
+    only showed up when a Japanese reader looked at its output. The single rule
+    behind <em>food</em>/<em>hood</em> is still here, on the
+    <a href="allophones.html">Allophones</a> page, where it belongs: one documented
+    fact rather than eleven thousand predictions.</p>
+  </div>
+</div>
+
+<h2 class="section">The competition</h2>
+
+<div class="block">
+  <p>Built for <strong>VizCon 2026</strong>, whose theme is
+  <em>“How the world lives, thrives, and connects.”</em> The brief asks for an
+  “I had no idea” moment from public, citable data.</p>
+  <p>My candidate for that moment: <strong>language family turns out to be a fairly
+  weak predictor of how a language sounds.</strong> Among the 34 languages here,
+  English's closest sound-relative is Hindi rather than German, and the closest pair
+  in the dataset is Amharic and Indonesian — two languages with no common ancestor
+  in recorded history. I've tried to keep the conclusion that follows a practical
+  one rather than only a surprising one: sound distance is a reasonable guide to
+  where the pronunciation work will be, not to whether a language is within
+  reach.</p>
+</div>
+
+<h2 class="section">Data sources</h2>
+
+<div class="block">
+  <p>Everything here comes from public, citable datasets. Where I had to combine
+  sources, the seams are documented rather than smoothed over.</p>
+</div>
+
+<table class="srctable">
+  <thead><tr><th>Source</th><th>What it provides</th><th class="lic">Licence</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><a href="https://phoible.org">PHOIBLE 2.0</a></td>
+      <td class="what">The backbone. Sound inventories for 2,177 languages
+      (3,020 inventories), each segment tagged with 38 articulatory features, plus
+      the allophone records. Every phoneme count, overlap figure and rarity
+      percentage traces back here.</td>
+      <td class="lic">CC BY-SA 3.0</td>
+    </tr>
+    <tr>
+      <td><a href="https://commons.wikimedia.org">Wikimedia Commons</a></td>
+      <td class="what">Audio for all 117 chart symbols. 109 are isolated-phoneme
+      recordings; the 8 English diphthongs are word examples, since Commons has no
+      systematic isolated recordings for those. Plus 3 whole-word recordings
+      (<em>top</em>, <em>stop</em>, <em>butter</em>) by a single speaker,
+      <a href="https://commons.wikimedia.org/wiki/User:Dvortygirl">Dvortygirl</a>,
+      used on the Allophones page to demonstrate one phoneme with three
+      allophones — two of those allophones exist only inside a word. The same
+      <em>top</em> and <em>stop</em> recordings are analysed on the Seeing Sounds
+      page.</td>
+      <td class="lic">CC BY-SA<br>(words: 3.0)</td>
+    </tr>
+    <tr>
+      <td>Own acoustic analysis<br><span class="what">(scipy, numpy)</span></td>
+      <td class="what">Spectrograms and voice-onset-time measurements for the
+      Seeing Sounds page, computed offline from the Commons word recordings rather
+      than in the browser — Safari could not decode Ogg Vorbis before 18.4, so a
+      client-side version would show some readers a blank canvas. Measured
+      here: <em>top</em> 70 ms and <em>stop</em> 26 ms, which matches the
+      published range for English aspirated versus post-/s/ stops. Three earlier
+      detectors gave wrong answers and are documented in the script.</td>
+      <td class="lic">derived</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/CUNY-CL/wikipron">WikiPron</a></td>
+      <td class="what">Word-to-IPA pairs scraped from Wiktionary. Used to find
+      real example words containing each sound in each language (~850 of the 915
+      example words).</td>
+      <td class="lic">CC BY-SA</td>
+    </tr>
+    <tr>
+      <td><a href="https://glottolog.org">Glottolog</a></td>
+      <td class="what">Language classification and one representative coordinate
+      per language — the homeland markers on the world map.</td>
+      <td class="lic">CC BY 4.0</td>
+    </tr>
+    <tr>
+      <td><a href="https://cldr.unicode.org/">Unicode CLDR</a></td>
+      <td class="what">Per-country speaker estimates: which languages have a
+      documented community in each territory, and roughly how large. The base
+      layer for the map's country shading.</td>
+      <td class="lic">Unicode licence</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.ethnologue.com/guides/ethnologue200">Ethnologue 2026</a>
+      via <a href="https://en.wikipedia.org/wiki/List_of_languages_by_total_number_of_speakers">Wikipedia</a></td>
+      <td class="what">First-language vs second-language speaker counts. Ethnologue
+      itself is paywalled, so the figures are taken from Wikipedia's tabulation of
+      them — which is why 9 of the 34 languages have no learner estimate here.</td>
+      <td class="lic">CC BY-SA</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.census.gov/data/tables/time-series/demo/language-use/2017-2021-lang-tables.html">US Census ACS 2017–2021</a></td>
+      <td class="what">Detailed “languages spoken at home” tables, parsed straight
+      from the published workbook to add US diaspora communities that CLDR omits.</td>
+      <td class="lic">Public domain</td>
+    </tr>
+    <tr>
+      <td>UK ONS 2021 · Statistics Canada 2021 · Australian Bureau of Statistics
+      2021 · Japan / Korea / Taiwan immigration agencies</td>
+      <td class="what">Hand-entered diaspora rows for the 16 languages CLDR covers
+      most thinly. Each row carries its own citation — hover any country on the
+      map to see which source its figure came from.</td>
+      <td class="lic">Open government</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.naturalearthdata.com/">Natural Earth</a></td>
+      <td class="what">World basemap (110m countries), simplified to about a tenth
+      of its original size so the page stays self-contained.</td>
+      <td class="lic">Public domain</td>
+    </tr>
+    <tr>
+      <td>Published histories of English:
+      <a href="https://en.wikipedia.org/wiki/Phonological_history_of_English">Wikipedia</a>
+      (phonological history, the
+      <a href="https://en.wikipedia.org/wiki/Great_Vowel_Shift">Great Vowel Shift</a>,
+      <a href="https://en.wikipedia.org/wiki/Gh_(digraph)">the ⟨gh⟩ digraph</a>) ·
+      <a href="https://www.britannica.com/topic/Great-Vowel-Shift">Britannica</a> ·
+      <a href="https://cpercy.artsci.utoronto.ca/courses/MEPhonology.htm">U. of
+      Toronto Middle English phonology notes</a> ·
+      <a href="https://en.wiktionary.org/wiki/Appendix:English_doublets">Wiktionary
+      doublets</a></td>
+      <td class="what">The only page here not built from a dataset. PHOIBLE records
+      languages as spoken today and has no Old or Middle English entry, so the
+      History of English timeline — the Great Vowel Shift, the loss of the ⟨gh⟩
+      sound, the <em>kn</em> simplification, the French layer that made
+      <span class="ipa">v</span>/<span class="ipa">z</span> separate sounds — is
+      compiled from these published accounts and cited on the page itself. The
+      present-day English/German comparison on that page is PHOIBLE, as
+      elsewhere.</td>
+      <td class="lic">CC BY-SA<br>(Britannica: quoted<br>facts only)</td>
+    </tr>
+    <tr>
+      <td><a href="https://pypi.org/project/wordfreq/">wordfreq</a></td>
+      <td class="what">Word-commonness scores, used to keep the example words to
+      ones a general reader recognises instead of dictionary obscurities.</td>
+      <td class="lic">Apache 2.0</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 class="section">How it was built</h2>
+
+<ol class="steps">
+  <li><strong>Pick one inventory per language.</strong> PHOIBLE often has several
+  analyses of the same language, and they disagree — its Italian entries range
+  from 30 to 70 phonemes. For each language I take the inventory whose
+  length-collapsed count sits closest to the median of all its candidates: the
+  “typical” analysis rather than the most maximal one. English is pinned to the
+  Received Pronunciation inventory so its count matches the familiar 44.</li>
+
+  <li><strong>Match sounds at the base-symbol level.</strong> Sources differ on
+  whether to write <code>p</code> or <code>pʰ</code>, so diacritics and length
+  marks are stripped before comparing. This is why South Asian languages show
+  fewer chart cells than raw phonemes — their aspirated series merges into the
+  base cells, and the headline says so.</li>
+
+  <li><strong>Count consistently.</strong> Allophones aren't counted as phonemes,
+  long and doubled forms are excluded from headline counts, and tones are counted
+  separately and flagged. The aim is a figure comparable to the ones textbooks
+  quote: Hindi 46, English 44.</li>
+
+  <li><strong>Compare every pair.</strong> All 561 pairs get a shared count and a
+  size-normalised overlap score, plus a rarity-weighted version where sharing a
+  click counts for more than sharing <span class="ipa">m</span>.</li>
+
+  <li><strong>Check the claims against the data.</strong> Six test suites run the
+  real page code and assert the figures quoted in the prose, so a finding that
+  stops being true fails a test. One of them exists specifically because an earlier
+  draft claimed “no correlation” where the data shows a moderate one.</li>
+</ol>
+
+<h2 class="section">What this can't tell you</h2>
+
+<div class="honest">
+  <h4>Limits worth knowing if you plan to cite any of this</h4>
+  <ul>
+    <li><strong>Linguists disagree about phoneme inventories.</strong> Every count
+    reflects one analysis among several. PHOIBLE
+    <a href="https://phoible.org/faq">documents why its sources differ</a>; the
+    numbers here will not match every textbook.</li>
+    <li><strong>2,177 languages is a sample, not a census</strong>, and
+    documentation is geographically uneven. Global rarity percentages carry real
+    uncertainty.</li>
+    <li><strong>34 languages is a small, deliberately skewed roster</strong> —
+    mostly the world's largest languages, plus Zulu for its clicks. Findings
+    describe this roster, not humanity.</li>
+    <li><strong>Country shading is a floor, not a census.</strong> Unshaded means
+    undocumented in these sources, not absent.</li>
+    <li><strong>Sound difficulty is one part of language difficulty.</strong>
+    Grammar, writing system and available material often matter more. Cantonese
+    requires one new sound from English and is still widely found difficult.</li>
+    <li><strong>These are correlations, not causes</strong>, the lingua-franca
+    finding included.</li>
+    <li><strong>The microphone tool does not score your pronunciation</strong>,
+    deliberately. A single similarity number between a live microphone signal and
+    a reference recording is dominated by pitch, vocal tract length, microphone
+    and room rather than by how you articulated the sound; it would look precise
+    and measure the wrong thing. F1 and F2 are shown because each corresponds to
+    a checkable articulatory fact, but the estimator is a simple spectral
+    peak-picker rather than the LPC analysis phonetics software uses, so on a
+    high-pitched voice a harmonic can be misread as a formant.</li>
+    <li><strong>Two spectrograms are two recordings</strong>, not a language.
+    <em>top</em> and <em>stop</em> show what one speaker did once; the aspiration
+    pattern they illustrate is general, the exact millisecond values are not.</li>
+  </ul>
+</div>
+
+<h2 class="section" id="cut">What got cut, and why</h2>
+
+<div class="honest">
+  <h4>A page that predicted loanword collisions, removed after a reader checked it</h4>
+  <p>A page called <em>Lost in Translation</em> used to sit here. It generalised the
+  <em>food</em>/<em>hood</em> observation into a model: map each English phoneme to
+  the closest sound a target language has, apply that to ~11,800 common English
+  words, and report which pairs collapse into a homophone. It passed a validation
+  suite of nine documented mergers and reported a collision rate per language.</p>
+  <p>It was wrong, and the way it was wrong is instructive. A Japanese speaker
+  looked at its example cards and pointed out that most of the words it produced
+  were not Japanese. Tracing them back found four separate defects:</p>
+  <ul>
+    <li><strong>Vowel length was discarded.</strong> The shared symbol-normalising
+    step strips length marks, so English <em>fast</em> /fɑːst/ and <em>first</em>
+    /fɜːst/ both became the same string. Japanese length is phonemic — ファスト and
+    ファースト are different words — so the model invented a merger out of the exact
+    contrast it had thrown away. This inflated every collision rate, not just the
+    examples.</li>
+    <li><strong>Half the examples relied on a dialect variant.</strong> The lexicon
+    holds several pronunciations per word and weighted them equally, so a single
+    regional or archaic variant could manufacture a collision. Four of the eight
+    Japanese examples disappeared when restricted to each word's primary
+    pronunciation.</li>
+    <li><strong>A pinned substitution overreached.</strong> English /f/ → /h/ was
+    pinned to set up the seed case, since Japanese /h/ is [ɸ] before /u/. But the
+    context rule only fired before /u/, so every other /f/ stayed /h/ and
+    <em>fast</em> came out as ハスト instead of ファスト.</li>
+    <li><strong>A fix was written at the wrong layer.</strong> The transliterator
+    had a rule spelling /ŋ/ as ング, added specifically because ン gave the wrong
+    word for <em>long</em>. The model had already rewritten /ŋ/ upstream, so the
+    rule could never fire and the page still showed the wrong form.</li>
+  </ul>
+  <p>The uncomfortable part is that the transliterator had its own passing test
+  suite, including <em>food</em> → フード. That test fed in hand-written phoneme
+  strings the pipeline never actually produces; run end to end, the real pipeline
+  turned <em>food</em> into フド. The page's own headline example was not reproduced
+  by the code generating the page, and every test was green.</p>
+  <p>The defects were fixable. The reason for removing the page rather than fixing
+  it is that predicted collisions have no external ground truth to check against —
+  the nine-merger suite was the only anchor, and passing it turned out to be
+  compatible with being badly wrong everywhere else. That is the same conclusion
+  reached earlier about a cross-language allophone divergence metric, which was cut
+  for the same reason. Where a claim can't be validated against something outside
+  the model, that is a reason not to publish it, not a reason to add a caveat.</p>
+  <p>What survives is the one part that was never a prediction: Japanese /h/ → [ɸ]
+  before /u/, giving <em>food</em> = <em>hood</em>. It's a documented fact from
+  reference grammars, it's on the <a href="allophones.html">Allophones</a> page, and
+  it comes with audio you can check by ear.</p>
+</div>
+
+<h2 class="section">Tools</h2>
+
+<div class="block">
+  <p>Python for the data work (PHOIBLE and CLDR parsing, the acoustic analysis,
+  the statistics), and vanilla JavaScript with canvas for the visualisations rather
+  than a chart library. Built with <a href="https://kiro.dev">Kiro</a> as a pair
+  programmer; <code>GENAI_LOG.md</code> in the repository records what the model
+  wrote, along with the factual errors that surfaced along the way and how they were
+  found — which is the more useful half.</p>
+</div>
+
+<div class="pagenav">
+  <a href="difficulty.html">&larr; Language Learners</a>
+  <span class="spacer"></span>
+  <a href="index.html">Back to the Sound Chart &rarr;</a>
+</div>
+
+<script src="nav.js?v=aae3ed8a"></script>
+</body>
+</html>

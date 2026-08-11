@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>World Map — Spoken Sounds Across the World</title>
+<link rel="stylesheet" href="shared.css?v=d949b745">
+<style>
+  :root {
+    --l1: #1a7f6b; --l2: #7b4bbf; --both: #23558c;
+    --none-bg: #f1ede6; --none-text: #a09a8e; --imposs: #dcd6cb;
+    --bg: #faf8f4; --ink: #2b2620; --accent: #b3542e;
+    --rare: #c1553a; --common: #9aa8b8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0 auto; padding: 2rem 1.5rem 4rem; max-width: 1180px;
+    font-family: "Avenir Next", "Segoe UI", system-ui, sans-serif;
+    background: var(--bg); color: var(--ink);
+  }
+  h1 { font-size: 1.85rem; margin: 0 0 .3rem; }
+  .subtitle { color: #6b6459; margin: 0 0 1.2rem; max-width: 72ch; line-height: 1.55; }
+  h2.section { font-size: .95rem; letter-spacing: .1em; text-transform: uppercase;
+    color: #8a8275; margin: 2.4rem 0 .6rem; }
+  a { color: var(--accent); }
+
+  .backlink { display: inline-block; font-size: .85rem; margin-bottom: 1.2rem;
+    text-decoration: none; border: 1px solid #d8d1c4; border-radius: 999px;
+    padding: .3rem .8rem; background: #fff; }
+  .backlink:hover { border-color: var(--accent); }
+
+  .block { max-width: 78ch; margin-bottom: 1rem; }
+  .block h3 { font-size: 1.15rem; margin: 0 0 .4rem; color: var(--accent); }
+  .block p { line-height: 1.6; margin: 0 0 .6rem; }
+  .sub { font-size: .8rem; color: #8a8275; margin-top: .5rem; }
+  .ipa { font-family: var(--ipa-font);
+    background: #f0ece4; padding: 0 .25em; border-radius: 3px; }
+
+  .controls { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
+    margin: .8rem 0; font-size: .88rem; }
+  .controls label { font-weight: 600; }
+  select { font-size: .9rem; padding: .35rem .55rem; border-radius: 8px;
+    border: 2px solid #c9c2b6; background: #fff; color: var(--ink); }
+  select:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+  .radio-set { display: flex; gap: .1rem; border: 1px solid #c9c2b6;
+    border-radius: 8px; overflow: hidden; background: #fff; }
+  .radio-set label { font-weight: 400; padding: .35rem .7rem; cursor: pointer; }
+  .radio-set input { position: absolute; opacity: 0; pointer-events: none; }
+  .radio-set label:has(input:checked) { background: var(--both); color: #fff; }
+  .radio-set label:has(input:focus-visible) { outline: 3px solid var(--accent);
+    outline-offset: -3px; }
+
+  .maprow { display: grid; grid-template-columns: 1fr 300px; gap: 1rem;
+    align-items: start; }
+  @media (max-width: 900px) { .maprow { grid-template-columns: 1fr; } }
+  #mapwrap { overflow-x: auto; }
+  .legend { font-size: .78rem; border: 1px solid #e0d9cc; border-radius: 8px;
+    padding: .7rem .8rem; background: #fdfcfa; }
+  .legend h4 { margin: 0 0 .4rem; font-size: .85rem; }
+  .legend .row { display: flex; align-items: center; gap: .45rem; margin: .25rem 0; }
+  .legend .dot { border-radius: 50%; background: var(--both); flex: none; }
+  .legend .swatch { width: 2.4em; height: .7em; border-radius: 3px; flex: none;
+    background: linear-gradient(90deg, var(--common), var(--rare)); }
+  .tooltip { position: fixed; z-index: 10; max-width: 320px; background: var(--ink);
+    color: #faf8f4; padding: .5rem .7rem; border-radius: 8px; font-size: .8rem;
+    pointer-events: none; opacity: 0; transition: opacity .12s; line-height: 1.45; }
+  .tooltip.show { opacity: 1; }
+  .tooltip .ipa { background: rgba(255,255,255,.18); }
+
+  table.data { border-collapse: collapse; font-size: .84rem; margin: .8rem 0; }
+  table.data th, table.data td { padding: .3rem .6rem; text-align: left;
+    border-bottom: 1px solid #e8e2d7; }
+  table.data th { color: #8a8275; font-weight: 600; }
+  table.data td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  table.data .sym { font-family: var(--ipa-font); }
+  .bar { display: inline-block; height: .7em; background: var(--both);
+    border-radius: 2px; vertical-align: middle; }
+  .bar.l2 { background: var(--l2); }
+
+  .cards { display: grid; gap: .7rem; margin: .9rem 0;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .card { border: 1px solid #e0d9cc; border-radius: 8px; padding: .7rem .8rem;
+    background: #fdfcfa; }
+  .card h4 { margin: 0 0 .3rem; font-size: .92rem; }
+  .card .big { font-size: 1.5rem; color: var(--accent); font-weight: 600; }
+  .card p { font-size: .8rem; color: #6b6459; margin: .2rem 0 0; line-height: 1.45; }
+  .note { font-size: .8rem; color: #8a8275; margin-top: 1rem; max-width: 78ch;
+    line-height: 1.55; }
+  .caveat { border-left: 3px solid #d8b96a; background: #fdf8ec; padding: .6rem .8rem;
+    border-radius: 0 6px 6px 0; font-size: .82rem; margin: .8rem 0; max-width: 78ch;
+    line-height: 1.5; }
+  @media (prefers-reduced-motion: reduce) { .tooltip { transition: none; } }
+</style>
+</head>
+<body data-nav="map">
+
+
+<h1>World Map</h1>
+<p class="subtitle">Where these 34 languages are documented, and how many of their
+speakers learned them rather than grew up with them. The rest of this project
+treats languages as sound inventories; this page is a reminder that they belong to
+communities of people.</p>
+
+<h2 class="section">The map</h2>
+
+<div class="block">
+  <h3>Where each language travels</h3>
+  <p>Pick a language and the map shades the countries where a speaker community
+  is <em>documented</em>, <strong>darker where more people speak it, with flow
+  lines to its largest recorded communities abroad.</strong> The range is wide:
+  English is documented in over 100 countries, Thai in seven — though part of that
+  gap is how thoroughly each language has been surveyed, not only where it's
+  spoken. Hover a country for its figure and source, or the homeland marker for the
+  language's less common sounds.</p>
+  <p class="sub">Coverage is uneven between languages, so this is best read as
+  "where records exist" rather than "everywhere it is spoken" — see the note below
+  the map.</p>
+</div>
+
+<div class="controls">
+  <div class="ctl">
+    <label for="focusLang">Language</label>
+    <select id="focusLang"></select>
+  </div>
+  <div class="ctl">
+    <label><input type="checkbox" id="showArcs" checked> flow lines</label>
+  </div>
+  <span id="mapHeadline" style="color:#6b6459"></span>
+</div>
+
+<div class="maprow">
+  <div id="mapwrap">
+    <canvas id="worldmap" width="1000" height="520" style="max-width:100%"
+      aria-label="World map shading the countries where the selected language is spoken, with flow lines from its homeland to its largest speaker communities"></canvas>
+  </div>
+  <div class="legend">
+    <h4>Reading the map</h4>
+    <div class="row"><span class="swatch"></span></div>
+    <div class="row" style="color:#6b6459">fewer &rarr; more speakers (log scale)</div>
+    <div class="row" style="margin-top:.5rem">
+      <span style="width:1.1em;height:1.1em;border-radius:50%;background:var(--accent);border:2px solid #fff;box-shadow:0 0 0 1px #999;flex:none"></span>
+      homeland</div>
+    <div class="row">
+      <span style="width:2.2em;height:0;border-top:2px solid var(--both);opacity:.65;flex:none"></span>
+      flow to a community abroad (width = speakers)</div>
+    <p class="sub" style="margin-top:.6rem">Country totals count everyone who
+    speaks the language there, native or learned. Hover a shaded country for
+    figures and official status.</p>
+  </div>
+</div>
+<div id="mapTip" class="tooltip"></div>
+
+<div class="caveat">
+  <strong>What the shading means — and doesn't.</strong> Shading marks a
+  <em>documented</em> speaker community, not ownership and not everyone in the
+  country: 19% of India speaks English and 41% speaks Hindi, and both facts
+  shade the same country. Figures mix native and second-language speakers.
+  <br><br>
+  <strong>Unshaded is not proof of absence.</strong> The base layer (Unicode
+  CLDR) records the languages relevant to each country's software locale, not
+  emigrant communities — on its own it put Thai in 2 countries and Telugu,
+  Marathi and Hebrew in 1. For the 16 languages with the thinnest coverage we
+  added diaspora communities from national statistics agencies (US Census ACS,
+  UK ONS, Statistics Canada, Australian Bureau of Statistics and others); hover
+  any country to see which source its figure came from. That lifts the floor
+  without making coverage uniform, and definitions differ between sources —
+  "speaks at home" is not the same question as "speaks". Five languages
+  (Telugu, Hebrew, Amharic, Marathi, Yoruba) still show only 3–4 communities
+  abroad, which reflects thin records as much as small diasporas. Treat every
+  count as a documented minimum. The homeland marker is a simplification too —
+  English is anchored to England though most English speakers have never been
+  there.
+</div>
+
+<p class="note"><strong>Sources and caveats.</strong> Sound inventories:
+<a href="https://phoible.org">PHOIBLE 2.0</a> (CC BY-SA). Coordinates and
+language classification: <a href="https://glottolog.org">Glottolog</a> (CC BY).
+Speaker counts: Ethnologue 2026 figures as tabulated on
+<a href="https://en.wikipedia.org/wiki/List_of_languages_by_total_number_of_speakers">Wikipedia</a>
+(CC BY-SA); Ethnologue itself is paywalled. Country-level speaker communities:
+<a href="https://cldr.unicode.org/">Unicode CLDR</a> supplemental data, augmented
+for thinly-covered languages with
+<a href="https://www.census.gov/data/tables/time-series/demo/language-use/2017-2021-lang-tables.html">US Census ACS 2017–2021</a>
+detailed language tables (parsed directly from the published workbook) plus
+hand-entered rows from UK ONS 2021, Statistics Canada 2021, the Australian
+Bureau of Statistics 2021, and other national agencies — each country's source
+is shown in its hover tooltip. Basemap:
+<a href="https://www.naturalearthdata.com/">Natural Earth</a> (public domain),
+simplified for size.
+<br><br>
+<strong>On the mixed country layer:</strong> combining sources means combining
+definitions. CLDR estimates speakers as a share of population; the ACS counts
+people 5+ who speak a language <em>at home</em>; census "main language" and
+"mother tongue" questions differ again, and resident-population figures for Gulf
+states count nationality rather than language. Years range from 2011 to 2023.
+Counts are therefore comparable in magnitude, not precisely across countries,
+and every one is a documented minimum rather than a ceiling.
+<br><br>
+Global frequencies are estimates, not a census: PHOIBLE samples about a third of
+the world's languages and documentation is geographically uneven, so a sound's
+"share of languages" carries real uncertainty. Diphthongs and consonant clusters
+are excluded from rarity rankings because sources disagree about whether to list
+them as single segments at all — including them would rank English's
+<span class="ipa">əʊ</span> as one of the world's rarest sounds, which reflects
+transcription convention, not articulation. Speaker counts are contested wherever
+L1/L2 status is politically loaded, most obviously for Modern Standard Arabic;
+9 of the 34 languages have no published L2 estimate in this source and are shown
+as unknown rather than zero.</p>
+
+<script src="mapdata.js?v=5a0b0f32"></script>
+<script>
+(function () {
+  const $ = id => document.getElementById(id);
+  const M = MAPDATA, L = M.languages;
+  const names = Object.keys(L);
+  const pct = x => Math.round(100 * x);
+  const fmtM = v => v == null ? "—"
+    : v >= 1000 ? (v / 1000).toFixed(2) + "B"
+    : v >= 1 ? Math.round(v) + "M"
+    : Math.round(v * 1000) + "k";      // sub-1M communities (Thai in SG = 42k)
+
+  // ---------- shared scales ----------
+  const rar = names.map(n => L[n].meanRarity);
+  const rarMin = Math.min(...rar), rarMax = Math.max(...rar);
+  // color by inventory rarity: muted blue (common) -> warm red (rare)
+  function rarityColor(v, alpha) {
+    const t = (v - rarMin) / (rarMax - rarMin || 1);
+    const h = 212 - 200 * t, s = 22 + 40 * t, l = 62 - 14 * t;
+    return `hsla(${h},${s}%,${l}%,${alpha == null ? 1 : alpha})`;
+  }
+
+  // ---------- world map: per-language choropleth + homeland flow arcs ----------
+  const cv = $("worldmap"), ctx = cv.getContext("2d");
+  const PAD = 6;
+  // equirectangular; clip Antarctica and the far north (no languages there)
+  const LAT0 = 84, LAT1 = -56;
+  const proj = (lat, lon) => [
+    PAD + (lon + 180) / 360 * (cv.width - 2 * PAD),
+    PAD + (LAT0 - lat) / (LAT0 - LAT1) * (cv.height - 2 * PAD),
+  ];
+  let focus = "English", arcsOn = true;
+  const CL = M.countryLayer, ANCH = M.countryAnchors;
+
+  // log-scale shading: 0.1M .. 1300M speakers
+  function shade(speakers) {
+    const t = Math.min(1, Math.max(0,
+      (Math.log10(speakers) - Math.log10(0.1)) / (Math.log10(1300) - Math.log10(0.1))));
+    const h = 212 - 200 * t, s = 30 + 38 * t, l = 78 - 30 * t;
+    return `hsl(${h},${s}%,${l}%)`;
+  }
+
+  function homelandXY(n) {
+    return proj(L[n].lat, L[n].lon);
+  }
+
+  function drawMap() {
+    const rows = CL[focus] || {};
+    ctx.fillStyle = "#eef1f4";
+    ctx.fillRect(0, 0, cv.width, cv.height);
+    // land: shaded when the focused language has a community there
+    for (const sh of M.shapes) {
+      const d = sh.c && rows[sh.c];
+      ctx.beginPath();
+      sh.pts.forEach(([lon, lat], i) => {
+        const [x, y] = proj(lat, lon);
+        i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+      });
+      ctx.closePath();
+      ctx.fillStyle = d ? shade(d.speakers) : "#e4e1d8";
+      ctx.fill();
+      ctx.strokeStyle = d ? "#ffffff" : "#d3cfc4";
+      ctx.lineWidth = d ? 1 : 0.6;
+      ctx.stroke();
+    }
+    // flow arcs homeland -> top communities abroad (quadratic, lifted control pt)
+    const [hx, hy] = homelandXY(focus);
+    if (arcsOn) {
+      const top = Object.entries(rows)
+        .filter(([c]) => ANCH[c])
+        .sort((a, b) => b[1].speakers - a[1].speakers)
+        .slice(0, 12);
+      const maxSp = top.length ? top[0][1].speakers : 1;
+      for (const [c, d] of top) {
+        const [tx, ty] = proj(ANCH[c][1], ANCH[c][0]);
+        if (Math.hypot(tx - hx, ty - hy) < 18) continue;    // home country itself
+        const mx = (hx + tx) / 2, my = (hy + ty) / 2 - Math.min(70, Math.hypot(tx - hx, ty - hy) * 0.22);
+        ctx.beginPath();
+        ctx.moveTo(hx, hy);
+        ctx.quadraticCurveTo(mx, my, tx, ty);
+        ctx.strokeStyle = "rgba(35,85,140,.55)";
+        ctx.lineWidth = 0.8 + 4.5 * Math.sqrt(d.speakers / maxSp);
+        ctx.stroke();
+        // arrival dot
+        ctx.beginPath(); ctx.arc(tx, ty, 2.6, 0, 2 * Math.PI);
+        ctx.fillStyle = "rgba(35,85,140,.8)"; ctx.fill();
+      }
+    }
+    // homeland marker on top
+    ctx.beginPath(); ctx.arc(hx, hy, 7, 0, 2 * Math.PI);
+    ctx.fillStyle = "#b3542e"; ctx.fill();
+    ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.stroke();
+    ctx.font = "600 11px sans-serif"; ctx.textAlign = "center";
+    ctx.lineWidth = 3; ctx.strokeStyle = "rgba(255,255,255,.9)";
+    ctx.strokeText(focus, hx, hy - 11);
+    ctx.fillStyle = "#2b2620"; ctx.fillText(focus, hx, hy - 11);
+
+    // headline
+    const nC = Object.keys(rows).length;
+    const tot = Object.values(rows).reduce((s, d) => s + d.speakers, 0);
+    $("mapHeadline").textContent = nC
+      ? `${focus}: speaker communities in ${nC} ${nC === 1 ? "country" : "countries"}` +
+        ` (~${tot >= 1000 ? (tot / 1000).toFixed(1) + "B" : Math.round(tot) + "M"} people)`
+      : `${focus}: no country-level data in CLDR`;
+  }
+  drawMap();
+
+  // hover: nearest shaded-country anchor OR the homeland marker
+  const mTip = $("mapTip");
+  cv.addEventListener("mousemove", e => {
+    const rect = cv.getBoundingClientRect(), s = cv.width / rect.width;
+    const mx = (e.clientX - rect.left) * s, my = (e.clientY - rect.top) * s;
+    const rows = CL[focus] || {};
+    const [hx, hy] = homelandXY(focus);
+    let html = null;
+    if ((mx - hx) ** 2 + (my - hy) ** 2 < 140) {
+      const d = L[focus];
+      const sig = d.signature.slice(0, 4)
+        .map(g => `<span class="ipa">${g.sym}</span> ${pct(g.worldShare)}%`).join("  ");
+      html = `<strong>${focus}</strong> — homeland<br>` +
+        `${fmtM(d.total)} speakers worldwide` +
+        (d.l2Share != null ? ` · ${pct(d.l2Share)}% learners` : "") +
+        `<br><span style="opacity:.75">signature sounds (share of world languages):</span><br>${sig}`;
+    } else {
+      let best = null, bd = 500;
+      for (const [c, d] of Object.entries(rows)) {
+        if (!ANCH[c]) continue;
+        const [x, y] = proj(ANCH[c][1], ANCH[c][0]);
+        const d2 = (mx - x) ** 2 + (my - y) ** 2;
+        if (d2 < bd) { bd = d2; best = [c, d]; }
+      }
+      if (best) {
+        const [c, d] = best;
+        const st = (d.official || "").replace(/_/g, " ");
+        html = `<strong>${focus} in ${c}</strong><br>` +
+          `~${fmtM(d.speakers)} speakers` +
+          (d.pct != null ? ` (${d.pct}% of the country)` : "") +
+          (st ? `<br>status: ${st}` : "") +
+          // augmented rows carry their own citation; CLDR rows don't
+          `<br><span style="opacity:.7;font-size:.92em">source: ${d.src || "Unicode CLDR"}</span>`;
+      }
+    }
+    if (html) {
+      mTip.innerHTML = html;
+      mTip.classList.add("show");
+      mTip.style.left = Math.min(e.clientX + 14, window.innerWidth - 330) + "px";
+      mTip.style.top = (e.clientY + 14) + "px";
+    } else mTip.classList.remove("show");
+  });
+  cv.addEventListener("mouseleave", () => mTip.classList.remove("show"));
+
+  const fsel = $("focusLang");
+  for (const n of names.slice().sort()) {
+    const o = document.createElement("option");
+    o.value = o.textContent = n;
+    fsel.appendChild(o);
+  }
+  fsel.value = "English";
+  fsel.addEventListener("change", () => { focus = fsel.value; drawMap(); });
+  $("showArcs").addEventListener("change", () => {
+    arcsOn = $("showArcs").checked; drawMap();
+  });
+
+})();
+</script>
+
+<div class="pagenav">
+  <a href="index.html">&larr; Sound Chart</a>
+  <span class="spacer"></span>
+  <a href="allophones.html">Allophones &rarr;</a>
+</div>
+
+<script src="nav.js?v=aae3ed8a"></script>
+</body>
+</html>

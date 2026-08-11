@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Short History of English Sounds — Spoken Sounds Across the World</title>
+<link rel="stylesheet" href="shared.css?v=d949b745">
+<style>
+  /* ================= the sound-flow diagram ================= */
+  /* SVG for the lines, absolutely-positioned HTML for the labels (they need to
+     be real audio buttons and to wrap). Both use the same year->x mapping. */
+  .flowwrap { position: relative; max-width: 100%; margin: 1rem 0 .2rem;
+    overflow-x: auto; }
+  .flowinner { position: relative; min-width: 900px; }
+  .flowinner svg { display: block; width: 100%; height: auto; }
+  /* lines */
+  .flow-trunk { stroke: var(--ink); stroke-width: 3.5; }
+  .flow-arrowhead { fill: var(--ink); }
+  .flow-trunklab { font-size: 11px; font-weight: 700; letter-spacing: .12em;
+    fill: var(--ink); }
+  .flow-run.in, .flow-curve.in { stroke: var(--l1); stroke-width: 2.2;
+    fill: none; }
+  .flow-run.out, .flow-curve.out { stroke: var(--rare); stroke-width: 2.2;
+    fill: none; }
+  .flow-tip.in { fill: var(--l1); }
+  .flow-tip.out { fill: var(--rare); }
+  .flow-node.in { fill: var(--l1); stroke: var(--bg); stroke-width: 2; }
+  .flow-node.out { fill: var(--rare); stroke: var(--bg); stroke-width: 2; }
+  .flow-guide { stroke: #e0d9cc; stroke-width: 1; stroke-dasharray: 2 4; }
+  .flow-axis { stroke: #cfc7ba; stroke-width: 1; }
+  .flow-tick { font-size: 11px; fill: #a8a094; }
+  .flow-era { font-size: 10.5px; fill: #8a8275; letter-spacing: .06em;
+    text-transform: uppercase; }
+  .flow-year { font-size: 10.5px; fill: #8a8275;
+    font-variant-numeric: tabular-nums; }
+  .flow-gone { font-size: 15px; font-weight: 700; fill: var(--rare); }
+  /* labels */
+  .flow-overlay { position: absolute; inset: 0; pointer-events: none; }
+  /* width is set inline in viewBox-proportional % so the label tracks its own
+     branch at any scale; sits just above the run it belongs to */
+  /* An INFLOW label sits above its run: the branch descends from it into the
+     trunk, so the text reads then the eye follows the line down. An OUTFLOW label
+     sits BELOW its run, because lifting it above pushed it back toward the trunk
+     the branch is leaving — the y-out label ended up 15px above the trunk line,
+     with its words printed across the neighbouring branch's curve. */
+  .flow-label { position: absolute; pointer-events: auto; }
+  .flow-label.in { transform: translateY(-100%); padding-bottom: .3rem; }
+  .flow-label.out { padding-top: .34rem; }
+  .flow-head { display: flex; align-items: baseline; gap: .35rem; }
+  .flow-gloss { font-size: .78rem; color: #6b6459; }
+  .flow-src { display: block; font-size: .68rem; text-transform: uppercase;
+    letter-spacing: .05em; color: #a8a094; margin: .12rem 0 .1rem; }
+  .flow-words { display: flex; flex-wrap: wrap; gap: .1rem .7rem;
+    font-size: .76rem; }
+  .flow-words .fw { color: #6b6459; }
+  .flow-words .fw b { font-weight: 600; color: #8a8275; font-size: .7rem;
+    text-transform: uppercase; letter-spacing: .03em; }
+  .flow-words .fw i { font-style: normal; font-weight: 600; color: var(--ink); }
+  .flow-words .fw em { font-style: normal; color: #a8a094; font-size: .72rem; }
+  .flow-words .fw.unver i { border-bottom: 1px dotted #cfc7ba; }
+  .flowlegend { display: flex; flex-wrap: wrap; gap: .35rem 1.3rem;
+    font-size: .76rem; color: #8a8275; margin: .1rem 0 0; }
+  .flowlegend .k { display: inline-flex; align-items: center; gap: .4rem; }
+  .flowlegend i { width: 1.5rem; height: 0; display: inline-block;
+    border-top: 2.2px solid var(--l1); }
+  .flowlegend i.out { border-top-color: var(--rare); }
+  .flowlegend i.trunk { border-top: 3.5px solid var(--ink); }
+  /* ================= compact timeline ================= */
+  .tl { position: relative; max-width: 74ch; margin: 1rem 0 0;
+    padding-left: 1.9rem; }
+  .tl::before { content: ""; position: absolute; left: .52rem; top: .4rem;
+    bottom: .4rem; width: 2px; background: #e0d9cc; }
+  .ev2 { position: relative; margin-bottom: 1rem; }
+  .ev2::before { content: ""; position: absolute; left: -1.62rem; top: .42rem;
+    width: .62rem; height: .62rem; border-radius: 50%;
+    background: var(--bg); border: 2px solid var(--both); }
+  .ev2.lost::before { border-color: var(--rare); background: var(--rare); }
+  .ev2.gained::before { border-color: var(--l1); background: var(--l1); }
+  .ev2 .when { font-size: .72rem; text-transform: uppercase;
+    letter-spacing: .06em; color: #8a8275; }
+  .ev2 h3 { font-size: 1rem; margin: .05rem 0 .2rem; color: var(--accent); }
+  .ev2 p { line-height: 1.55; margin: 0; font-size: .9rem; }
+  /* ================= playable chips ================= */
+  button.vchip { font-family: var(--ipa-font); font-size: .95rem;
+    min-width: 2em; padding: .18rem .35rem; border-radius: 5px; cursor: pointer;
+    background: #fff; color: var(--ink); border: 2px solid #ddd6c8;
+    vertical-align: baseline; }
+  button.vchip:hover { transform: translateY(-1px); }
+  button.vchip.playing { box-shadow: 0 0 0 4px rgba(179,84,46,.45); }
+  button.vchip:focus-visible { outline: 3px solid var(--accent);
+    outline-offset: 2px; }
+  button.vchip.t-very-rare { border-color: var(--rare); border-style: solid; }
+  button.vchip.t-rare { border-color: #d98f6a; }
+  button.vchip.t-uncommon { border-color: #c9c2b6; }
+  button.vchip.t-common { border-color: #e8e2d7; border-style: dashed; }
+  button.vchip.big { font-size: 1.3rem; padding: .2rem .45rem; }
+  @media (prefers-reduced-motion: reduce) {
+    button.vchip, .tooltip { transition: none; }
+  }
+  /* ================= detail cards under the diagram ================= */
+  .flowdetail { display: grid; gap: .8rem; margin: 1.1rem 0 .3rem;
+    grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); }
+  .fd { border: 1px solid #e0d9cc; border-radius: 10px; background: #fdfcfa;
+    padding: .7rem .8rem; border-left-width: 4px; }
+  .fd.in { border-left-color: var(--l1); }
+  .fd.out { border-left-color: var(--rare); }
+  .fd h4 { margin: 0 0 .3rem; font-size: .95rem; display: flex;
+    align-items: baseline; gap: .4rem; }
+  .fd h4 .yr { font-size: .72rem; color: #a8a094; margin-left: auto;
+    font-variant-numeric: tabular-nums; }
+  .fd p { font-size: .84rem; line-height: 1.5; margin: 0; color: #6b6459; }
+  /* ================= cognate word pairs ================= */
+  .wordpairs { font-size: .86rem; margin: .8rem 0 .2rem; }
+  .wp-row { display: grid; grid-template-columns: 7.5em 7.5em 1fr; gap: .5rem;
+    padding: .3rem 0; border-top: 1px solid #efe9df; align-items: baseline; }
+  .wp-row.head { font-weight: 600; color: #8a8275; border-top: 0;
+    font-size: .76rem; text-transform: uppercase; letter-spacing: .04em; }
+  .wp-row .en { font-weight: 600; }
+  .wp-row .de { color: #6b6459; }
+  .wp-row .gl { font-size: .8rem; color: #8a8275; }
+</style>
+</head>
+<body data-nav="history">
+
+<h1>A short history of English sounds</h1>
+<p class="subtitle">The Sound Chart shows every language as it is spoken now — a
+snapshot of something still moving. The line below is English. Sounds flow into it
+from the languages English met, and out of it toward the relatives that kept what
+English dropped.</p>
+
+<h2 class="section">Sounds flowing in and out</h2>
+
+<div class="block">
+  <p>Branches above the line arrive; branches below it leave. Each carries the
+  sound itself — click to hear it — and the words that show it, in English and in
+  the language on the other end.</p>
+  <p class="deffoot"><strong>Two ways a sound arrives.</strong> An arriving branch
+  labelled <em>from Norman French</em> or <em>from French</em> means <strong>contact
+  </strong>: borrowed words brought the sound with them, and English kept it. A
+  branch labelled <strong><em>from inside English</em></strong> means the opposite —
+  no borrowing at all. The sound <strong>developed out of a sound English already
+  had</strong>, as speakers gradually shifted how they pronounced it in certain
+  positions, until the result counted as a separate sound.
+  <span class="ipa">tʃ</span> is the case here: Old English inherited a
+  <span class="ipa">k</span> and softened it before front vowels, so
+  <em>church</em> parted ways with German <em lang="de">Kirche</em> and Dutch
+  <em lang="nl">kerk</em>, which kept the <span class="ipa">k</span>. Same
+  ancestor, no loanword involved. The <em>how</em> line on each branch says which
+  sound it came from.</p>
+</div>
+
+<div class="flowwrap">
+  <div id="flowChart" class="flowinner"></div>
+</div>
+<div class="flowlegend">
+  <span class="k"><i class="trunk"></i>English, 400 to now</span>
+  <span class="k"><i></i>a sound English gained</span>
+  <span class="k"><i class="out"></i>a sound English lost, and who kept it</span>
+</div>
+<p class="sub" id="flowNote" style="max-width:80ch"></p>
+
+<div id="flowDetail" class="flowdetail"></div>
+
+<h2 class="section">The events behind them</h2>
+
+<div id="timeline" class="tl"></div>
+
+<h2 class="section">The ⟨gh⟩ in <em>knight</em></h2>
+
+<div class="block">
+  <p><em>Knight</em> is spelled the way it was said. In Middle English both the
+  ⟨k⟩ and the ⟨gh⟩ were pronounced — the ⟨k⟩ as an ordinary
+  <span id="k-chip"></span>, the ⟨gh⟩ as <span id="x-chip"></span>, the rasp at
+  the end of Scottish <em>loch</em>. English lost both and kept the letters.
+  <span id="x-langs"></span> of the <span id="n-langs"></span> languages charted
+  here have <span class="ipa">x</span>; German and Dutch are among them.</p>
+
+  <div id="wordpairs" class="wordpairs"></div>
+  <p class="sub">Where English writes a silent ⟨gh⟩, German usually still says
+  something. A caution on the symbol: PHOIBLE's German inventory lists a single
+  dorsal fricative, <span class="ipa">x</span>. German also has a fronter version
+  in words like <em>ich</em>, and whether that is one sound or two has been argued
+  for decades — this page follows the inventory it charts.</p>
+</div>
+
+
+<p class="note" id="hist-notes"></p>
+
+<div class="pagenav">
+  <a href="spectrograms.html">&larr; Seeing Sounds</a>
+  <span class="spacer"></span>
+  <a href="difficulty.html">Language Learners &rarr;</a>
+</div>
+
+<script src="data.js?v=6518c281"></script>
+<script src="rarity.js?v=776d7c52"></script>
+<script src="history_data.js?v=02d74ed7"></script>
+<script>
+// Chip building + audio + tooltip. Defined BEFORE history_flow.js runs, and
+// handed to it via window.__flowChip / __flowBind, so the diagram's labels are
+// the same playable buttons used on the Sound Chart.
+(function () {
+  const $ = id => document.getElementById(id);
+  if (typeof DATA === "undefined") return;
+  const freq = (typeof RARITY !== "undefined") ? RARITY.globalFreq : {};
+  const pct = v => Math.round(100 * v);
+
+  function rarityTier(sym) {
+    const f = freq[sym];
+    if (f == null) return null;
+    if (f < 0.05) return "very-rare";
+    if (f < 0.15) return "rare";
+    if (f < 0.5) return "uncommon";
+    return "common";
+  }
+  function rarityPhrase(sym) {
+    const f = freq[sym];
+    if (f == null) return "";
+    return `in ${f < 0.01 ? "<1" : pct(f)}% of the world's languages`;
+  }
+  function wordFor(sym, lang) {
+    const e = DATA.examplesByLang && DATA.examplesByLang[`${lang}|${sym}`];
+    return e ? { text: e.text, mined: e.mined } : null;
+  }
+  // Only symbols with audio become buttons: a control that looks clickable and
+  // plays nothing is worse than plain text.
+  function chip(sym, langs, cls) {
+    langs = langs || [];
+    if (!DATA.audio[sym]) return `<span class="ipa">${sym}</span>`;
+    const tier = rarityTier(sym);
+    const bits = [sym, rarityPhrase(sym)].filter(Boolean);
+    for (const lg of langs) {
+      const w = wordFor(sym, lg);
+      if (w) bits.push(`${lg}: ${w.text}`);
+    }
+    return `<button class="vchip${tier ? " t-" + tier : ""}${cls ? " " + cls : ""}" ` +
+      `data-sym="${sym}" data-langs="${langs.join("|")}" ` +
+      `aria-label="${bits.join(" — ").replace(/"/g, "&quot;")}. Click to hear.">` +
+      `${sym}</button>`;
+  }
+  window.__flowChip = sym => chip(sym, ["English"], "big");
+
+  let tip = $("histTip");
+  if (!tip) {
+    tip = document.createElement("div");
+    tip.id = "histTip";
+    tip.className = "tooltip";
+    document.body.appendChild(tip);
+  }
+  function showTip(btn) {
+    const sym = btn.dataset.sym;
+    const langs = (btn.dataset.langs || "").split("|").filter(Boolean);
+    // some diphthong entries carry a filename as their "name"; only show a real
+    // articulatory description
+    const nm = DATA.names[sym];
+    const name = nm && !/^En-[a-z]{2}-/i.test(nm)
+      ? `<span style="opacity:.8">${nm}</span><br>` : "";
+    const rare = rarityPhrase(sym);
+    let html = `<strong class="ipa">${sym}</strong> ${name}` +
+      (rare ? `<span style="opacity:.8">${rare}</span><br>` : "");
+    const rows = [];
+    for (const lg of langs) {
+      const w = wordFor(sym, lg);
+      if (w) rows.push(`<em>${lg}</em>: ${w.text}` +
+        (w.mined ? ` <span style="opacity:.55">(via Wiktionary)</span>` : ""));
+    }
+    html += rows.length ? rows.join("<br>")
+      : `<span style="opacity:.6">no example word recorded</span>`;
+    html += `<br><span style="opacity:.55">Click to hear the sound.</span>`;
+    tip.innerHTML = html;
+    tip.classList.add("show");
+  }
+  function moveTip(e) {
+    tip.style.left = Math.min(e.clientX + 14, window.innerWidth - 320) + "px";
+    tip.style.top = (e.clientY + 16) + "px";
+  }
+  const hideTip = () => tip.classList.remove("show");
+
+  let playing = null;
+  function play(sym, btn) {
+    const a = DATA.audio[sym];
+    if (!a) return;
+    if (playing) { playing.a.pause(); playing.b.classList.remove("playing"); }
+    const au = new Audio(a.file);
+    playing = { a: au, b: btn };
+    btn.classList.add("playing");
+    au.addEventListener("ended", () => btn.classList.remove("playing"));
+    au.play();
+  }
+  function bindChips(root) {
+    for (const b of (root || document).querySelectorAll("button.vchip")) {
+      if (b.dataset.bound) continue;
+      b.dataset.bound = "1";
+      b.addEventListener("click", () => play(b.dataset.sym, b));
+      b.addEventListener("mouseenter", () => showTip(b));
+      b.addEventListener("mousemove", moveTip);
+      b.addEventListener("mouseleave", hideTip);
+      b.addEventListener("focus", () => {
+        showTip(b);
+        const r = b.getBoundingClientRect();
+        moveTip({ clientX: r.left, clientY: r.bottom });
+      });
+      b.addEventListener("blur", hideTip);
+    }
+  }
+  window.__flowBind = bindChips;
+  window.__histChip = chip;
+  window.__histBind = bindChips;
+})();
+</script>
+<script src="history_flow.js?v=e617a3ae"></script>
+<script>
+// Everything on the page other than the diagram itself.
+(function () {
+  const $ = id => document.getElementById(id);
+  if (typeof DATA === "undefined" || typeof HIST === "undefined") return;
+  const chip = window.__histChip, bindChips = window.__histBind;
+  const freq = (typeof RARITY !== "undefined") ? RARITY.globalFreq : {};
+  const byName = {};
+  for (const l of DATA.languages) byName[l.name] = l;
+  const nLangs = DATA.languages.length;
+  const invOf = n => new Set((byName[n] || { phonemes: [] }).phonemes);
+
+  // {{x}} -> playable chip; a declared CLUSTER -> italic spelling. /sk/ and /kn/
+  // are two segments with no single chart cell or recording, so a chip for them
+  // would put a wrong label on a control that plays a real sound.
+  const expand = text => text.replace(/\{\{([^}]+)\}\}/g, (_, tok) =>
+    HIST.clusters[tok] ? `<em>${HIST.clusters[tok]}</em>` : chip(tok, ["English"]));
+
+  // ---------- detail cards: the "how" for each branch ----------
+  {
+    const host = $("flowDetail");
+    for (const f of HIST.flows) {
+      const card = document.createElement("div");
+      card.className = `fd ${f.dir}`;
+      card.dataset.sym = f.sym;
+      // keyed by (sym, dir) like the branches it describes, so a symbol that
+      // appears on both sides of the trunk cannot collide
+      card.dataset.bid = `${f.sym}-${f.dir}`;
+      const verb = f.dir === "in"
+        ? `arrived from ${f.source}`
+        : (f.gone ? "left, and is gone" : "left English");
+      card.innerHTML =
+        `<h4>${chip(f.sym, ["English"])}<span>${f.label}</span>` +
+        `<span class="yr">${verb} · ~${f.year}</span></h4>` +
+        `<p>${expand(f.how)}</p>`;
+      host.appendChild(card);
+    }
+  }
+
+  // ---------- provenance note for the diagram ----------
+  {
+    const ins = HIST.flows.filter(f => f.dir === "in");
+    const outs = HIST.flows.filter(f => f.dir === "out");
+    const donors = [...new Set(ins.filter(f => f.srcRoster)
+      .map(f => f.srcRoster))];
+    const unver = HIST.unverifiedLangs || [];
+    $("flowNote").innerHTML =
+      `<strong>How the ends of the branches were checked.</strong> ` +
+      `All ${ins.length} arriving sounds are confirmed present in English's ` +
+      `charted inventory today, and every language named on a departing branch ` +
+      `is confirmed to still have that sound, in ` +
+      `<a href="https://phoible.org">PHOIBLE</a>. ` +
+      `${donors.join(" and ")} are in this site's roster too, which is how the ` +
+      `<span class="ipa">dʒ</span> branch can say something the timeline alone ` +
+      `could not: French handed English that sound and then changed, so English ` +
+      `now keeps a sound its donor gave up. ` +
+      (unver.length
+        ? `${unver.join(", ")} ${unver.length > 1 ? "are" : "is"} not in the ` +
+          `roster, so ${unver.length > 1 ? "those claims" : "that claim"} is ` +
+          `marked with a dotted underline and rests on the cited sources rather ` +
+          `than on the data. `
+        : "") +
+      `The <em>dates</em> are a different kind of claim: PHOIBLE records ` +
+      `languages as spoken today and has no entry for Old English, so every year ` +
+      `on this diagram comes from the published histories cited below rather ` +
+      `than from the data — and a sound's arrival is rarely a single moment, so ` +
+      `the year marks where the evidence clusters.`;
+  }
+
+  // ---------- the compact timeline ----------
+  {
+    const host = $("timeline");
+    for (const ev of HIST.events) {
+      const div = document.createElement("div");
+      div.className = "ev2" + (ev.kind === "lost" ? " lost"
+        : ev.kind === "gained" ? " gained" : "");
+      div.innerHTML = `<div class="when">${ev.when}</div>` +
+        `<h3>${ev.title}</h3><p>${expand(ev.body)}</p>`;
+      host.appendChild(div);
+    }
+  }
+
+  // ---------- the knight section ----------
+  $("k-chip").innerHTML = chip("k", ["English"]);
+  $("x-chip").innerHTML = chip("x", ["German", "Dutch"]);
+  const xLangs = DATA.languages.filter(l => l.phonemes.includes("x"));
+  $("x-langs").textContent = xLangs.length;
+  $("n-langs").textContent = nLangs;
+  $("wordpairs").innerHTML =
+    `<div class="wp-row head"><span>English</span><span>German</span>` +
+    `<span>note</span></div>` +
+    HIST.cognates.map(([en, de, note]) =>
+      `<div class="wp-row"><span class="en">${en}</span>` +
+      `<span class="de" lang="de">${de}</span>` +
+      `<span class="gl">${note}</span></div>`).join("");
+
+  // The English-vs-German inventory columns were removed with the "Where they
+  // ended up" section; thLangs stays because the sources note still quotes it.
+  const thLangs = DATA.languages.filter(l =>
+    l.phonemes.includes("θ") && l.phonemes.includes("ð"));
+
+  bindChips();
+
+  // ---------- sources ----------
+  $("hist-notes").innerHTML =
+    `<strong>Sources.</strong> The dates and sound changes are compiled from ` +
+    `Wikipedia's <a href="https://en.wikipedia.org/wiki/Phonological_history_of_English">phonological ` +
+    `history of English</a> and its companions on the ` +
+    `<a href="https://en.wikipedia.org/wiki/Great_Vowel_Shift">Great Vowel Shift</a>, ` +
+    `<a href="https://en.wikipedia.org/wiki/Phonological_history_of_English_consonants">English ` +
+    `consonants</a>, <a href="https://en.wikipedia.org/wiki/Phonological_history_of_English_close_front_vowels">close ` +
+    `front vowels</a> and <a href="https://en.wikipedia.org/wiki/Gh_(digraph)">the ⟨gh⟩ ` +
+    `digraph</a>; the <a href="https://en.wikipedia.org/wiki/High_German_consonant_shift">High ` +
+    `German consonant shift</a> and <a href="https://en.wikipedia.org/wiki/Middle_Dutch">Middle ` +
+    `Dutch</a> for the continental relatives; ` +
+    `<a href="https://www.britannica.com/topic/Great-Vowel-Shift">Britannica</a> on the ` +
+    `vowel shift; the University of Toronto's ` +
+    `<a href="https://cpercy.artsci.utoronto.ca/courses/MEPhonology.htm">Middle English ` +
+    `phonology notes</a> for the voiced fricatives becoming separate sounds; ` +
+    `a <a href="https://www.cambridge.org/core/journals/english-language-and-linguistics/article/old-english-cg-and-its-sound-correspondences-in-old-english-and-middle-english/1BCD6753AABC4655380379A8DAA00435">Cambridge ` +
+    `study of Old English ⟨cg⟩</a> for the French contribution to ` +
+    `<span class="ipa">dʒ</span>; and Wiktionary's ` +
+    `<a href="https://en.wiktionary.org/wiki/Appendix:English_doublets">English ` +
+    `doublets</a> for the shirt/skirt pairs. Caxton's 1476 press follows ` +
+    `<a href="https://en.wikipedia.org/wiki/William_Caxton">Wikipedia</a>; ` +
+    `cognates were checked against Wiktionary entries word by word. ` +
+    `<strong>What the sources do not settle:</strong> the causes. Why the long ` +
+    `vowels moved, and why <em>kn</em> simplified when it did, are open ` +
+    `questions — the accounts describe what changed and roughly when, which is ` +
+    `as far as the evidence reaches. One arrival is argued over in its own ` +
+    `right: how much of {{dʒ}} English already had before 1066. ` +
+    `The present-day figures ` +
+    `(${xLangs.length} of ${nLangs} languages with <span class="ipa">x</span>, ` +
+    `${thLangs.length} with both <em>th</em> sounds, and the diagram's branch ` +
+    `ends) come from ` +
+    `<a href="https://phoible.org">PHOIBLE 2.0</a>, one inventory per language, ` +
+    `describing those languages as spoken now. Audio is Wikimedia Commons, ` +
+    `credited on the <a href="about.html">About page</a>.`;
+  $("hist-notes").innerHTML = expand($("hist-notes").innerHTML);
+  bindChips();
+})();
+</script>
+<script src="nav.js?v=aae3ed8a"></script>
+</body>
+</html>

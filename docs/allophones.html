@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Allophones — Spoken Sounds Across the World</title>
+<link rel="stylesheet" href="shared.css?v=d949b745">
+<style>
+  /* listening demos */
+  .demos { display: grid; gap: .9rem; margin: 1rem 0;
+    grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); }
+  .demo { border: 1px solid #e0d9cc; border-radius: 10px; background: #fdfcfa;
+    padding: .8rem .9rem; }
+  .demo h4 { margin: 0; font-size: 1rem; }
+  .demo .sound { font-size: .78rem; color: #8a8275; margin-bottom: .6rem; }
+  .demo .sides { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem;
+    margin-bottom: .6rem; }
+  .demo .side { border: 1px solid #e8e2d7; border-radius: 8px; padding: .5rem;
+    background: #fff; text-align: center; }
+  .demo .side .lg { font-size: .74rem; text-transform: uppercase;
+    letter-spacing: .05em; color: #8a8275; }
+  .demo button.pb { font-family: var(--ipa-font); font-size: 1.5rem;
+    width: 2.1em; height: 2.1em; border-radius: 50%; cursor: pointer;
+    border: 2px solid var(--both); background: #fff; color: var(--ink);
+    margin: .3rem 0; display: inline-flex; align-items: center;
+    justify-content: center; }
+  .demo button.pb:hover { background: #eaf0f7; }
+  .demo button.pb.playing { box-shadow: 0 0 0 5px rgba(179,84,46,.4); }
+  .demo button.pb:focus-visible { outline: 3px solid var(--accent);
+    outline-offset: 2px; }
+  .demo .side .desc { font-size: .74rem; color: #6b6459; line-height: 1.35; }
+  .demo .side .word { font-size: .78rem; margin-top: .25rem; }
+  .demo .why { font-size: .8rem; color: #6b6459; line-height: 1.5;
+    border-top: 1px solid #efe9df; padding-top: .5rem; }
+  /* within-English /t/ strip: one phoneme, three allophones */
+  .allo-strip { display: grid; gap: .6rem; margin: .9rem 0 .3rem;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+  .allo-strip .cell { border: 1px solid #e0d9cc; border-radius: 10px;
+    background: #fdfcfa; padding: .7rem .8rem; text-align: center; }
+  .allo-strip .cell .w { font-size: 1.05rem; font-weight: 600; }
+  .allo-strip .cell .ph { font-family: var(--ipa-font);
+    font-size: .9rem; color: var(--accent); margin: .1rem 0 .35rem; }
+  .allo-strip .cell .tag { font-size: .7rem; text-transform: uppercase;
+    letter-spacing: .05em; color: #8a8275; }
+  /* the allophone symbol itself — the thing the card is about, so it is the
+     largest element rather than being buried in the narrow transcription */
+  .allo-strip .cell .allo { margin: .4rem 0 .15rem; }
+  .allo-strip .cell .allo .sym { font-family: var(--ipa-font);
+    font-size: 1.9rem; line-height: 1.1; color: var(--accent); font-weight: 600;
+    display: block; }
+  .allo-strip .cell .allo .cap { font-size: .68rem; text-transform: uppercase;
+    letter-spacing: .05em; color: #a8a094; }
+  .allo-strip .cell .inword { font-size: .74rem; color: #6b6459;
+    margin: .1rem 0 .45rem; }
+  .allo-strip .cell .inword .hl { color: var(--accent); font-weight: 700; }
+  .allo-strip .cell .desc { font-size: .74rem; color: #6b6459; line-height: 1.4;
+    margin-top: .3rem; }
+  .allo-strip .cell button.pw { font: inherit; font-size: .78rem; cursor: pointer;
+    border: 1.5px solid var(--both); border-radius: 999px; background: #fff;
+    color: var(--ink); padding: .2rem .7rem; margin: .1rem 0 .5rem; }
+  .allo-strip .cell button.pw:hover { background: #eaf0f7; }
+  .allo-strip .cell button.pw.playing { box-shadow: 0 0 0 4px rgba(179,84,46,.35); }
+  .allo-strip .cell button.pw:focus-visible { outline: 3px solid var(--accent);
+    outline-offset: 2px; }
+  /* broad vs narrow transcription, stacked so the difference is obvious */
+  .allo-strip .trans { display: grid; gap: .15rem; margin: 0 0 .4rem;
+    font-size: .78rem; }
+  .allo-strip .trans .tl { display: inline-block; width: 4.9em; text-align: right;
+    margin-right: .45rem; font-size: .66rem; text-transform: uppercase;
+    letter-spacing: .04em; color: #a8a094; }
+  .allo-strip .trans .ipa { font-family: var(--ipa-font); }
+  .allo-strip .trans .ipa.narrow { color: var(--accent); font-weight: 600; }
+  .credit { font-size: .72rem; color: #a8a094; margin: .1rem 0 0; }
+  /* .deffoot (terminology note) now lives in shared.css — three pages use it */
+  .bridge-list { margin: .9rem 0 .2rem; font-size: .82rem; }
+  .bridge-row { display: grid; grid-template-columns: 15em 5.5em 1fr; gap: .5rem;
+    padding: .3rem 0; border-top: 1px solid #efe9df; align-items: baseline; }
+  .bridge-row.head { font-weight: 600; color: #8a8275; border-top: 0; }
+  .bridge-row .gain { color: var(--accent); font-weight: 600; }
+  .bridge-row .syms { font-family: var(--ipa-font); color: #6b6459; }
+</style>
+</head>
+<body data-nav="allophones">
+
+<h1>Allophones: variations on sounds</h1>
+<p class="subtitle">The Sound Chart compares <em>phonemes</em> — the sounds a
+language treats as meaningfully different. That's a useful summary, but not the
+whole picture. A phoneme is produced as a small family of slightly different
+sounds, and those differ between languages even when the phoneme itself matches.
+A good deal of what we hear as an accent sits at this level.</p>
+
+<h2 class="section">Phoneme or allophone?</h2>
+
+<div class="block">
+  <h3>Two kinds of sound difference</h3>
+  <p>A <strong>phoneme</strong> is a sound a language uses to tell words apart.
+  Swap one for another and the word changes: English <em>pat</em> and <em>bat</em>
+  differ by one phoneme. Phonemes are written in slashes: <span class="ipa">/t/</span>.</p>
+  <p>An <strong>allophone</strong> is one of the ways a single phoneme actually gets
+  pronounced, depending on where it sits in a word. Swapping one allophone for
+  another doesn't change which word you've said — it changes how it sounds, in the
+  way an accent does. Allophones are written in square brackets:
+  <span class="ipa">[tʰ]</span>.</p>
+
+  <p class="deffoot"><strong>A note on wording.</strong> This page uses
+  <em>allophone</em> throughout. Where you see <em>variant</em> or
+  <em>realization</em> — here or in the linguistics literature — they mean the same
+  thing: one of the ways a phoneme is pronounced. The bracket notation is the
+  quickest tell: <span class="ipa">/slashes/</span> for the category a language
+  stores, <span class="ipa">[brackets]</span> for what a mouth actually produced.</p>
+
+  <p><strong>One phoneme, three allophones, all within English.</strong> Each
+  word below contains the phoneme <span class="ipa">/t/</span>, read by the same
+  speaker in the same accent — but the <em>t</em> is pronounced differently in each.
+  Many English speakers group all three under one sound and don't notice the
+  difference until it's pointed out, because English never uses it to tell two
+  words apart:</p>
+
+  <div id="demo-english-t" class="allo-strip"></div>
+  <p class="credit" id="demo-english-t-credit"></p>
+
+  <p class="sub">All three words store the same phoneme,
+  <span class="ipa">/t/</span> — which is why the Sound Chart lists English /t/
+  once. The <strong>phonetic</strong> line on each card is what the mouth actually
+  did, and it differs every time: <span class="ipa">[tʰ]</span> with a puff of air
+  in <em>top</em>, plain <span class="ipa">[t]</span> in <em>stop</em> where the
+  preceding <em>s</em> suppresses that puff, and <span class="ipa">[ɾ]</span> as a
+  single quick tap in <em>butter</em>. <em>Top</em> and <em>stop</em> are the
+  easiest pair to hear, since they differ by little else — hold a hand in front of
+  your mouth and only the first one pushes air against it. Three allophones of one
+  phoneme, and substituting one for another leaves the word intact, which is the
+  standard test for whether a difference is allophonic rather than phonemic.</p>
+
+  <p><strong>This is part of why two languages can share a sound on the chart and
+  still sound quite different:</strong> they agree on the phoneme and differ in its
+  allophones. The rest of this page looks at that. Note the shift in what is being
+  compared: the /t/ strip above held <em>one language</em> and varied the position
+  in the word, while every card from here on holds <strong>one phoneme and varies
+  the language</strong>. Both languages list the sound on the Sound Chart, so
+  playing the two sides shows how far apart their allophones can sit.</p>
+</div>
+
+<h2 class="section">Same sound, different mouth — across two languages</h2>
+
+<div class="block">
+  <p>Each card below is <strong>one phoneme in two languages</strong>. Both list
+  it on the Sound Chart, so the chart counts it as shared, but the everyday
+  allophone differs enough to hear. This is the cross-language counterpart to the
+  /t/ strip above: there, one language pronounced one phoneme three ways depending
+  on position; here, two languages pronounce the same phoneme differently as a
+  matter of habit.</p>
+  <div id="demo-realization" class="demos"></div>
+</div>
+
+<h2 class="section">Sounds you already make by accident</h2>
+
+<div class="block">
+  <p>This works in the learner's favour too. A sound can be a full phoneme in one
+  language and merely an allophone in another, which means
+  <strong>a speaker may already produce it without having needed to notice.</strong>
+  Counting these "bridges" at half credit, English–Hindi sound overlap goes from
+  <span id="a-jbefore"></span>% to <span id="a-jafter"></span>%. Producing a sound
+  by habit isn't the same as controlling it deliberately, so the half weighting is
+  a rough allowance rather than a measurement.</p>
+  <div id="demo-bridges" class="demos"></div>
+  <div id="allo-bridges" class="bridge-list"></div>
+</div>
+
+<div class="caveat">
+  <strong>Why this page is short, and hand-written.</strong> Allophone coverage in
+  PHOIBLE is uneven. It records allophones for 32 of the 34 languages here — not
+  for Marathi or Yoruba — and for English not in the inventory used for the Sound
+  Chart, though
+  <a href="https://phoible.org/inventories/view/160">a different English
+  inventory</a> documents them in detail (see the note below). The records that do
+  exist often use stacked phonetic diacritics
+  (<span class="ipa">d̪̤̚</span>, <span class="ipa">t̪̚ʰ</span>) that many fonts
+  render poorly, so a generated allophone table was hard to read.
+  <p style="margin:.6rem 0 0">A larger problem is that ranking languages by "how
+  differently they realize their shared sounds" partly measures how thoroughly each
+  language has been documented rather than how its speakers talk. An earlier
+  version of this page reported that Hindi and Punjabi realize 100% of their shared
+  sounds differently, when the main driver was that Punjabi's entry is nearly
+  empty. The contrasts above are drawn from descriptive grammars instead, each
+  chosen because both sides have audio available. That means fewer comparisons than
+  a generated table would offer, but ones that can be checked individually.</p>
+</div>
+
+<p class="note" id="allo-notes"></p>
+
+<div class="pagenav">
+  <a href="map.html">&larr; World Map</a>
+  <span class="spacer"></span>
+  <a href="spectrograms.html">Seeing Sounds &rarr;</a>
+</div>
+
+<script src="data.js?v=6518c281"></script>
+<script src="deep.js?v=f13cd68b"></script>
+<script src="demos.js?v=508a4ab7"></script>
+<script>
+(function () {
+  const $ = id => document.getElementById(id);
+  const pct = x => Math.round(100 * x);
+  if (typeof DEEP === "undefined") return;
+  const A = DEEP.allophones;
+
+  const eh = A.featured.find(f => (f.a === "English" && f.b === "Hindi") ||
+                                  (f.a === "Hindi" && f.b === "English"));
+  if (eh) {
+    $("a-jbefore").textContent = pct(eh.jaccard);
+    $("a-jafter").textContent = pct(eh.bridgedJaccard);
+  }
+
+  // ---- audio playback shared by every demo button ----
+  let current = null;
+  function play(sym, btn) {
+    const a = DATA.audio[sym];
+    if (!a) return;
+    if (current) { current.a.pause(); current.b.classList.remove("playing"); }
+    const au = new Audio(a.file);
+    current = { a: au, b: btn };
+    btn.classList.add("playing");
+    au.addEventListener("ended", () => btn.classList.remove("playing"));
+    au.play();
+  }
+
+  function renderDemos(target, list) {
+    const host = $(target);
+    if (!host || typeof DEMOS === "undefined") return;
+    for (const d of list) {
+      const card = document.createElement("div");
+      card.className = "demo";
+      card.innerHTML =
+        `<h4>${d.title}</h4><div class="sound">${d.sound}</div>` +
+        `<div class="sides">` +
+        d.sides.map(s =>
+          `<div class="side"><div class="lg">${s.lang}</div>` +
+          `<button class="pb" data-sym="${s.symbol}" ` +
+          `aria-label="Play ${s.lang} ${s.symbol}">${s.symbol}</button>` +
+          `<div class="desc">${s.desc}</div>` +
+          (s.word ? `<div class="word">${s.word}</div>` : "") + `</div>`).join("") +
+        `</div><div class="why">${d.why}</div>`;
+      host.appendChild(card);
+      for (const b of card.querySelectorAll("button.pb")) {
+        b.addEventListener("click", () => play(b.dataset.sym, b));
+      }
+    }
+  }
+  // one phoneme, three realizations, all within English — rendered first so the
+  // reader meets phoneme-vs-allophone before any cross-language card
+  // plays a whole-word file rather than an isolated IPA segment
+  let currentWord = null;
+  function playFile(file, btn) {
+    if (currentWord) {
+      currentWord.a.pause(); currentWord.b.classList.remove("playing");
+    }
+    if (current) { current.a.pause(); current.b.classList.remove("playing"); }
+    const au = new Audio(file);
+    currentWord = { a: au, b: btn };
+    btn.classList.add("playing");
+    au.addEventListener("ended", () => btn.classList.remove("playing"));
+    au.play();
+  }
+
+  function renderEnglishT() {
+    const host = $("demo-english-t");
+    if (!host || typeof DEMOS === "undefined" || !DEMOS.englishT) return;
+    const d = DEMOS.englishT;
+    for (const v of d.variants) {
+      const cell = document.createElement("div");
+      cell.className = "cell";
+      // Both transcriptions are shown: the broad /…/ is identical in the /t/
+      // slot across all three, the narrow […] is not. That contrast is the
+      // phoneme/allophone distinction written down.
+      // The allophone symbol leads the card. It was previously only visible
+      // inside the narrow transcription, which meant a reader could not answer
+      // "so which allophone IS this?" without decoding [tʰɑp] themselves.
+      cell.innerHTML =
+        `<div class="tag">${v.label}</div>` +
+        `<div class="w">${v.word}</div>` +
+        `<div class="allo"><span class="sym ipa">[${v.allophone}]</span>` +
+        `<span class="cap">allophone</span></div>` +
+        `<div class="inword">/t/ is said as ` +
+        `<span class="hl ipa">[${v.allophone}]</span> in this word</div>` +
+        `<button class="pw" data-file="${v.file}" ` +
+        `aria-label="Play a recording of the word ${v.word}, ` +
+        `where the t is pronounced ${v.allophone}">` +
+        `<span aria-hidden="true">▶</span> play</button>` +
+        // Only the phonetic transcription is shown. The phonemic line was
+        // identical in the /t/ slot across all three cards by definition, so it
+        // added a row of near-duplicate notation; the shared /t/ is already
+        // stated in the "…is said as…" line above and in the prose.
+        `<div class="trans">` +
+        `<div><span class="tl">phonetic</span>` +
+        `<span class="ipa narrow">${v.phonetic}</span></div>` +
+        `</div>` +
+        `<div class="desc">${v.desc}</div>`;
+      host.appendChild(cell);
+      for (const b of cell.querySelectorAll("button.pw")) {
+        b.addEventListener("click", () => playFile(b.dataset.file, b));
+      }
+    }
+    // credit goes into its own element in the markup rather than being spliced
+    // in next to the host; DOM traversal from a generated node is needless
+    // coupling and breaks under the test stub
+    const cr = $("demo-english-t-credit");
+    if (cr) cr.textContent = d.credit;
+  }
+  renderEnglishT();
+
+  renderDemos("demo-realization", DEMOS.realization);
+  renderDemos("demo-bridges", DEMOS.bridges);
+
+  // bridges for the featured pair (both directions)
+  if (eh) {
+    const rows = [
+      [`Hindi phonemes English has only as an allophone`, eh.bBridges],
+      [`English phonemes Hindi has only as an allophone`, eh.aBridges],
+    ];
+    $("allo-bridges").innerHTML =
+      `<div class="bridge-row head"><span>direction</span><span>count</span>` +
+      `<span>sounds</span></div>` +
+      rows.map(([label, syms]) =>
+        `<div class="bridge-row"><span>${label}</span>` +
+        `<span class="gain">${syms.length}</span>` +
+        `<span class="syms">${syms.join(" ") || "—"}</span></div>`).join("");
+  }
+
+  // coverage note, generated from the data so it can't go stale
+  const c = A.coverage;
+  $("allo-notes").innerHTML =
+    `<strong>Sources and limits.</strong> The contrasts above come from standard ` +
+    `descriptive grammars rather than from mining a dataset. Each recording is a ` +
+    `separate Wikimedia Commons file for that IPA symbol, so the two sides of ` +
+    `each pair are different audio. The three English /t/ words are ` +
+    `whole-word recordings by a single speaker ` +
+    `(<a href="https://commons.wikimedia.org/wiki/User:Dvortygirl">Dvortygirl</a>, ` +
+    `General American, CC BY-SA 3.0) rather than isolated segments, because these ` +
+    `allophones only exist in context: the <span class="ipa">[t]</span> of ` +
+    `<em>stop</em> is unaspirated precisely because of the <em>s</em> in front of ` +
+    `it, and the tap in <em>butter</em> is a positional allophone rather than a ` +
+    `segment IPA references list for English. The words were chosen so that the ` +
+    `allophone is <em>obligatory</em> rather than optional: an earlier version used ` +
+    `<em>cat</em> for an unreleased <span class="ipa">[t̚]</span>, but word-final ` +
+    `release in English is a speaker's choice, so the recording did not dependably ` +
+    `contain it. Transcriptions are Wiktionary's, and the tap is ` +
+    `General American — many British speakers use a full ` +
+    `<span class="ipa">t</span> in <em>butter</em>. Elsewhere on this page the audio is ` +
+    `isolated IPA segments, which are careful laboratory productions; a ` +
+    `<span class="ipa">β</span> between vowels in running Spanish is usually ` +
+    `softer than the demo suggests. The bridge overlap figure uses PHOIBLE's ` +
+    `allophone records, where coverage is uneven: ` +
+    `${c.with_allophones} of ${c.total} languages have them, and ` +
+    `${c.excluded.join(" and ")} have none in any inventory. English is a ` +
+    `particular case — the Received Pronunciation inventory used for the Sound ` +
+    `Chart (PHOIBLE 2252) lists no allophones, while PHOIBLE's ` +
+    `<a href="https://phoible.org/inventories/view/160">SPA inventory 160</a> ` +
+    `documents them for 68% of its English phonemes. The English allophones here come ` +
+    `from that second inventory, which agrees with the charted one on 32 of 51 ` +
+    `phonemes. Counting a bridge at half credit is a rough allowance rather than a ` +
+    `measurement: producing a sound as an allophone is a step toward a ` +
+    `contrast, but not the same as controlling it.`;
+})();
+</script>
+<script src="nav.js?v=aae3ed8a"></script>
+</body>
+</html>

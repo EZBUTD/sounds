@@ -1,0 +1,106 @@
+/* Shared theme + top navigation for all five pages.
+   Page-specific styles stay inline in each page. */
+:root {
+  --l1: #1a7f6b;         /* language 1 only */
+  --l2: #7b4bbf;         /* language 2 only */
+  --both: #23558c;       /* in both */
+  --none-bg: #f1ede6;    /* in neither */
+  --none-text: #a09a8e;
+  --imposs: #dcd6cb;
+  --bg: #faf8f4;
+  --ink: #2b2620;
+  --accent: #b3542e;
+  --rare: #c1553a;
+  --common: #9aa8b8;
+  /* IPA font stack — use var(--ipa-font) everywhere IPA is rendered.
+     The SIL fonts are ideal but are NOT installed on a stock machine, and the
+     stack used to end at generic `serif`. On macOS that resolves to a face
+     lacking some combining diacritics: U+031A COMBINING LEFT ANGLE ABOVE (the
+     unreleased-stop mark in [t̚]) rendered as a tofu box floating above the
+     letter. Arial Unicode MS and Times New Roman DO cover it — verified by
+     reading the local font cmaps rather than assumed — so they are named before
+     the generic fallback. (Lucida Grande was checked and does NOT cover U+031A,
+     so it is deliberately absent.) */
+  --ipa-font: "Doulos SIL", "Charis SIL", "Gentium Plus", "Arial Unicode MS",
+    "Times New Roman", serif;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0 auto; padding: 0 1.5rem 4rem; max-width: 1180px;
+  font-family: "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  background: var(--bg); color: var(--ink);
+}
+h1 { font-size: 1.85rem; margin: 0 0 .3rem; }
+.subtitle { color: #6b6459; margin: 0 0 1.4rem; max-width: 72ch; line-height: 1.55; }
+h2.section { font-size: .95rem; letter-spacing: .1em; text-transform: uppercase;
+  color: #8a8275; margin: 2.4rem 0 .6rem; }
+a { color: var(--accent); }
+
+/* ---- top nav ---- */
+.topnav { margin: 0 -1.5rem 1.6rem; padding: .7rem 1.5rem;
+  border-bottom: 1px solid #e2dcd0; background: #fffdfa;
+  position: sticky; top: 0; z-index: 20; }
+.topnav .brand { display: block; font-size: .78rem; letter-spacing: .04em;
+  text-transform: uppercase; color: #8a8275; text-decoration: none;
+  margin-bottom: .45rem; }
+.topnav .brand:hover { color: var(--accent); }
+.topnav ul { list-style: none; display: flex; flex-wrap: wrap; gap: .3rem;
+  margin: 0; padding: 0; }
+.topnav a { display: inline-block; text-decoration: none; color: #6b6459;
+  font-size: .88rem; padding: .32rem .7rem; border-radius: 999px;
+  border: 1px solid transparent; }
+.topnav a:hover { background: #f2ede4; color: var(--ink); }
+.topnav a.on { background: var(--both); color: #fff; font-weight: 600; }
+.topnav a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+@media (max-width: 700px) {
+  .topnav { position: static; }
+  .topnav a { font-size: .8rem; padding: .28rem .55rem; }
+}
+
+/* ---- shared content blocks ---- */
+.block, .finding { max-width: 78ch; margin-bottom: 1.6rem; }
+.block h3, .finding h3 { font-size: 1.15rem; margin: 0 0 .4rem; color: var(--accent); }
+.block p, .finding p { line-height: 1.6; margin: 0 0 .6rem; }
+.sub { font-size: .8rem; color: #8a8275; margin-top: .5rem; }
+.ipa, .ipa-inline { font-family: var(--ipa-font);
+  background: #f0ece4; padding: 0 .25em; border-radius: 3px; }
+.takeaway { background: #eef3ec; border-left: 4px solid var(--l1);
+  padding: 1rem 1.2rem; border-radius: 8px; }
+.note { font-size: .8rem; color: #8a8275; margin-top: 2.5rem; max-width: 78ch;
+  line-height: 1.55; }
+/* A terminology or notation note: sits with the prose it explains but visually set
+   apart, so a reader scanning for "what does this label mean" can find it. Shared
+   because three pages now teach a piece of vocabulary this way — the Allophones
+   page's /slashes/ vs [brackets], Seeing Sounds repeating it, and the History
+   page's "from inside English" vs "from French". Was duplicated per page. */
+.deffoot { font-size: .82rem; background: #f3f0e8; border-left: 3px solid #c9c2b6;
+  padding: .55rem .75rem; border-radius: 0 6px 6px 0; color: #55504a;
+  line-height: 1.55; max-width: 78ch; }
+.caveat { border-left: 3px solid #d8b96a; background: #fdf8ec; padding: .6rem .8rem;
+  border-radius: 0 6px 6px 0; font-size: .82rem; margin: .8rem 0; max-width: 78ch;
+  line-height: 1.5; }
+.tooltip { position: fixed; z-index: 30; max-width: 330px; background: var(--ink);
+  color: #faf8f4; padding: .5rem .7rem; border-radius: 8px; font-size: .8rem;
+  pointer-events: none; opacity: 0; transition: opacity .12s; line-height: 1.45; }
+.tooltip.show { opacity: 1; }
+.tooltip .ipa { background: rgba(255,255,255,.18); }
+
+/* shared tables */
+table.data { border-collapse: collapse; font-size: .84rem; margin: .8rem 0; }
+table.data th, table.data td { padding: .3rem .6rem; text-align: left;
+  border-bottom: 1px solid #e8e2d7; }
+table.data th { color: #8a8275; font-weight: 600; }
+table.data td.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.data .sym { font-family: var(--ipa-font); }
+.bar { display: inline-block; height: .7em; background: var(--both);
+  border-radius: 2px; vertical-align: middle; }
+.bar.l2 { background: var(--l2); }
+
+/* next/prev page footer */
+.pagenav { display: flex; justify-content: space-between; gap: 1rem;
+  margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #e2dcd0;
+  font-size: .9rem; }
+.pagenav a { text-decoration: none; font-weight: 600; }
+.pagenav .spacer { flex: 1; }
+
+@media (prefers-reduced-motion: reduce) { .tooltip { transition: none; } }
