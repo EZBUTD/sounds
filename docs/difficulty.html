@@ -18,34 +18,27 @@
 
 <h1>Language learners</h1>
 <p class="subtitle">Sound overlap is symmetric: English and Japanese share the same
-16 sounds in either direction. The list of sounds a learner has to add isn't — it
-depends which way you're going. This page looks at that asymmetry, and then at
-whether unusual sounds have anything to do with how many people take a language up.
-In this data they don't, so much of the page is about what does.</p>
+16 sounds in either direction. The list of sounds a learner has to learn isn't — it
+depends on what your first language is. This page looks at that asymmetry, and then at
+whether unusual sounds have a correlation with how many people take a language up.
+</p>
 
 <div class="deffoot" style="margin-bottom:1.2rem">
-  <strong>A note on what "unusual" means here, and what it doesn't.</strong> The
+  <strong>A note on what "unusual" means here.</strong> The
   charts below count sounds and score how globally rare they are. Neither is a
-  measure of <em>difficulty</em>. A rare sound is not automatically hard to learn —
-  Zulu's clicks are among the rarest on Earth and children acquire them natively,
-  while the English <span class="ipa">ɹ</span> is fairly common worldwide and
-  notoriously slow to master. Rarity is a fact about how many languages happen to
-  use a sound; difficulty is a fact about a particular learner coming from a
-  particular first language. The two are related at the edges and not the same
-  thing, so this page names the sound counts for what they are and treats
-  difficulty as the open question.
+  measure of <em>difficulty</em>, since a rare sound is not automatically hard to learn.
 </div>
 
 <h2 class="section">The two directions differ</h2>
 
 <div class="block">
   <h3>The same pair of languages, two different amounts to learn</h3>
-  <p>What matters to a learner is how many sounds the target language uses that
-  their own doesn't, and that count can differ considerably depending on which way
-  you're going.</p>
-  <p><strong>An English speaker learning Japanese meets 4 unfamiliar sounds; a
-  Japanese speaker learning English meets 28.</strong> Same pair of languages,
-  quite different amounts of new pronunciation to learn.</p>
+  <div class="caveat">
+  <strong>Sound count is a small part of difficulty.</strong> This counts individual
+  sounds only — not tone, rhythm, or syllable structure. For example, English
+  speakers usually find Cantonese tones hard to learn, which is not captured in
+  this chart.
+</div>
   <div class="controls">
     <label for="asymLang">Your language</label>
     <select id="asymLang"></select>
@@ -53,21 +46,12 @@ In this data they don't, so much of the page is about what does.</p>
   <div id="asymPanel"></div>
 </div>
 
-<div class="caveat">
-  <strong>Sound count is a small part of difficulty.</strong> Grammar, writing
-  system, vocabulary distance and how much study material exists usually matter
-  more. This counts individual sounds only — not tone, rhythm, or syllable
-  structure. Japanese speakers find English consonant clusters hard
-  (<em>strengths</em>) even though every sound in them is shared, and English
-  speakers find Cantonese tone hard although it needs just one new sound here.
-  The one-new-sound figure for Cantonese is a good reminder that this metric
-  measures a narrow thing precisely, not difficulty in general.
-</div>
+
 
 <h2 class="section">Do unusual sounds deter learners?</h2>
 
 <div class="block">
-  <h3>Not in this data — but the first reading needs unpacking</h3>
+  <h3>We do not see this in the data</h3>
   <p>If unusual sounds put learners off, the languages with the rarest inventories
   would have the fewest learners. Taken at face value the data points the other
   way — <span id="corr-text"></span> — which would suggest languages with rarer
@@ -83,11 +67,10 @@ In this data they don't, so much of the page is about what does.</p>
   to how rare its sounds are (r = <span id="corr-lfr"></span>).
   <strong>Lingua francas in this set have a median of 77M learners; the others,
   8M.</strong></p>
-  <p>So a reasonable summary is not that unusual sounds attract learners, but that
+  <p>From this exploration, it seems it isn't that unusual sounds attract learners, but that
   <strong>how unusual a language's sounds are doesn't appear to predict learner
   numbers in this sample</strong>, while historical and institutional factors —
-  trade, governance, schooling — line up with it more closely. With 25 languages
-  and a hand-coded lingua-franca flag, this is suggestive rather than settled.</p>
+  trade, governance, schooling — line up with it more closely.</p>
   <div style="overflow-x:auto">
     <canvas id="scatterL2" width="900" height="380" style="max-width:100%"
       aria-label="Scatter plot of consonant and vowel rarity against number of second-language speakers, showing no clear relationship once inventory size is accounted for"></canvas>
@@ -124,26 +107,16 @@ In this data they don't, so much of the page is about what does.</p>
   <span id="tone-lead"></span></p>
   <div id="tonetable"></div>
   <p class="sub" id="tone-note"></p>
-  <p>For a Mandarin or Cantonese learner this is not a footnote. Tone is
-  frequently the part English speakers struggle with longest, and a language can
-  look unremarkable on every measure here while asking for a distinction the
-  learner's own language never makes. The reverse holds too: a tonal-language
-  speaker learning English gets no credit on these charts for already controlling
-  pitch contrasts, and no warning about English's stress and vowel reduction,
-  which are also prosodic and also absent from the data.</p>
 </div>
 
 <div class="caveat">
-  <strong>Why not just add tone to the counts?</strong> Two reasons, and the
-  second is the honest one. Tone inventories are not commensurable with segment
+  <strong>Why not just add tone to the counts?</strong> Tone inventories are not commensurable with segment
   inventories — Cantonese's six tones combine with syllables rather than sitting
   alongside consonants, so adding "+6 sounds" would misdescribe the system. And
   PHOIBLE's tone coverage is thinner and less consistent than its segment
   coverage: <span id="tone-gap"></span> Rather than build a
   tone metric on that footing, this site measures segments and states the
-  boundary. It's the same reasoning that removed a page predicting loanword
-  collisions — a number nobody can check against ground truth is worse than an
-  acknowledged gap.
+  boundary.
 </div>
 
 <h2 class="section">The takeaway</h2>
@@ -164,13 +137,10 @@ In this data they don't, so much of the page is about what does.</p>
 
 <div class="block">
   <h3>Some languages are mostly spoken by people who learned them</h3>
-  <p>The Sound Chart treats every language as a sound system. This table looks at
-  them as something people <em>acquire</em>, and the balance varies a lot:
+  <p>This table looks at how many learners <em>acquire</em> a language, and the balance varies a lot:
   <strong>English has roughly three learners for every native speaker</strong>,
   while Modern Standard Arabic has very few native speakers, since it's a formal
-  register learned alongside a home dialect rather than acquired first. Set against
-  the sections above, there's no obvious relationship between how unfamiliar a
-  language's sounds are and how many people learn it.</p>
+  register learned alongside a home dialect rather than acquired first.</p>
   <div id="l2table"></div>
   <p class="sub">Speaker estimates: Ethnologue 2026 figures as tabulated on
   Wikipedia. Bars are proportional within each column.</p>
