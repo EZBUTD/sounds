@@ -213,54 +213,26 @@
 </style>
 </head>
 <body data-nav="chart">
-<h1>Spoken Sounds Across the World</h1>
-<p class="subtitle">A look at the raw materials of human speech: which sounds each
-language uses, how much any two languages have in common, and what that means for
-anyone learning one. No background in linguistics needed — the preface below covers
-everything the charts assume.</p>
+<h1>Sound Chart: Phonemes</h1>
+<p class="subtitle">A look at the raw materials of human speech: which sounds
+language use, what some languages have in common, and how that affects learners. </p>
 
 <div class="preface">
   <h2>Before the charts</h2>
 
-  <p><strong>Roughly 7,000 languages are spoken today.</strong> They connect people
-  and they also divide them, which is why this seemed a reasonable fit for a theme
-  about how the world lives, thrives and connects. Sound is the layer where that
-  connection is most physical: before you can exchange anything with someone, one of
-  you has to make noises the other can recognise.</p>
+  <p><strong>More than 7,000 languages are spoken around the world.</strong> 
+    The 34 languages used in this analysis are chosen from some of the world's largest, so the patterns describe this
+  selection rather than all human speech. </p>
 
   <p><strong>What a phoneme is.</strong> Say <em>pat</em>, then <em>bat</em>. One
-  small change at the front changes the word entirely. That difference — the one
-  your language treats as meaningful — is a <em>phoneme</em>: the smallest unit of
+  small change at the beginning of the word changes the meaning entirely. That difference in sound — is a <em>phoneme</em>: the smallest unit of
   sound that can change what a word means. English has around 44 of them. Every
-  language has its own set, and no language uses more than a fraction of what a
-  human mouth can produce.</p>
+  language has its own set, and no language uses all of the documented phonemes.</p>
 
-  <p><strong>What the chart below is.</strong> Linguists needed one notation for
-  every sound in every language, since spelling is no help — English
-  <em>through</em>, <em>though</em> and <em>tough</em> share four letters and three
-  different sounds. That notation is the
-  <strong>International Phonetic Alphabet</strong>, and one symbol always means one
-  sound. The grid arranges those symbols by <em>how</em> they're made: across, by
-  where in the mouth the sound happens (lips on the left, throat on the right);
-  down, by what the air is doing (fully blocked, squeezed through a gap, and so on).
-  You don't need to read the labels to use it. Pick two languages and the pattern of
-  what they share, and don't, is visible at a glance.</p>
-
-  <p><strong>Sound is one layer of a language, not the whole of it.</strong> Tone,
-  rhythm, grammar, writing system, vocabulary, politeness conventions and cultural
-  context all shape how hard a language is to learn and how it feels to use. This
-  project measures sounds because that is what there is good comparable data for, so
-  treat it as one useful view rather than a verdict on any language.</p>
-
-  <p><strong>The data has real gaps, and they aren't evenly spread.</strong>
-  Everything here draws on <a href="https://phoible.org">PHOIBLE</a>, which
-  catalogues sound inventories for 2,177 languages — a large sample, but not a
-  census, and skewed toward languages that have received sustained academic
-  attention. Widely-studied languages appear in several analyses that disagree with
-  each other; many others are described once, or not at all. The 34 languages
-  compared here are mostly the world's largest, so the patterns describe this
-  selection rather than all human speech. Where a number depends on a choice we
-  made, the method notes say so.</p>
+  <p><strong>What the chart below is.</strong> Linguists needed a standard, universal system for
+  describing these sounds, and created the
+  <strong>International Phonetic Alphabet</strong>, where each symbol represents one
+  sound.</p>
 </div>
 
 <h2 class="section" style="margin-top:2.5rem">Compare two languages</h2>
@@ -321,8 +293,7 @@ to hear it.</p>
 
 <div class="block">
   <h3>What they share, what each one keeps to itself</h3>
-  <p>The chart above places both languages against the full range of human speech.
-  This view splits the same comparison into three groups and <strong>outlines each
+  <p> This view splits the above comparison into three groups and <strong>outlines each
   sound by how rare it is worldwide</strong>, which helps distinguish sounds that
   are globally unusual from sounds that are common but happen to be missing from
   the other language. Hover any sound for an example word.</p>
@@ -335,72 +306,47 @@ to hear it.</p>
 
 <div class="block">
   <h3>The rarest sounds on the chart</h3>
-  <p>Counted across <strong><span id="worldN"></span> languages</strong> in
-  PHOIBLE, using one inventory per language so that heavily-studied languages
-  don't count more than once. Some sounds are close to universal:
-  <span class="ipa">k</span> appears in about 99% of them,
-  <span class="ipa">m</span> and <span class="ipa">i</span> in about 97%. Others
-  appear in only a handful. These shares reflect the languages PHOIBLE documents,
-  which is a large sample but not an even one.</p>
+  <p>Counted across <strong><span id="worldN"></span> languages</strong> in the
+  PHOIBLE dataset, these reflect some of the rarest sounds per language.</p>
   <div id="raretable"></div>
 </div>
 
 <div class="block">
   <h3>English is one of the unusual ones</h3>
-  <p>If English is your first language, it's easy to hear it as the ordinary case
-  and other languages as the unusual ones. By this measure it sits on the other
-  side. English's <span class="ipa">θ</span> (<em>think</em>) appears in about 4%
-  of the world's languages, its <span class="ipa">ð</span> (<em>this</em>) in 6%,
-  and its <span class="ipa">ɹ</span> (<em>red</em>) in 6%. Weighting each sound by
+  <p> Weighting each sound by
   how rare it is worldwide, <strong>English has the
-  <span id="engRank"></span>-most unusual inventory among the 34 here</strong> —
-  which suggests learners of English are working on much the same kind of problem
-  English speakers describe when learning others.</p>
+  <span id="engRank"></span>-most unusual inventory among the 34 Languages presented</strong>.</p>
   <div class="cards" id="engCards"></div>
 </div>
 
 <div class="block">
   <h3>Not all overlap is equal</h3>
-  <p>The comparisons above count every shared sound equally. But sharing
+  <p>The comparisons above count every shared phoneme equally. But sharing some sounds like
   <span class="ipa">m</span> says little — nearly every language has it — while
-  sharing a click says more. Re-scoring overlap so that rarer sounds carry more
-  weight gives a different view of which pairs are alike in an unusual way rather
-  than in a common one. Scores drop across the board once universal sounds stop
-  earning full credit, so the ranking below uses the re-scored number, highest to
-  lowest.</p>
+  sharing a click is more rare. Re-scoring overlap so that rarer sounds carry more
+  weight gives a different perspective of which pairs of languages are alike.</p>
   <div id="weightedtable"></div>
-  <p class="sub">The <em>Drop</em> column shows how much each pair lost in the
-  re-scoring. It is a different ordering: a pair can fall a long way and still
-  finish near the top (Indonesian + Amharic drops 20 points and still ranks
-  second), while a pair that started low has less to lose. The weighted score is
-  what the rows are sorted on.</p>
 </div>
 
 <h2 class="section" style="margin-top:3rem">Patterns in the data</h2>
 
 <div class="finding">
-  <h3>Ancestry is a weak predictor of how a language sounds</h3>
+  <h3>Ancestry is a weak predictor of phoneme overlap</h3>
   <p>Grouping these languages by ancestry (their <span class="hoverable" tabindex="0"
   data-glossary="A group of languages descended from a common ancestor — like Indo-European (English, Hindi, Spanish, Russian...) or Afro-Asiatic (Arabic, Hebrew, Amharic...). Established by comparing vocabulary and grammar, not sounds.">language families</span>)
-  gives a reasonable expectation that relatives will sound alike. In this dataset
-  that holds less often than you might expect:
-  <strong><span id="f-nnSame"></span> of the 34 languages here have their closest
+  may give an expectation that relatives will sound alike. However, in this dataset:
+  <strong>only <span id="f-nnSame"></span> of the 34 languages here have their closest
   sound-relative inside their own family.</strong> Related languages do share a
-  little more on average (median overlap <span id="f-sameMed"></span>% against
-  <span id="f-crossMed"></span>% for unrelated pairs), and
-  <span id="f-beat"></span>% of unrelated pairs score above the related-pair
-  median. A fair reading is that ancestry sets a starting point, and drift,
-  contact and borrowing over long spans do much of the rest.</p>
+  little more overlap on average (median overlap <span id="f-sameMed"></span>% against
+  <span id="f-crossMed"></span>% for unrelated pairs).
+  <span id="f-beat" style="display: none;"></span></p>
 </div>
 
 <div class="finding">
   <h3>The sound heatmap: 561 comparisons at once</h3>
-  <p>Each cell compares two languages, darker where they share more sounds. Rows
-  are ordered by <em>sound similarity</em> rather than ancestry, so the darker
-  blocks are groups of languages with similar inventories — "sound
-  neighborhoods". The colored strip along the edges shows each language's
-  ancestral family. If ancestry closely tracked sound, those colors would line up
-  with the blocks; here they mostly don't.</p>
+  <p>Each cell compares two languages, darker where they share more phoneme sounds. Rows
+  are ordered by <em>sound similarity</em> rather than ancestry. The colored strip along the edges shows each language's
+  ancestral family.</p>
   <div class="fam-legend" id="famLegend" aria-label="Language family color legend"></div>
   <div id="heatmapWrap" style="overflow-x:auto">
     <canvas id="heatmap" width="900" height="900" style="max-width:100%"></canvas>
@@ -410,99 +356,60 @@ to hear it.</p>
 
 <div class="finding">
   <h3>The sound family tree: grouping by sound instead of ancestry</h3>
-  <p>This is a family tree built from <strong>sound alone</strong> — no history, no
-  vocabulary, no geography. The languages are the labels down the right-hand side;
+  <p>This is a family tree built from sound alone. The languages are the labels down the right-hand side;
   every fork to their left is the point where two branches merged, drawn at the
   <strong>average overlap between everything on one side and everything on the
   other</strong> (scale along the bottom). So <strong>forks near the right join
-  languages that are very much alike</strong>, and forks far to the left join
-  groups that have little in common on average — even if one or two individual
-  pairs across the gap score higher.</p>
-  <p>The colors show each language's ancestral family. If sound closely followed
-  ancestry, the branches would tend toward single colors. Mostly they are mixed:
-  Swahili sits within a branch of Romance and Slavic languages, Amharic pairs with
-  Indonesian, and Telugu falls next to Hindi and Punjabi from a different family.
-  Cutting the tree at <span id="t-cut"></span>% overlap gives the "sound
-  neighborhoods" referred to elsewhere on this page, and
-  <span id="t-mixed"></span>.</p>
-  <p>One group runs the other way, and it's worth noting:
-  <strong>Dutch, French and German</strong> form the only neighborhood here that is
-  a single family. Long contact between neighbors can pull sound systems together
-  as well — it just isn't the general pattern in this set.</p>
-  <p><strong>Why does <span id="t-loner">one language</span> sit on its own?</strong>
-  This is a reasonable thing to wonder about, and there are two parts to it. The
-  first concerns how to read the chart: <strong>a fork's position is the
-  <em>average</em> overlap across all the pairs it spans, not the closest
-  pair.</strong> So the leftmost fork at <span id="t-rootPct"></span>% isn't
-  <span id="t-loner2"></span>'s distance from its nearest neighbour — it's
-  <span id="t-loner3"></span>'s average across all
-  <span id="t-lonerRest"></span> other languages, which is what that number
-  becomes when a language joins the rest of the set at once.</p>
-  <p>The second part is that it has no especially close match in this set. Its
-  nearest is <span id="t-lonerBest"></span>, which is the lowest "nearest match"
-  here — the others each have a partner above <span id="t-lonerFloor"></span>%.
-  Its nearest neighbours are also closer to each other than to it:
-  <span id="t-lonerPairMsg"></span> Since a tree places every language somewhere,
-  a language without a close match ends up joining late, on its own branch.
-  Worth noting that this is a property of these 34 languages rather than of the
-  language itself: with a closer relative in the roster it would likely sit
-  differently.</p>
+  languages that have high overlap</strong>, and forks far to the left join
+  groups that have little in common on average.</p>
+ <span id="t-cut" style="display: none;"></span>
+  <span id="t-mixed" style="display: none;"></span>
+ <span id="t-loner" style="display: none;"></span> 
+ <span id="t-rootPct" style="display: none;"></span>
+  <span id="t-loner2" style="display: none;"></span>
+  <span id="t-loner3" style="display: none;"></span>
+  <span id="t-lonerRest" style="display: none;"></span>
+ <span id="t-lonerBest" style="display: none;"></span>
+ <span id="t-lonerFloor" style="display: none;"></span>
+  <span id="t-lonerPairMsg" style="display: none;"></span> </p>
   <div class="fam-legend" id="famLegend2" aria-label="Language family color legend"></div>
   <div id="treeWrap" style="overflow-x:auto">
     <canvas id="soundtree" width="900" height="760" style="max-width:100%"
       aria-label="Dendrogram of 34 languages clustered by sound-inventory similarity, leaf labels coloured by real language family"></canvas>
   </div>
   <p class="sub">Hover any fork to see which languages it joins and at what
-  overlap. This section previously used a scatter plot. Projecting 561 pairwise
-  distances onto two axes kept only part of the structure (r = 0.67) and left the
-  axes without a direct interpretation, which made it hard to read. A tree shows
-  the same clustering with each fork placed at a measured overlap value, though it
-  imposes a strict hierarchy that real relationships don't always have.</p>
+  overlap</p>
 </div>
 
 <div class="finding">
-  <h3>Unrelated languages that sound alike</h3>
   <p>The closest pair in this dataset is <strong>Amharic (Ethiopia) and
-  Indonesian</strong> at 90% overlap, from families with no common ancestor in
-  recorded history. Clustering turns up several groups like this:
-  <span id="f-clusters"></span>. There are a couple of likely reasons. All human
-  mouths favor the same easy sounds — nearly every language has m, k and a — so
-  mid-sized inventories built mostly from common sounds tend to resemble each
-  other. Languages in contact also borrow sounds along with words: retroflexes are
-  found across unrelated languages in South Asia, and clicks passed from Khoisan
-  languages into Zulu. Linguists call contact zones like these
-  <em>Sprachbünde</em>. So some of this resemblance is coincidence and some is
-  shared circumstance, and a 90% figure from one pair of inventories shouldn't be
-  read as more precise than it is.</p>
+  Indonesian</strong> at 90% overlap, from different language families. 
+  <span id="f-clusters" style="display: none;"></span>
+</p>
 </div>
 
 <div class="finding">
   <h3>Why relatives often don't sound alike</h3>
   <p>Sound systems tend to change faster than vocabulary or grammar. English and
   Hindi separated roughly 6,000 years ago and today overlap more than English does
-  with German. English and Spanish, closer cousins, sit near the lower end of
-  English's similarity list at <span id="f-engSpa"></span>% overlap: Spanish uses
-  around 25 sounds with five vowels, while English uses around 44 with a much
-  larger vowel space. Because family trees are established from vocabulary and
-  grammar, which change more slowly, a shared family tells you less about sound
-  than you might assume.</p>
+  with German. <span id="f-engSpa" style="display: none;"></span>
+  Because family trees are established from vocabulary and
+  grammar, which change more slowly, a shared family tells us less about phoneme overlap than one might expect.</p>
 </div>
 
 <div class="finding takeaway">
   <h3>What this does and doesn't tell a learner</h3>
-  <p>English and Spanish have one of the lower sound overlaps in this dataset, and
-  Spanish is also the language English speakers study most. That combination is a
-  useful reminder that sound distance is one factor among several. It's a real one
-  — it's largely what an accent is made of — but vocabulary, grammar, writing
+  <p>English and Spanish have one of the lower sound overlaps in this dataset, but
+  Spanish is one of the languages English speakers study most. That combination is a
+  useful reminder that sound overlap is one factor among several. While it can 
+  affect one's accent, other factors like vocabulary, grammar, writing
   system, shared loanwords and how much you use the language day to day all matter
-  too, and none of them appear on this chart. People learn languages with very
-  different sound systems from their own routinely, and unfamiliar sounds are
-  learnable with practice. A large gap here suggests where the pronunciation work
-  will be, not whether the language is worth starting.</p>
+  too. People learn languages with very different sound systems from their own routinely, 
+  and unfamiliar sounds are learnable with practice.</p>
 </div>
 
 <div class="finding" style="max-width:74ch">
-  <h3>Keep going</h3>
+  <h3>Keep Learning</h3>
   <p>Sharing a sound isn't the same as pronouncing it the same way —
   <a href="allophones.html"><strong>Allophones</strong></a> covers that gap, and
   <a href="spectrograms.html"><strong>Seeing Sounds</strong></a> makes one of those

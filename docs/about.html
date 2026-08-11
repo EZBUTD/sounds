@@ -40,33 +40,20 @@
 <body data-nav="about">
 
 <h1>About &amp; sources</h1>
-<p class="subtitle">What this is, where every number came from, what it can't tell
-you, and why I went looking in the first place.</p>
 
-<h2 class="section">Why I made this</h2>
+<h2 class="section">ezbchen@</h2>
 
 <div class="me">
-  <div class="badge" aria-hidden="true">ɸ</div>
   <div>
-    <p>As a Chinese-American living in Japan, I've spent a lot of time hearing the
-    same language handled differently by different communities — and a lot of time
+    <p>As a Chinese-American living in Japan, I've heard the same language handled differently by different communities — and a lot of time
     comparing notes with other learners about what makes a language hard to pick
-    up. The struggles people describe rarely match what a textbook says should be
-    difficult.</p>
-    <p>What actually sent me down this particular rabbit hole was a pattern in
+    up.</p>
+    <p>What sent me down this particular rabbit hole was a pattern in
     Japanese loanwords. English words arrive in Japanese and sometimes collide:
-    <strong>food</strong> and <strong>hood</strong> both become フード
-    <em>fūdo</em>. Once you notice one, you start hearing them everywhere. I
-    wanted to know whether that was a handful of coincidences or something
-    systematic — and if it was systematic, whether the same thing happens in every
-    other language too.</p>
-    <p>That question is what this project grew out of, even though the answer isn't
-    on it. A page that tried to predict those collisions across all 34 languages was
-    built and then <a href="#cut">cut</a>, because the model was wrong in ways that
-    only showed up when a Japanese reader looked at its output. The single rule
-    behind <em>food</em>/<em>hood</em> is still here, on the
-    <a href="allophones.html">Allophones</a> page, where it belongs: one documented
-    fact rather than eleven thousand predictions.</p>
+    <strong>food</strong> and <strong>hood</strong> can both be said as フード
+    <em>fūdo</em> in Japanese. I wanted to know whether this was a coincidence or something
+    systematic that can happen across languages (More info on the
+    <a href="allophones.html">Allophones</a> page).</p>
   </div>
 </div>
 
@@ -74,23 +61,12 @@ you, and why I went looking in the first place.</p>
 
 <div class="block">
   <p>Built for <strong>VizCon 2026</strong>, whose theme is
-  <em>“How the world lives, thrives, and connects.”</em> The brief asks for an
-  “I had no idea” moment from public, citable data.</p>
-  <p>My candidate for that moment: <strong>language family turns out to be a fairly
-  weak predictor of how a language sounds.</strong> Among the 34 languages here,
-  English's closest sound-relative is Hindi rather than German, and the closest pair
-  in the dataset is Amharic and Indonesian — two languages with no common ancestor
-  in recorded history. I've tried to keep the conclusion that follows a practical
-  one rather than only a surprising one: sound distance is a reasonable guide to
-  where the pronunciation work will be, not to whether a language is within
-  reach.</p>
+  <em>“How the world lives, thrives, and connects.”</em></p>
 </div>
 
 <h2 class="section">Data sources</h2>
 
 <div class="block">
-  <p>Everything here comes from public, citable datasets. Where I had to combine
-  sources, the seams are documented rather than smoothed over.</p>
 </div>
 
 <table class="srctable">
@@ -118,14 +94,9 @@ you, and why I went looking in the first place.</p>
       <td class="lic">CC BY-SA<br>(words: 3.0)</td>
     </tr>
     <tr>
-      <td>Own acoustic analysis<br><span class="what">(scipy, numpy)</span></td>
+      <td>Acoustic analysis<br><span class="what">(scipy, numpy)</span></td>
       <td class="what">Spectrograms and voice-onset-time measurements for the
-      Seeing Sounds page, computed offline from the Commons word recordings rather
-      than in the browser — Safari could not decode Ogg Vorbis before 18.4, so a
-      client-side version would show some readers a blank canvas. Measured
-      here: <em>top</em> 70 ms and <em>stop</em> 26 ms, which matches the
-      published range for English aspirated versus post-/s/ stops. Three earlier
-      detectors gave wrong answers and are documented in the script.</td>
+      Seeing Sounds page, computed offline from the Commons word recordings</td>
       <td class="lic">derived</td>
     </tr>
     <tr>
@@ -187,7 +158,7 @@ you, and why I went looking in the first place.</p>
       Toronto Middle English phonology notes</a> ·
       <a href="https://en.wiktionary.org/wiki/Appendix:English_doublets">Wiktionary
       doublets</a></td>
-      <td class="what">The only page here not built from a dataset. PHOIBLE records
+      <td class="what"> PHOIBLE records
       languages as spoken today and has no Old or Middle English entry, so the
       History of English timeline — the Great Vowel Shift, the loss of the ⟨gh⟩
       sound, the <em>kn</em> simplification, the French layer that made
@@ -240,7 +211,6 @@ you, and why I went looking in the first place.</p>
 <h2 class="section">What this can't tell you</h2>
 
 <div class="honest">
-  <h4>Limits worth knowing if you plan to cite any of this</h4>
   <ul>
     <li><strong>Linguists disagree about phoneme inventories.</strong> Every count
     reflects one analysis among several. PHOIBLE
@@ -257,8 +227,7 @@ you, and why I went looking in the first place.</p>
     <li><strong>Sound difficulty is one part of language difficulty.</strong>
     Grammar, writing system and available material often matter more. Cantonese
     requires one new sound from English and is still widely found difficult.</li>
-    <li><strong>These are correlations, not causes</strong>, the lingua-franca
-    finding included.</li>
+    <li><strong>These are correlations, not causes</strong></li>
     <li><strong>The microphone tool does not score your pronunciation</strong>,
     deliberately. A single similarity number between a live microphone signal and
     a reference recording is dominated by pitch, vocal tract length, microphone
@@ -267,72 +236,16 @@ you, and why I went looking in the first place.</p>
     a checkable articulatory fact, but the estimator is a simple spectral
     peak-picker rather than the LPC analysis phonetics software uses, so on a
     high-pitched voice a harmonic can be misread as a formant.</li>
-    <li><strong>Two spectrograms are two recordings</strong>, not a language.
-    <em>top</em> and <em>stop</em> show what one speaker did once; the aspiration
-    pattern they illustrate is general, the exact millisecond values are not.</li>
   </ul>
-</div>
-
-<h2 class="section" id="cut">What got cut, and why</h2>
-
-<div class="honest">
-  <h4>A page that predicted loanword collisions, removed after a reader checked it</h4>
-  <p>A page called <em>Lost in Translation</em> used to sit here. It generalised the
-  <em>food</em>/<em>hood</em> observation into a model: map each English phoneme to
-  the closest sound a target language has, apply that to ~11,800 common English
-  words, and report which pairs collapse into a homophone. It passed a validation
-  suite of nine documented mergers and reported a collision rate per language.</p>
-  <p>It was wrong, and the way it was wrong is instructive. A Japanese speaker
-  looked at its example cards and pointed out that most of the words it produced
-  were not Japanese. Tracing them back found four separate defects:</p>
-  <ul>
-    <li><strong>Vowel length was discarded.</strong> The shared symbol-normalising
-    step strips length marks, so English <em>fast</em> /fɑːst/ and <em>first</em>
-    /fɜːst/ both became the same string. Japanese length is phonemic — ファスト and
-    ファースト are different words — so the model invented a merger out of the exact
-    contrast it had thrown away. This inflated every collision rate, not just the
-    examples.</li>
-    <li><strong>Half the examples relied on a dialect variant.</strong> The lexicon
-    holds several pronunciations per word and weighted them equally, so a single
-    regional or archaic variant could manufacture a collision. Four of the eight
-    Japanese examples disappeared when restricted to each word's primary
-    pronunciation.</li>
-    <li><strong>A pinned substitution overreached.</strong> English /f/ → /h/ was
-    pinned to set up the seed case, since Japanese /h/ is [ɸ] before /u/. But the
-    context rule only fired before /u/, so every other /f/ stayed /h/ and
-    <em>fast</em> came out as ハスト instead of ファスト.</li>
-    <li><strong>A fix was written at the wrong layer.</strong> The transliterator
-    had a rule spelling /ŋ/ as ング, added specifically because ン gave the wrong
-    word for <em>long</em>. The model had already rewritten /ŋ/ upstream, so the
-    rule could never fire and the page still showed the wrong form.</li>
-  </ul>
-  <p>The uncomfortable part is that the transliterator had its own passing test
-  suite, including <em>food</em> → フード. That test fed in hand-written phoneme
-  strings the pipeline never actually produces; run end to end, the real pipeline
-  turned <em>food</em> into フド. The page's own headline example was not reproduced
-  by the code generating the page, and every test was green.</p>
-  <p>The defects were fixable. The reason for removing the page rather than fixing
-  it is that predicted collisions have no external ground truth to check against —
-  the nine-merger suite was the only anchor, and passing it turned out to be
-  compatible with being badly wrong everywhere else. That is the same conclusion
-  reached earlier about a cross-language allophone divergence metric, which was cut
-  for the same reason. Where a claim can't be validated against something outside
-  the model, that is a reason not to publish it, not a reason to add a caveat.</p>
-  <p>What survives is the one part that was never a prediction: Japanese /h/ → [ɸ]
-  before /u/, giving <em>food</em> = <em>hood</em>. It's a documented fact from
-  reference grammars, it's on the <a href="allophones.html">Allophones</a> page, and
-  it comes with audio you can check by ear.</p>
 </div>
 
 <h2 class="section">Tools</h2>
 
 <div class="block">
   <p>Python for the data work (PHOIBLE and CLDR parsing, the acoustic analysis,
-  the statistics), and vanilla JavaScript with canvas for the visualisations rather
-  than a chart library. Built with <a href="https://kiro.dev">Kiro</a> as a pair
+  the statistics), and vanilla JavaScript with canvas for the visualisations. Built with <a href="https://kiro.dev">Kiro</a> as a pair
   programmer; <code>GENAI_LOG.md</code> in the repository records what the model
-  wrote, along with the factual errors that surfaced along the way and how they were
-  found — which is the more useful half.</p>
+  wrote, along with the factual errors that surfaced along the way. </p>
 </div>
 
 <div class="pagenav">
