@@ -96,22 +96,11 @@
 
 
 <h1>World Map</h1>
-<p class="subtitle">Where these 34 languages are documented, and how many of their
-speakers learned them rather than grew up with them. The rest of this project
-treats languages as sound inventories; this page is a reminder that they belong to
-communities of people.</p>
-
-<h2 class="section">The map</h2>
-
 <div class="block">
-  <h3>Where each language travels</h3>
+  <h3>Spoken Around the World</h3>
   <p>Pick a language and the map shades the countries where a speaker community
-  is <em>documented</em>, <strong>darker where more people speak it, with flow
-  lines to its largest recorded communities abroad.</strong> The range is wide:
-  English is documented in over 100 countries, Thai in seven — though part of that
-  gap is how thoroughly each language has been surveyed, not only where it's
-  spoken. Hover a country for its figure and source, or the homeland marker for the
-  language's less common sounds.</p>
+  is documented within our data source, <strong>darker where more people speak it, with flow
+  lines connecting to the language's modern origin.</strong></p>
   <p class="sub">Coverage is uneven between languages, so this is best read as
   "where records exist" rather than "everywhere it is spoken" — see the note below
   the map.</p>
@@ -153,23 +142,13 @@ communities of people.</p>
 <div class="caveat">
   <strong>What the shading means — and doesn't.</strong> Shading marks a
   <em>documented</em> speaker community, not ownership and not everyone in the
-  country: 19% of India speaks English and 41% speaks Hindi, and both facts
-  shade the same country. Figures mix native and second-language speakers.
+  country. Figures mix native and second-language speakers.
   <br><br>
-  <strong>Unshaded is not proof of absence.</strong> The base layer (Unicode
-  CLDR) records the languages relevant to each country's software locale, not
-  emigrant communities — on its own it put Thai in 2 countries and Telugu,
-  Marathi and Hebrew in 1. For the 16 languages with the thinnest coverage we
-  added diaspora communities from national statistics agencies (US Census ACS,
-  UK ONS, Statistics Canada, Australian Bureau of Statistics and others); hover
-  any country to see which source its figure came from. That lifts the floor
-  without making coverage uniform, and definitions differ between sources —
-  "speaks at home" is not the same question as "speaks". Five languages
-  (Telugu, Hebrew, Amharic, Marathi, Yoruba) still show only 3–4 communities
-  abroad, which reflects thin records as much as small diasporas. Treat every
-  count as a documented minimum. The homeland marker is a simplification too —
-  English is anchored to England though most English speakers have never been
-  there.
+  <strong>Unshaded is not proof of absence.</strong> For the 16 languages with the
+  thin coverage we
+  added diaspora communities from national statistics agencies; hover
+  any country to see which source its figure came from. Some languages show only 3–4 communities
+  abroad, which reflects thin records as much as small diasporas.
 </div>
 
 <p class="note"><strong>Sources and caveats.</strong> Sound inventories:
@@ -181,31 +160,12 @@ Speaker counts: Ethnologue 2026 figures as tabulated on
 <a href="https://cldr.unicode.org/">Unicode CLDR</a> supplemental data, augmented
 for thinly-covered languages with
 <a href="https://www.census.gov/data/tables/time-series/demo/language-use/2017-2021-lang-tables.html">US Census ACS 2017–2021</a>
-detailed language tables (parsed directly from the published workbook) plus
-hand-entered rows from UK ONS 2021, Statistics Canada 2021, the Australian
+detailed language tables, UK ONS 2021, Statistics Canada 2021, the Australian
 Bureau of Statistics 2021, and other national agencies — each country's source
 is shown in its hover tooltip. Basemap:
-<a href="https://www.naturalearthdata.com/">Natural Earth</a> (public domain),
-simplified for size.
+<a href="https://www.naturalearthdata.com/">Natural Earth</a> (public domain)
 <br><br>
-<strong>On the mixed country layer:</strong> combining sources means combining
-definitions. CLDR estimates speakers as a share of population; the ACS counts
-people 5+ who speak a language <em>at home</em>; census "main language" and
-"mother tongue" questions differ again, and resident-population figures for Gulf
-states count nationality rather than language. Years range from 2011 to 2023.
-Counts are therefore comparable in magnitude, not precisely across countries,
-and every one is a documented minimum rather than a ceiling.
-<br><br>
-Global frequencies are estimates, not a census: PHOIBLE samples about a third of
-the world's languages and documentation is geographically uneven, so a sound's
-"share of languages" carries real uncertainty. Diphthongs and consonant clusters
-are excluded from rarity rankings because sources disagree about whether to list
-them as single segments at all — including them would rank English's
-<span class="ipa">əʊ</span> as one of the world's rarest sounds, which reflects
-transcription convention, not articulation. Speaker counts are contested wherever
-L1/L2 status is politically loaded, most obviously for Modern Standard Arabic;
-9 of the 34 languages have no published L2 estimate in this source and are shown
-as unknown rather than zero.</p>
+</p>
 
 <script src="mapdata.js?v=5a0b0f32"></script>
 <script>
