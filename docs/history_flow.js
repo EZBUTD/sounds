@@ -280,6 +280,10 @@
     const CORR = 30;                       // corridor offset from the junction
     if (isIn) {
       const xc = xj - CORR;                // corridor sits LEFT of the junction
+      // Meet the top edge of the junction dot instead of drawing the incoming
+      // line and arrowhead through the centre of the English timeline.
+      const joinY = TRUNK_Y - 5;
+      const arrowBaseY = joinY - 8;
       g.appendChild(el("line", {
         x1: runFrom, y1: yRow, x2: Math.min(runTo, xc), y2: yRow,
         class: "flow-run in",
@@ -287,13 +291,15 @@
       g.appendChild(el("path", {
         d: `M${Math.min(runTo, xc)} ${yRow} ` +
            `Q${xc} ${yRow} ${xc} ${yRow + 18} ` +
-           `L${xc} ${TRUNK_Y - 18} ` +
-           `Q${xc} ${TRUNK_Y} ${xj} ${TRUNK_Y}`,
+           `L${xc} ${arrowBaseY - 18} ` +
+           `Q${xc} ${arrowBaseY - 8} ${xj - 10} ${arrowBaseY - 8} ` +
+           `Q${xj} ${arrowBaseY - 8} ${xj} ${arrowBaseY}`,
         class: "flow-curve in",
       }));
-      // arrowhead where it meets the trunk, so direction is unambiguous
+      // Point down into the timeline. The curve's short vertical ending meets
+      // the centre of the arrowhead's flat top edge.
       g.appendChild(el("path", {
-        d: `M${xj} ${TRUNK_Y} l-4.5 -8 l9 0 z`, class: "flow-tip in",
+        d: `M${xj} ${joinY} l-4.5 -8 l9 0 z`, class: "flow-tip in",
       }));
     } else {
       // same corridor treatment, mirrored: leave the trunk, drop straight down
