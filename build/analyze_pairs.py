@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-Pairwise overlap analysis across all 36 languages (630 pairs).
+Pairwise overlap analysis across the selected languages.
 
-Two metrics per pair (one-to-one matches inside broad IPA categories):
-  shared  = sum(min(entriesA, entriesB))
-  jaccard = shared / sum(max(entriesA, entriesB))
+Two metrics per pair (one occupied broad IPA area per language):
+  shared  = number of broad areas occupied by both sources
+  jaccard = shared / number of areas occupied by either source
 
-This lets differently detailed source spellings match without discarding extra
-contrastive entries when a language records more than one in the same category.
+This lets differently detailed source spellings share a broad area while keeping
+the source entries as qualitative detail rather than inferring equivalent contrasts.
 
 Prints: top/bottom pairs by jaccard, distribution stats, per-language
 "best friend / stranger", and English's ranked list.
@@ -16,7 +16,7 @@ import json
 import statistics
 from itertools import combinations
 
-raw = open("prototype/data.js", encoding="utf-8").read()
+raw = open("docs/data.js", encoding="utf-8").read()
 D = json.loads(raw[len("const DATA = "):-2])
 langs = {l["name"]: l["comparisonGroups"] for l in D["languages"]}
 names = sorted(langs)
@@ -24,10 +24,8 @@ names = sorted(langs)
 pairs = []
 for a, b in combinations(names, 2):
     keys = set(langs[a]) | set(langs[b])
-    inter = sum(min(len(langs[a].get(k, ())), len(langs[b].get(k, ())))
-                for k in keys)
-    union = sum(max(len(langs[a].get(k, ())), len(langs[b].get(k, ())))
-                for k in keys)
+    inter = len(set(langs[a]) & set(langs[b]))
+    union = len(keys)
     pairs.append({"a": a, "b": b, "shared": inter, "jaccard": inter / union})
 
 jac = [p["jaccard"] for p in pairs]

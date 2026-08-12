@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>A Short History of English Sounds — Spoken Sounds Across the World</title>
-<link rel="stylesheet" href="shared.css?v=c0395948">
+<link rel="stylesheet" href="shared.css?v=f89d3be3">
 <style>
   /* ================= the sound-flow diagram ================= */
   /* SVG for the lines, absolutely-positioned HTML for the labels (they need to
@@ -28,10 +28,10 @@
   .flow-node.out { fill: var(--rare); stroke: var(--bg); stroke-width: 2; }
   .flow-guide { stroke: #e0d9cc; stroke-width: 1; stroke-dasharray: 2 4; }
   .flow-axis { stroke: #cfc7ba; stroke-width: 1; }
-  .flow-tick { font-size: 11px; fill: #a8a094; }
-  .flow-era { font-size: 10.5px; fill: #8a8275; letter-spacing: .06em;
+  .flow-tick { font-size: 11px; fill: #6b6459; }
+  .flow-era { font-size: 10.5px; fill: #6b6459; letter-spacing: .06em;
     text-transform: uppercase; }
-  .flow-year { font-size: 10.5px; fill: #8a8275;
+  .flow-year { font-size: 10.5px; fill: #6b6459;
     font-variant-numeric: tabular-nums; }
   .flow-gone { font-size: 15px; font-weight: 700; fill: var(--rare); }
   /* labels */
@@ -49,17 +49,17 @@
   .flow-head { display: flex; align-items: baseline; gap: .35rem; }
   .flow-gloss { font-size: .78rem; color: #6b6459; }
   .flow-src { display: block; font-size: .68rem; text-transform: uppercase;
-    letter-spacing: .05em; color: #a8a094; margin: .12rem 0 .1rem; }
+    letter-spacing: .05em; color: #6b6459; margin: .12rem 0 .1rem; }
   .flow-words { display: flex; flex-wrap: wrap; gap: .1rem .7rem;
     font-size: .76rem; }
   .flow-words .fw { color: #6b6459; }
-  .flow-words .fw b { font-weight: 600; color: #8a8275; font-size: .7rem;
+  .flow-words .fw b { font-weight: 600; color: #6b6459; font-size: .7rem;
     text-transform: uppercase; letter-spacing: .03em; }
   .flow-words .fw i { font-style: normal; font-weight: 600; color: var(--ink); }
-  .flow-words .fw em { font-style: normal; color: #a8a094; font-size: .72rem; }
+  .flow-words .fw em { font-style: normal; color: #6b6459; font-size: .72rem; }
   .flow-words .fw.unver i { border-bottom: 1px dotted #cfc7ba; }
   .flowlegend { display: flex; flex-wrap: wrap; gap: .35rem 1.3rem;
-    font-size: .76rem; color: #8a8275; margin: .1rem 0 0; }
+    font-size: .76rem; color: #6b6459; margin: .1rem 0 0; }
   .flowlegend .k { display: inline-flex; align-items: center; gap: .4rem; }
   .flowlegend i { width: 1.5rem; height: 0; display: inline-block;
     border-top: 2.2px solid var(--l1); }
@@ -77,7 +77,7 @@
   .ev2.lost::before { border-color: var(--rare); background: var(--rare); }
   .ev2.gained::before { border-color: var(--l1); background: var(--l1); }
   .ev2 .when { font-size: .72rem; text-transform: uppercase;
-    letter-spacing: .06em; color: #8a8275; }
+    letter-spacing: .06em; color: #6b6459; }
   .ev2 h3 { font-size: 1rem; margin: .05rem 0 .2rem; color: var(--accent); }
   .ev2 p { line-height: 1.55; margin: 0; font-size: .9rem; }
   /* ================= playable chips ================= */
@@ -106,26 +106,26 @@
   .fd.out { border-left-color: var(--rare); }
   .fd h4 { margin: 0 0 .3rem; font-size: .95rem; display: flex;
     align-items: baseline; gap: .4rem; }
-  .fd h4 .yr { font-size: .72rem; color: #a8a094; margin-left: auto;
+  .fd h4 .yr { font-size: .72rem; color: #6b6459; margin-left: auto;
     font-variant-numeric: tabular-nums; }
   .fd p { font-size: .84rem; line-height: 1.5; margin: 0; color: #6b6459; }
   /* ================= cognate word pairs ================= */
   .wordpairs { font-size: .86rem; margin: .8rem 0 .2rem; }
   .wp-row { display: grid; grid-template-columns: 7.5em 7.5em 1fr; gap: .5rem;
     padding: .3rem 0; border-top: 1px solid #efe9df; align-items: baseline; }
-  .wp-row.head { font-weight: 600; color: #8a8275; border-top: 0;
+  .wp-row.head { font-weight: 600; color: #6b6459; border-top: 0;
     font-size: .76rem; text-transform: uppercase; letter-spacing: .04em; }
   .wp-row .en { font-weight: 600; }
   .wp-row .de { color: #6b6459; }
-  .wp-row .gl { font-size: .8rem; color: #8a8275; }
+  .wp-row .gl { font-size: .8rem; color: #6b6459; }
 </style>
 </head>
 <body data-nav="history">
 
 <h1>A short history of English sounds</h1>
-<p class="subtitle">Languages evolve over time. Below, we look at some changes observed in the English language. Sounds flow into it
-from the languages English met, and out of it, while some relatives kept what
-English dropped.</p>
+<p class="subtitle">A language is a record of the people it has met. This short
+tour follows a few English sounds as contact, everyday speech and time helped
+them enter, change or disappear.</p>
 
 <h2 class="section">Sounds flowing in and out</h2>
 
@@ -159,7 +159,8 @@ English dropped.</p>
 <h2 class="section">The ⟨gh⟩ in <em>knight</em></h2>
 
 <div class="block">
-  <p><em>Knight</em> is spelled the way it was said. In Middle English both the
+  <p>The spelling of <em>knight</em> preserves consonants that were once pronounced.
+  In Middle English both the
   ⟨k⟩ and the ⟨gh⟩ were pronounced — the ⟨k⟩ as an ordinary
   <span id="k-chip"></span>, the ⟨gh⟩ as <span id="x-chip"></span>, the rasp at
   the end of Scottish <em>loch</em>. English lost both and kept the letters.
@@ -167,15 +168,22 @@ English dropped.</p>
   here have <span class="ipa">x</span>; German and Dutch are among them.</p>
 
   <div id="wordpairs" class="wordpairs"></div>
-  <p class="sub">Where English writes a silent ⟨gh⟩, German usually still says
-  something. A caution on the symbol: PHOIBLE's German inventory lists a single
+  <p class="sub">These particular English and German relatives show a sound where
+  English now writes silent ⟨gh⟩. This is a pattern in the examples, not a rule
+  for every word. A caution on the symbol: PHOIBLE's German inventory lists a single
   dorsal fricative, <span class="ipa">x</span>. German also has a fronter version
   in words like <em>ich</em>, and whether that is one sound or two has been argued
   for decades — this page follows the inventory it charts.</p>
 </div>
 
 
-<p class="note" id="hist-notes"></p>
+<p class="note" id="hist-notes"><strong>Sources for this short overview:</strong>
+  <a href="https://www.britannica.com/topic/Great-Vowel-Shift">Britannica on the Great Vowel Shift</a>,
+  <a href="https://www.open.edu/openlearn/mod/oucontent/view.php?id=3980&amp;section=4">The Open University on spelling standardization</a>,
+  <a href="https://cpercy.artsci.utoronto.ca/courses/MEPhonology.htm">University of Toronto Middle English phonology notes</a>, and
+  <a href="https://en.wikipedia.org/wiki/Phonological_history_of_English">a linked overview of English sound history</a>.
+  Dates are broad guideposts, and the examples highlight selected changes rather
+  than telling the whole history of English.</p>
 
 <div class="pagenav">
   <a href="spectrograms.html">&larr; Seeing Sounds</a>
@@ -183,9 +191,9 @@ English dropped.</p>
   <a href="difficulty.html">Language Learners &rarr;</a>
 </div>
 
-<script src="data.js?v=c5c3b09e"></script>
-<script src="rarity.js?v=5eda637c"></script>
-<script src="history_data.js?v=4bf01ccc"></script>
+<script src="data.js?v=11e8f5a3"></script>
+<script src="rarity.js?v=1f9656aa"></script>
+<script src="history_data.js?v=73962d4b"></script>
 <script>
 // Chip building + audio + tooltip. Defined BEFORE history_flow.js runs, and
 // handed to it via window.__flowChip / __flowBind, so the diagram's labels are
@@ -299,7 +307,7 @@ English dropped.</p>
   window.__histBind = bindChips;
 })();
 </script>
-<script src="history_flow.js?v=00b46518"></script>
+<script src="history_flow.js?v=b42cd7e5"></script>
 <script>
 // Everything on the page other than the diagram itself.
 (function () {
@@ -388,6 +396,6 @@ English dropped.</p>
   bindChips();
 })();
 </script>
-<script src="nav.js?v=3651bfbb"></script>
+<script src="nav.js?v=94828a95"></script>
 </body>
 </html>

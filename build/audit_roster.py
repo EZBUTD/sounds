@@ -3,7 +3,7 @@
 import json
 from itertools import combinations
 
-raw = open("prototype/data.js", encoding="utf-8").read()
+raw = open("docs/data.js", encoding="utf-8").read()
 D = json.loads(raw[len("const DATA = "):-2])
 langs = {l["name"]: l for l in D["languages"]}
 

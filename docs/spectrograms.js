@@ -736,6 +736,20 @@
   function initVowelInteraction() {
     const cv = $("vowelCanvas");
     if (!cv) return;
+    const controls = $("vowelButtons");
+    if (controls) {
+      const seen = new Set();
+      for (const hit of vowelHits) {
+        if (seen.has(hit.symbol)) continue;
+        seen.add(hit.symbol);
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = hit.symbol;
+        button.setAttribute("aria-label", `Play the reference vowel ${hit.symbol}`);
+        button.addEventListener("click", () => playVowel(hit.symbol));
+        controls.appendChild(button);
+      }
+    }
     cv.addEventListener("mousemove", (ev) => {
       const hit = hitVowel(cv, ev);
       cv.style.cursor = hit ? "pointer" : "default";
@@ -748,24 +762,6 @@
     cv.addEventListener("click", (ev) => {
       const hit = hitVowel(cv, ev);
       if (hit) playVowel(hit);
-    });
-    // Keyboard access: a canvas click target is otherwise unreachable without a
-    // mouse. Left/right step through the vowels, Enter/Space plays the current.
-    let kbIndex = -1;
-    cv.addEventListener("keydown", (ev) => {
-      if (!vowelHits.length) return;
-      if (ev.key === "ArrowRight" || ev.key === "ArrowLeft") {
-        const d = ev.key === "ArrowRight" ? 1 : -1;
-        kbIndex = (kbIndex + d + vowelHits.length) % vowelHits.length;
-        hoverVowel = vowelHits[kbIndex].symbol;
-        redrawVowelChart();
-        ev.preventDefault();
-      } else if (ev.key === "Enter" || ev.key === " ") {
-        if (hoverVowel) { playVowel(hoverVowel); ev.preventDefault(); }
-      }
-    });
-    cv.addEventListener("blur", () => {
-      if (hoverVowel) { hoverVowel = null; redrawVowelChart(); }
     });
   }
 

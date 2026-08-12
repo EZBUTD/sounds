@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Spoken Sounds Across the World </title>
-<link rel="stylesheet" href="shared.css?v=c0395948">
+<link rel="stylesheet" href="shared.css?v=f89d3be3">
 <style>
   :root {
     /* Blue/orange are distinguishable under the common red/green deficiencies.
@@ -13,7 +13,7 @@
     --l2: #b23b00;         /* language 2 only */
     --both: #663399;       /* shared labels and text */
     --none-bg: #f1ede6;    /* in neither */
-    --none-text: #a09a8e;
+    --none-text: #6b6459;
     --imposs: #dcd6cb;
     --bg: #faf8f4;
     --ink: #2b2620;
@@ -28,7 +28,7 @@
   h1 { font-size: 1.85rem; margin: 0 0 .3rem; }
   .subtitle { color: #6b6459; margin: 0 0 1.4rem; max-width: 68ch; }
   h2.section { font-size: .95rem; letter-spacing: .1em; text-transform: uppercase;
-    color: #8a8275; margin: 2rem 0 .6rem; }
+    color: #6b6459; margin: 2rem 0 .6rem; }
 
   .controls { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; margin-bottom: .8rem; }
   .controls .ctl { display: flex; align-items: center; gap: .5rem; }
@@ -131,7 +131,7 @@
   .dist .dot.hl { width: 16px; height: 16px; background: var(--l2);
     opacity: 1; border: 2.5px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.35); z-index: 2; }
   .dist .axis { display: flex; justify-content: space-between; font-size: .7rem;
-    color: #8a8275; margin-top: .2rem; }
+    color: #6b6459; margin-top: .2rem; }
   .dist .verdict { font-size: .85rem; margin-top: .35rem; }
 
   /* findings section */
@@ -148,7 +148,7 @@
   .cross-pair .score { display: block; margin: .15rem 0; font-size: 1.15rem;
     font-weight: 700; color: var(--ink); }
   .cross-pair .families { display: block; font-size: .72rem; line-height: 1.35;
-    color: #8a8275; }
+    color: #6b6459; }
   @media (max-width: 760px) { .cross-highlights { grid-template-columns: 1fr; } }
   #findings .finding { max-width: 74ch; margin-bottom: 2rem; }
   #findings h3 { font-size: 1.15rem; margin: 0 0 .4rem; color: var(--accent); }
@@ -156,7 +156,7 @@
   #findings .takeaway { background: #eef3ec; border-left: 4px solid var(--l1);
     padding: 1rem 1.2rem; border-radius: 8px; }
 
-  #findings .sub { font-size: .8rem; color: #8a8275; margin-top: .5rem; }
+  #findings .sub { font-size: .8rem; color: #6b6459; margin-top: .5rem; }
   .follow-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: .8rem; margin-top: .9rem; }
   .follow-step { background: #fff; border: 1px solid #e0d9cc; border-top: 3px solid var(--accent);
@@ -181,7 +181,7 @@
   @media (max-width: 760px) { .vcols { grid-template-columns: 1fr; } }
   .vcol h4 { margin: 0 0 .4rem; font-size: .85rem; text-transform: uppercase;
     letter-spacing: .05em; }
-  .vcol h4 span { color: #8a8275; font-weight: 400; }
+  .vcol h4 span { color: #6b6459; font-weight: 400; }
   .vcol h4.c1 { color: var(--l1); } .vcol h4.c2 { color: var(--l2); }
   .vcol h4.cb { color: var(--both); }
   .vgroup { display: flex; flex-wrap: wrap; gap: .3rem; }
@@ -206,19 +206,19 @@
   button.vchip.no-audio:hover { transform: none; }
   button.vchip.playing { box-shadow: 0 0 0 4px rgba(179,84,46,.45); }
   button.vchip:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
-  /* rarity = border treatment, so it never relies on fill colour alone */
-  button.vchip.t-very-rare { border-color: var(--rare); border-style: solid; }
-  button.vchip.t-rare { border-color: #d98f6a; }
-  button.vchip.t-uncommon { border-color: #c9c2b6; }
+  /* Rarity uses line style as well as colour for color-blind readers. */
+  button.vchip.t-very-rare { border-color: var(--rare); border-style: solid; border-width: 3px; }
+  button.vchip.t-rare { border-color: var(--rare); border-style: dashed; border-width: 2px; }
+  button.vchip.t-uncommon { border-color: #837b70; border-style: dotted; }
   button.vchip.t-common { border-color: #e8e2d7; border-style: dashed; }
   .rarity-legend { display: flex; flex-wrap: wrap; align-items: center;
-    gap: .35rem .9rem; font-size: .76rem; color: #8a8275; margin-top: .7rem; }
+    gap: .35rem .9rem; font-size: .76rem; color: #6b6459; margin-top: .7rem; }
   .rarity-legend .rkey { display: inline-flex; align-items: center; gap: .3rem; }
   .rarity-legend i { width: 1em; height: 1em; border-radius: 4px; background: #fff;
     border: 2px solid #ddd6c8; display: inline-block; }
-  .rarity-legend i.t-very-rare { border-color: var(--rare); }
-  .rarity-legend i.t-rare { border-color: #d98f6a; }
-  .rarity-legend i.t-uncommon { border-color: #c9c2b6; }
+  .rarity-legend i.t-very-rare { border-color: var(--rare); border-style: solid; border-width: 3px; }
+  .rarity-legend i.t-rare { border-color: var(--rare); border-style: dashed; border-width: 2px; }
+  .rarity-legend i.t-uncommon { border-color: #837b70; border-style: dotted; }
   .rarity-legend i.t-common { border-color: #e8e2d7; border-style: dashed; }
   .cards { display: grid; gap: .7rem; margin: .9rem 0;
     grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
@@ -230,7 +230,7 @@
   table.data { border-collapse: collapse; font-size: .84rem; margin: .8rem 0; }
   table.data th, table.data td { padding: .3rem .6rem; text-align: left;
     border-bottom: 1px solid #e8e2d7; }
-  table.data th { color: #8a8275; font-weight: 600; }
+  table.data th { color: #6b6459; font-weight: 600; }
   table.data td.num { text-align: right; font-variant-numeric: tabular-nums; }
   table.data .sym { font-family: var(--ipa-font); }
   /* the rare-sounds table reuses the Venn chip so its sounds are playable and
@@ -238,7 +238,7 @@
   table.data td.sym { font-family: inherit; padding-top: .2rem;
     padding-bottom: .2rem; }
   table.data td.sym button.vchip { margin: 0; }
-  #findings .sub, .block .sub { font-size: .8rem; color: #8a8275; margin-top: .5rem; }
+  #findings .sub, .block .sub { font-size: .8rem; color: #6b6459; margin-top: .5rem; }
   .block { max-width: 78ch; margin-bottom: 1.6rem; }
   .block h3 { font-size: 1.15rem; margin: 0 0 .4rem; color: var(--accent); }
   .block p { line-height: 1.6; margin: 0 0 .6rem; }
@@ -247,39 +247,38 @@
   .preface { max-width: 74ch; margin: 1.6rem 0 0; padding: 1.2rem 1.4rem;
     background: #f6f3ec; border-radius: 10px; border: 1px solid #e6e0d4; }
   .preface h2 { margin: 0 0 .7rem; font-size: .78rem; text-transform: uppercase;
-    letter-spacing: .09em; color: #8a8275; font-weight: 600; }
+    letter-spacing: .09em; color: #6b6459; font-weight: 600; }
   .preface p { margin: 0 0 .85rem; font-size: .93rem; line-height: 1.62;
     max-width: none; }
   .preface p:last-child { margin-bottom: 0; }
   .preface strong { color: var(--ink); }
   .lede { max-width: 74ch; font-size: .92rem; color: #6b6459; margin: .2rem 0 1rem; }
-  .note { font-size: .8rem; color: #8a8275; margin-top: 2.5rem; max-width: 74ch; }
+  .note { font-size: .8rem; color: #6b6459; margin-top: 2.5rem; max-width: 74ch; }
   .note a { color: var(--accent); }
   @media (prefers-reduced-motion: reduce) { button.snd, .tooltip, button.vchip { transition: none; } }
 </style>
 </head>
 <body data-nav="chart">
 <h1>How the world speaks</h1>
-<p class="subtitle"><strong>Speech and sounds play a large role in connecting many of us.</strong>
- Explore the patterns they share, the sounds that distinguish
-them, and the people and places that carry them across the world.</p>
+<p class="subtitle"><strong>Speech and sounds play a large role in connecting many of us.</strong>  Explore the patterns they share, the sounds that distinguish them,
+   and how people carry
+those patterns across generations and borders.</p>
 
 <div class="preface">
   <h2>Before the charts</h2>
 
-  <p><strong>The International Phonetic Alphabet</strong> is a standard set of symbols for writing speech
-  sounds, so pronunciation can be described across languages without relying on how
-  a word happens to be spelled. Not all symbols from the IPA are included below (i.e, tones), with the focus primarily being on consonants
-  and vowels to control the scope of this exploration.</p>
+  <p><strong>The International Phonetic Alphabet, or IPA,</strong> is a shared set
+  of symbols for describing speech sounds without relying on spelling. This
+  exploration focuses on broad consonant and vowel areas. Tone and some finer
+  distinctions are introduced separately.</p>
 
-  <p><strong>More than 7,000 languages are spoken around the world.</strong> 
-    The 34 languages used in this analysis are chosen from some of the world's largest, so the patterns describe this
-  selection rather than all human speech. </p>
+  <p><strong>More than 7,000 languages are spoken around the world.</strong>
+    These 34 examples are mostly widely spoken languages, so the patterns describe
+    this selection rather than all human speech.</p>
 
   <p><strong>Each button is an IPA reference sound.</strong> Click one to hear an
-  example. The colors compare broad sound categories from the selected language
-  descriptions. A source may use a more detailed label; the tooltip keeps that
-  original spelling without treating the spelling difference as a new category.</p>
+  example. The colors compare broad sound areas in two selected descriptions.
+  Point to or focus a button to see any more detailed label used by the source.</p>
 
 </div>
 
@@ -291,6 +290,9 @@ cell to hear the reference sound represented by its IPA symbol.</p>
   <div class="ctl"><label for="sel1">Language 1</label><select id="sel1"></select></div>
   <div class="ctl"><label for="sel2">Language 2</label><select id="sel2"><option value="">— none —</option></select></div>
 </div>
+<p class="sub" style="margin:-.25rem 0 .8rem;max-width:72ch">Each language uses
+one selected source, not every accent or dialect. The <a href="about.html#method">About
+page</a> explains how those sources were chosen.</p>
 <p class="headline" id="headline" aria-live="polite"></p>
 <div class="dist" id="dist" role="img">
   <div class="dist-title" id="distTitle"></div>
@@ -299,13 +301,12 @@ cell to hear the reference sound represented by its IPA symbol.</p>
   <div class="verdict" id="distVerdict"></div>
 </div>
 <div class="legend" id="legend">
-  <span class="key"><span class="sw both">1·2</span> Both languages list a category here</span>
-  <span class="key"><span class="sw l1">1</span> <span id="leg1">Language 1</span> only</span>
-  <span class="key"><span class="sw l2">2</span> <span id="leg2">Language 2</span> only</span>
+  <span class="key"><span class="sw both">1·2</span> Both selected sources list an area here</span>
+  <span class="key"><span class="sw l1">1</span> Only the <span id="leg1">Language 1</span> source</span>
+  <span class="key"><span class="sw l2">2</span> Only the <span id="leg2">Language 2</span> source</span>
   <span class="key"><span class="sw none"></span> Neither</span>
   <span class="key"><span class="sw" style="background:#f0c54a;color:#2b2620">V</span>
-    A selected source records it as a pronunciation
-    <a href="allophones.html">variant</a>, not a separate category</span>
+    pronunciation<a href="allophones.html">variant</a> exists</span>
 </div>
 
 <h2 class="section">Consonants</h2>
@@ -343,9 +344,6 @@ cell to hear the reference sound represented by its IPA symbol.</p>
 
 <div class="block">
   <h3>What they share, what each one keeps to itself</h3>
-  <p>This view matches source entries one-for-one inside broad IPA categories.
-  A language still keeps any additional contrast recorded within a category.
-  <strong>Each outline shows how common the broad category is worldwide.</strong></p>
   <div id="vennWrap"></div>
   <div id="vennLegend" class="rarity-legend"></div>
 </div>
@@ -359,17 +357,17 @@ cell to hear the reference sound represented by its IPA symbol.</p>
 <h2 class="section" style="margin-top:3rem">Rare sounds</h2>
 
 <div class="block">
-  <h3>The rarest sounds on the chart</h3>
+  <h3>Selected sample from the dataset</h3>
   <p>Counted across <strong><span id="worldN"></span> languages</strong> in the
-  PHOIBLE dataset, these reflect some of the rarest sounds per language.</p>
+  PHOIBLE database, these are among the least often recorded areas represented by
+  the selected languages.</p>
   <div id="raretable"></div>
 </div>
 
 <div class="block">
-  <h3>English is one of the unusual ones</h3>
-  <p>Weighting each single-segment chart category by how rare it is worldwide,
-  <strong>English has the <span id="engRank"></span>-most unusual projected
-  sound system among the 34 languages presented</strong>. Click a symbol to hear it.</p>
+  <h3>English is unusual too</h3>
+  <p>Familiarity can hide rarity. PHOIBLE records several English sound areas in
+  relatively few languages in its sample. Click a symbol to hear one.</p>
   <div class="cards" id="engCards"></div>
 </div>
 
@@ -378,14 +376,15 @@ cell to hear the reference sound represented by its IPA symbol.</p>
 
 
 <div class="finding">
-  <h3>Ancestry is a weak predictor of sound-system overlap</h3>
+  <h3>Related languages do not always sound most alike</h3>
   <p>Grouping these languages by ancestry (their <span class="hoverable" tabindex="0"
   data-glossary="A group of languages descended from a common ancestor — like Indo-European (English, Hindi, Spanish, Russian...) or Afro-Asiatic (Arabic, Hebrew, Amharic...). Established through cognates, grammatical evidence and regular historical sound correspondences—not by counting shared modern IPA labels.">language families</span>)
-  may give an expectation that relatives will sound alike. However, in this dataset:
-  <strong>only <span id="f-nnSame"></span> of the 34 languages here have their closest
-  sound-relative inside their own family.</strong> Median overlap is
-  <span id="f-sameMed"></span>% for related pairs and
-  <span id="f-crossMed"></span>% for unrelated pairs in this roster.
+  reveals that in this sample,
+  <strong>only <span id="f-nnSame"></span> of the 34 selected languages have their
+  highest sound overlap inside their own family.</strong>
+  Across our comparisons, a typical language pair from the same family shares
+  <span id="f-sameMed"></span>% of its broad sound areas. A typical pair from
+  different families shares <span id="f-crossMed"></span>%.
   <span id="f-beat" style="display: none;"></span></p>
 </div>
 
@@ -400,10 +399,14 @@ cell to hear the reference sound represented by its IPA symbol.</p>
     aria-label="High-overlap pairs from different language families"></div>
   <div class="fam-legend" id="famLegend" aria-label="Language family color legend"></div>
   <div id="heatmapWrap" style="overflow-x:auto">
-    <canvas id="heatmap" width="900" height="900" style="max-width:100%"
+    <canvas id="heatmap" width="900" height="900" style="max-width:100%" role="img"
       aria-label="Heatmap of sound-system overlap for 34 languages; outlined cells mark high-overlap pairs from different language families"></canvas>
   </div>
   <div id="heatmapTip" class="tooltip"></div>
+  <details class="data-details">
+    <summary>View all heatmap comparisons as a table</summary>
+    <div id="heatmapTable" class="table-scroll"></div>
+  </details>
 </div>
 
 <div class="finding">
@@ -416,12 +419,10 @@ cell to hear the reference sound represented by its IPA symbol.</p>
 
 <div class="finding takeaway">
   <h3>Connection does not require sameness</h3>
-  <p>Spoken languages share the same basic human possibilities for speech,
-  but communities organize those possibilities differently. Common sounds create
-  broad areas of overlap; rarer ones give each sound system a distinctive profile.
-  Similarity crosses family boundaries, and related languages can drift apart.
-  Languages live wherever people speak them, and connect whenever people learn,
-  carry, and reshape them.</p>
+  <p>People do not need identical sound systems to understand, borrow from, or
+  learn from one another. Languages continually reshape sounds inside words,
+  across generations, and across borders. The rest of this project follows those
+  changes from the mouth, through history, and into communities around the world.</p>
 </div>
 
 <div class="finding" style="max-width:none">
@@ -448,7 +449,7 @@ cell to hear the reference sound represented by its IPA symbol.</p>
 </div>
 </section>
 
-<p class="note"><strong>Method notes:</strong> Phoneme inventories from
+<p class="note"><strong>Method notes:</strong> Source inventories from
 <a href="https://phoible.org">PHOIBLE 2.0</a> (CC BY-SA). Linguists analyse sound systems
 differently, so inventories vary by source
 (<a href="https://phoible.org/faq">PHOIBLE explains why</a>) and the counts here reflect one
@@ -456,21 +457,22 @@ analysis per language rather than a settled figure. Audio from Wikimedia Commons
 English diphthongs play whole words. The <strong>V</strong> badge means the selected
 source records that chart sound as a pronunciation variant (an <em>allophone</em>)
 of another category; it is not a complete claim about the language, because
-allophone coverage differs greatly by source. Overlap matches inventory entries
-one-for-one inside broad IPA chart categories. Thus a lone English source entry
-<span class="ipa-inline">pʰ</span> can match Spanish <span class="ipa-inline">p</span>
-under broad <span class="ipa-inline">/p/</span>; if a source lists both
-<span class="ipa-inline">p</span> and <span class="ipa-inline">pʰ</span> as distinct,
-the additional contrast remains counted. This is an approximate comparison of
-sound-system structure, not a claim that two languages share one phoneme or pronounce
-the category identically. The
+allophone coverage differs greatly by source. Overlap counts each occupied broad
+IPA area once. Thus English <span class="ipa-inline">pʰ</span> and Spanish
+<span class="ipa-inline">p</span> can share the broad <span class="ipa-inline">p</span> area.
+If a source records several distinctions inside one area, the tooltip preserves
+them as detail but the score still counts the area once. Long and doubled forms
+are also folded into the same broad quality for this comparison; that does not
+mean length is unimportant in the language. This is an invitation to explore broad
+patterns, not a claim that two languages share one phoneme or pronounce an area
+identically. The
 <a href="allophones.html">Sound Variants</a> page covers that. Shaded consonant cells are
 articulations generally judged not producible.</p>
 
-<script src="data.js?v=c5c3b09e"></script>
-<script src="comparison.js?v=4855e25b"></script>
+<script src="data.js?v=11e8f5a3"></script>
+<script src="comparison.js?v=3f6ce036"></script>
 <script src="analysis.js?v=0314b23d"></script>
-<script src="rarity.js?v=5eda637c"></script>
+<script src="rarity.js?v=1f9656aa"></script>
 <script>
 (function () {
   const $ = id => document.getElementById(id);
@@ -653,7 +655,7 @@ articulations generally judged not producible.</p>
       if (mapped.length) {
         const sourceDetail = mapped.length === 1 && mapped[0] === category
           ? "" : ` · source ${mapped.join(" ")}`;
-        tags.push(`<span class="${cls}">${L.name}: /${category}/${sourceDetail}</span>`);
+        tags.push(`<span class="${cls}">${L.name}: <span class="ipa">${category}</span> area${sourceDetail}</span>`);
         const note = comparison.noteFor(L.name, category);
         if (note) tags.push(`<span class="tg-var">${note}</span>`);
       }
@@ -673,7 +675,7 @@ articulations generally judged not producible.</p>
         if (category !== sym) baseCells.add(category);
       }
       if (baseCells.size) html += `<div style="margin-top:.35rem;opacity:.8">` +
-        `Source transcription detail; compared under broad ${[...baseCells].map(s => `/${s}/`).join(", ")}.</div>`;
+        `Source transcription detail; compared under broad ${[...baseCells].map(s => `<span class="ipa">${s}</span>`).join(", ")} areas.</div>`;
     }
     for (const L of [L1, L2]) {
       if (!L) continue;
@@ -733,9 +735,9 @@ articulations generally judged not producible.</p>
     if (L1 && L2) {
       const result = comparison.pairSummary(L1, L2);
       h.innerHTML = `<strong>${L1.name}</strong> and <strong>${L2.name}</strong> have ` +
-        `<strong>${result.shared}</strong> broadly matching sound categories. ` +
-        `${L1.name} has <strong>${result.only1}</strong> additional categories or contrasts; ` +
-        `${L2.name} has <strong>${result.only2}</strong>.`;
+        `<strong>${result.shared}</strong> broadly shared sound areas. ` +
+        `${L1.name} has <strong>${result.only1}</strong> areas not recorded for ${L2.name}; ` +
+        `${L2.name} has <strong>${result.only2}</strong> not recorded for ${L1.name}.`;
     } else if (L1) {
       h.innerHTML = `<strong>${L1.name}</strong> has <strong>${L1.soundCount}</strong> ` +
         `recorded sound categories under this counting policy` + footnoteBits(L1) + `.`;
@@ -748,8 +750,9 @@ articulations generally judged not producible.</p>
         `grouped under broader chart squares`);
       if (L.toneCount) bits.push(`<strong>${L.toneCount}</strong> standalone tone entries excluded from this sound comparison`);
       let s = " — " + bits.join(", ");
-      if (L.lengthVariantCount) s += `. This source also lists ${L.lengthVariantCount} ` +
-        `long/doubled forms, not counted here`;
+      if (L.lengthVariantCount) s += `. For this broad comparison, ${L.lengthVariantCount} ` +
+        `long or doubled source forms are folded into the same sound quality; ` +
+        `length can still distinguish words in the language`;
       return s;
     }
     // Detailed and off-chart labels use the same colors, number markers, audio
@@ -832,12 +835,12 @@ articulations generally judged not producible.</p>
     let verdict;
     if (pct >= 85) verdict = `${L2.name} is among ${L1.name}'s closest sound systems here`;
     else if (pct >= 60) verdict = `${L2.name} is more similar to ${L1.name} than most languages here`;
-    else if (pct >= 40) verdict = `${L2.name} is about typical for ${L1.name}`;
+    else if (pct >= 40) verdict = `${L2.name} falls near the middle of this roster for ${L1.name}`;
     else if (pct >= 15) verdict = `${L2.name} is less similar to ${L1.name} than most languages here`;
     else verdict = `${L2.name} is among ${L1.name}'s most distant sound systems here`;
     $("distVerdict").innerHTML = `<strong>${verdict}</strong> — ` +
       `more overlap than ${pct}% of the ${rows.length} other languages ` +
-      `(${sel.shared} broadly matching categories, ${Math.round(100 * sel.jaccard)}% of the pair's categories and contrasts).`;
+      `(${sel.shared} broadly shared areas, ${Math.round(100 * sel.jaccard)}% of the pair's broad areas).`;
     box.setAttribute("aria-label",
       `${L2.name} has ${sel.shared} broadly matching sound categories with ${L1.name}, more than ${pct}% of other languages.`);
   }
@@ -991,6 +994,23 @@ articulations generally judged not producible.</p>
       legend.appendChild(k);
     }
 
+    // The canvas is a quick visual overview; this table carries the same 561
+    // values for keyboard, touch, zoom and screen-reader users.
+    const heatRows = Object.entries(DATA.pairOverlap).map(([key, value]) => {
+      const [a, b] = key.split("|");
+      return { a, b, shared: value[0], score: value[1] };
+    }).sort((a, b) => b.score - a.score || b.shared - a.shared ||
+      `${a.a}|${a.b}`.localeCompare(`${b.a}|${b.b}`));
+    $("heatmapTable").innerHTML =
+      `<table class="data"><thead><tr><th>Language pair</th>` +
+      `<th>Families</th><th class="num">Shared areas</th>` +
+      `<th class="num">Overlap</th></tr></thead><tbody>` +
+      heatRows.map(row => `<tr><td>${row.a} + ${row.b}</td>` +
+        `<td>${ANALYSIS.families[row.a]} + ${ANALYSIS.families[row.b]}</td>` +
+        `<td class="num">${row.shared}</td>` +
+        `<td class="num">${Math.round(100 * row.score)}%</td></tr>`).join("") +
+      `</tbody></table>`;
+
     // shared hover tooltip (heatmap cells + sound map dots)
     const hTip = $("heatmapTip");
 
@@ -1015,7 +1035,7 @@ articulations generally judged not producible.</p>
 
 })();
 </script>
-<script src="chart_extras.js?v=37f4a9dc"></script>
-<script src="nav.js?v=3651bfbb"></script>
+<script src="chart_extras.js?v=af425fab"></script>
+<script src="nav.js?v=94828a95"></script>
 </body>
 </html>

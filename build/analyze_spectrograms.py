@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Precompute spectrograms + voice-onset-time segmentation for the word recordings,
-and emit prototype/spectro.js for the Spectrograms page.
+and emit docs/spectro.js for the Spectrograms page.
 
 WHY PRECOMPUTE INSTEAD OF ANALYSING IN THE BROWSER
 Safari only gained Ogg Vorbis support in 18.4, and older Safari cannot
@@ -42,8 +42,8 @@ import json
 import numpy as np
 import soundfile as sf
 
-AUDIO_DIR = "prototype/audio/"
-OUT = "prototype/spectro.js"
+AUDIO_DIR = "docs/audio/"
+OUT = "docs/spectro.js"
 
 # Spectrogram render settings. 25ms window is the usual "wideband" choice for
 # seeing formants and bursts; 4ms hop keeps the burst from being smeared away.

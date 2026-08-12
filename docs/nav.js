@@ -2,6 +2,16 @@
 // Injected by script so the link list lives in exactly one place; each page sets
 // `data-nav` on <body> to mark which item is current.
 (function () {
+  let skipLink = null;
+  const mainHeading = document.querySelector("h1");
+  if (mainHeading) {
+    mainHeading.id ||= "main-content";
+    mainHeading.tabIndex = -1;
+    skipLink = document.createElement("a");
+    skipLink.className = "skip-link";
+    skipLink.href = `#${mainHeading.id}`;
+    skipLink.textContent = "Skip to main content";
+  }
   const PAGES = [
     ["index.html",    "chart",      "Sound Chart"],
     ["allophones.html", "allophones", "Sound Variants"],
@@ -27,4 +37,5 @@
     ).join("") +
     `</ul>`;
   document.body.insertBefore(nav, document.body.firstChild);
+  if (skipLink) document.body.insertBefore(skipLink, nav);
 })();

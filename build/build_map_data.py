@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Emit prototype/mapdata.js — world basemap + per-language geography/rarity layer
+Emit docs/mapdata.js — world basemap + per-language geography/rarity layer
 for the "More to explore" page.
 
 The Natural Earth 110m countries file is ~840 KB, far too heavy to inline in a
@@ -23,7 +23,7 @@ GEO_IN = "geo_analysis.json"
 DRIVERS_IN = "l2_drivers.json"
 ASYM_IN = "asymmetry_analysis.json"
 COUNTRY_IN = "country_language_layer.json"
-OUT = "prototype/mapdata.js"
+OUT = "docs/mapdata.js"
 EPSILON = 0.55        # simplification tolerance in degrees
 MIN_AREA = 1.1        # drop islands smaller than this (deg^2 bounding box)
 

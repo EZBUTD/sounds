@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Emit prototype/rarity.js — the global sound-rarity layer for the Sound Chart page.
+Emit docs/rarity.js — the global sound-rarity layer for the Sound Chart page.
 
 The rare-sounds material moved from the map page to the Sound Chart (it is a fact
 about sounds, not geography), but the chart page must not pay for the ~200 KB map
@@ -13,7 +13,7 @@ Run analyze_geography.py first.
 import json
 
 GEO_IN = "geo_analysis.json"
-OUT = "prototype/rarity.js"
+OUT = "docs/rarity.js"
 
 
 def main():
@@ -23,7 +23,7 @@ def main():
     # understates the rarest sounds. This exact bug hid Zulu's clicks (each in
     # <1% of the world's languages) behind a default gray outline.
     import re
-    js = open("prototype/data.js", encoding="utf-8").read()
+    js = open("docs/data.js", encoding="utf-8").read()
     data = json.loads(js.split("=", 1)[1].rstrip().rstrip(";"))
     chart_syms = {s for l in data["languages"] for s in l["phonemes"]}
     missing = sorted(chart_syms - set(geo["globalFreq"]))

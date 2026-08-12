@@ -39,7 +39,7 @@ import unicodedata
 from collections import defaultdict
 
 from build_chart_data import (
-    LANG_INVENTORIES, TONE_CHARS, comparison_segment, norm,
+    LANG_INVENTORIES, TONE_CHARS, comparison_groups, comparison_segment, norm,
 )
 
 PHOIBLE = "data/phoible.csv"
@@ -122,11 +122,11 @@ def load_phoible():
 
 
 def global_frequencies(rows_by_inv, inv_glotto):
-    """Return chart-projection and exact-segment frequencies by language.
+    """Return chart-projection and broad comparison frequencies by language.
 
     Both are deduplicated by Glottocode. Chart frequencies support the reference
-    sound/rarity UI; exact length-collapsed frequencies support the inventory
-    overlap and learner-gap calculations without erasing written contrasts.
+    sound/rarity UI; broad occupied-area frequencies support the inventory
+    overlap and learner-gap calculations while source labels remain available.
 
     CLICKS need special handling. PHOIBLE writes them as clusters with their
     accompaniment (Zulu has kǀ, kǁ, kǃ -- never a bare ǀ), but the chart credits
@@ -147,14 +147,14 @@ def global_frequencies(rows_by_inv, inv_glotto):
     comparison_counts = defaultdict(int)
     for g, inv in best.items():
         syms = set()
-        comparison_syms = set()
+        comparison_segments = set()
         raw = []
         for r in rows_by_inv[inv]:
             seg = r["Phoneme"]
             if any(c in seg for c in TONE_CHARS):
                 continue
             raw.append(seg)
-            comparison_syms.add(comparison_segment(seg))
+            comparison_segments.add(comparison_segment(seg))
             s = norm(seg)
             if s:
                 syms.add(s)
@@ -164,7 +164,7 @@ def global_frequencies(rows_by_inv, inv_glotto):
                 syms.add(click)
         for s in syms:
             counts[s] += 1
-        for s in comparison_syms:
+        for s in comparison_groups(comparison_segments):
             comparison_counts[s] += 1
     n = len(best)
     return (
@@ -194,7 +194,7 @@ def main():
     speakers = json.load(open(SPEAKERS, encoding="utf-8"))
 
     print("=" * 78)
-    print(f"GLOBAL SOUND FREQUENCY (over {n_world} languages, one per Glottocode)")
+    print(f"GLOBAL SOUND FREQUENCY ({n_world} PHOIBLE inventories, one per Glottocode)")
     print("=" * 78)
     common = sorted(freq.items(), key=lambda kv: -kv[1])[:10]
     print("most universal: " + ", ".join(f"{s} {v:.0%}" for s, v in common))
@@ -216,7 +216,7 @@ def main():
                     ours.add(click)
     rare_ours = sorted((freq.get(s, 0), s) for s in ours
                        if is_single_segment(s))[:12]
-    print("rarest single segments among our 34 languages: " +
+    print("least often recorded single segments in the 34 selected sources: " +
           ", ".join(f"{s} {v:.1%}" for v, s in rare_ours))
     excluded = sorted((freq.get(s, 0), s) for s in ours
                       if not is_single_segment(s))[:6]
@@ -227,7 +227,7 @@ def main():
     out = {}
     missing_geo, missing_sp = [], []
     print("\n" + "=" * 78)
-    print("PER LANGUAGE — homeland, speakers, and signature (globally rare) sounds")
+    print("PER SELECTED SOURCE — homeland, speakers, and rarely recorded segments")
     print("=" * 78)
     print(f"{'language':<18} {'area':<14} {'L1':>7} {'L2':>7} {'L2%':>5}  signature sounds")
     for name, inv in LANG_INVENTORIES.items():
@@ -311,15 +311,16 @@ def main():
     # ---- rarity-weighted overlap (backlog item) ----
     print("\n" + "=" * 78)
     print("RARITY-WEIGHTED OVERLAP vs plain overlap")
-    print("(sharing /m/ is trivial; sharing a click is remarkable)")
+    print("(commonly recorded areas contribute less weight than rare records)")
     print("=" * 78)
     sets = {}
     for name, inv in LANG_INVENTORIES.items():
-        sets[name] = {
+        source_segments = {
             comparison_segment(r["Phoneme"])
             for r in rows_by_inv[inv]
             if not any(c in r["Phoneme"] for c in TONE_CHARS)
         }
+        sets[name] = set(comparison_groups(source_segments))
     names = list(sets)
     pairs = []
     for i, a in enumerate(names):
@@ -335,29 +336,29 @@ def main():
     # a big drop means the overlap was mostly generic sounds; a small drop means
     # the pair genuinely shares unusual ones.
     print(f"{'pair':<40} {'plain':>7} {'weighted':>9} {'drop':>7}")
-    print("-- biggest drop: their overlap was almost all universal sounds --")
+    print("-- biggest drop: much of the overlap uses commonly recorded areas --")
     for a, b, p, w in sorted(pairs, key=lambda t: t[3] - t[2])[:6]:
         print(f"{a + ' + ' + b:<40} {p:>7.0%} {w:>9.0%} {p - w:>7.0%}")
-    print("-- smallest drop: they share genuinely rare sounds, not just easy ones --")
+    print("-- smallest drop: more of the overlap uses rarely recorded areas --")
     for a, b, p, w in sorted(pairs, key=lambda t: t[2] - t[3])[:6]:
         print(f"{a + ' + ' + b:<40} {p:>7.0%} {w:>9.0%} {p - w:>7.0%}")
 
     # ---- reverse hook: English's own sounds are globally unusual ----
     print("\n" + "=" * 78)
-    print("IS ENGLISH THE WEIRD ONE? English sounds by global frequency")
+    print("THE SELECTED ENGLISH SOURCE IN THE PHOIBLE SAMPLE")
     print("=" * 78)
     eng = sets["English"]
     eng_single = sorted((freq.get(s, 0), s) for s in eng if is_single_segment(s))
-    print("English's rarest sounds worldwide:")
+    print("Its least often recorded single segments in this PHOIBLE sample:")
     for v, s in eng_single[:8]:
-        print(f"   /{s}/  in {v:.0%} of the world's languages")
+        print(f"   {s}  in {v:.0%} of the sampled inventories")
     med_rarity = sorted(out[n]["meanRarity"] for n in out)
     eng_rank = sorted(out, key=lambda n: -out[n]["meanRarity"]).index("English") + 1
-    print(f"\nEnglish inventory 'unusualness' rank: {eng_rank} of {len(out)} "
-          f"(mean rarity {out['English']['meanRarity']:.2f}, "
+    print(f"\nEnglish single-segment rarity rank within this roster: "
+          f"{eng_rank} of {len(out)} (mean rarity {out['English']['meanRarity']:.2f}, "
           f"roster median {med_rarity[len(med_rarity)//2]:.2f})")
     most_unusual = sorted(out.items(), key=lambda kv: -kv[1]["meanRarity"])[:5]
-    print("most unusual inventories on the roster: " +
+    print("highest mean rarity scores among the selected sources: " +
           ", ".join(f"{n} {d['meanRarity']:.2f}" for n, d in most_unusual))
     print("(scored on single segments only; multi-segment symbols per language: " +
           ", ".join(f"{n} {out[n]['nMultiSegment']}"
@@ -369,7 +370,7 @@ def main():
     # segments, and PHOIBLE records tone as its own SegmentClass. Report the
     # split explicitly rather than letting the silence imply tone was included.
     print("\n" + "=" * 78)
-    print("TONE — recorded separately by PHOIBLE, excluded from every score here")
+    print("TONE — recorded separately, excluded from overlap and rarity figures")
     print("=" * 78)
     # Count the RAW phoneme strings: norm() strips tone marks to "" by design, so
     # counting normalised symbols reports 1 for every tonal language.
@@ -384,25 +385,24 @@ def main():
     print(f"{'':<18} {'':>5}  {'rarity':>9}")
     for name, raw, rar in sorted(tonal, key=lambda t: -len(t[1])):
         print(f"{name:<18} {len(raw):>5}  {rar:>9.3f}  {' '.join(raw)}")
-    print(f"\n{len(tonal)} of {len(LANG_INVENTORIES)} charted languages carry tone "
-          f"rows. Every one of those rows is dropped before any figure on the site "
-          f"is computed:")
+    print(f"\nThe selected sources for {len(tonal)} of {len(LANG_INVENTORIES)} "
+          f"charted languages include standalone tone rows. Those rows are "
+          f"left out of overlap and rarity figures:")
     print("  - the chart grid has no axis for pitch, so tones have nowhere to sit")
-    print("  - norm() reduces a tone mark to the empty string, so tone-bearing")
-    print("    phonemes collapse onto their segmental base (norm('a˥') -> 'a')")
-    print("  - phoneme COUNTS, pairwise overlap, and this rarity score are all")
-    print("    computed after that filter, so they are segmental-only figures")
+    print("  - tone rows are filtered before the broad-area comparison")
+    print("  - the page shows their source-recorded counts in a separate section")
     print("\nConsequences worth stating on the page rather than leaving implicit:")
     ranked_low = sorted(out, key=lambda n: out[n]["meanRarity"])
     cant_rank = ranked_low.index("Cantonese") + 1
-    print(f"  - Cantonese is {cant_rank}nd-least-unusual of {len(out)} "
-          f"({out['Cantonese']['meanRarity']:.2f}) while carrying six lexical tones\n"
-          f"    English has no equivalent for. Its low score is a fact about its "
-          f"consonants\n    and vowels, not a statement about difficulty.")
-    print(f"  - Thai is {ranked_low.index('Thai') + 1}th-least-unusual "
-          f"({out['Thai']['meanRarity']:.2f}) with five tones. Mandarin sits higher "
-          f"({out['Mandarin Chinese']['meanRarity']:.2f}),\n    but for its retroflex "
-          f"and alveolo-palatal series rather than for anything tonal.")
+    cant_rows = next(raw for name, raw, _ in tonal if name == "Cantonese")
+    thai_rows = next(raw for name, raw, _ in tonal if name == "Thai")
+    print(f"  - Cantonese ranks {cant_rank} of {len(out)} from least to most unusual "
+          f"consonants/vowels ({out['Cantonese']['meanRarity']:.2f}), while its "
+          f"selected source lists {len(cant_rows)} tone rows. Canonical tone counts "
+          f"can differ by analysis.")
+    print(f"  - Thai ranks {ranked_low.index('Thai') + 1} of {len(out)} on that same "
+          f"consonant/vowel axis ({out['Thai']['meanRarity']:.2f}); its selected "
+          f"source lists {len(thai_rows)} tone rows separately.")
     # Coverage gap, reported rather than silently absorbed: Yoruba is a
     # well-described three-tone language, and the inventory we chart lists none.
     no_tone_rows = [n for n in ("Yoruba", "Japanese")
@@ -414,7 +414,8 @@ def main():
               ", ".join(no_tone_rows) + " have no tone rows in the charted "
               "inventory.\n    Yoruba is a three-tone language, so that is a gap in "
               "the source, not a\n    property of the language. Japanese pitch accent "
-              "is lexical too and is\n    not recorded as tone by PHOIBLE at all.")
+              "is lexical too and is\n    not represented by standalone tone rows "
+              "in the selected source.")
 
     # Tone shipped as data so the page can name the tonal languages and their
     # tone counts without hardcoding either. `nTones` is the count of raw
@@ -433,7 +434,7 @@ def main():
             "languages": tone_out,
             "nTonal": len(tone_out),
             "nCharted": len(LANG_INVENTORIES),
-            "excludedFromAllMetrics": True,
+            "excludedFromOverlapAndRarity": True,
             "noToneRows": no_tone_rows,
         },
         "englishRarest": [{"sym": s, "worldShare": round(v, 4)}

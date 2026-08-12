@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Seeing sounds — Spoken Sounds Across the World</title>
-<link rel="stylesheet" href="shared.css?v=c0395948">
+<link rel="stylesheet" href="shared.css?v=f89d3be3">
 <style>
   .specwrap { margin: 1rem 0 .4rem; }
   .spec-card { border: 1px solid #e0d9cc; border-radius: 10px; background: #fdfcfa;
@@ -20,11 +20,11 @@
     border: 1px solid #e4ded2; }
   .spec-head .ph { font-family: var(--ipa-font); font-size: 1.02rem;
     color: #6b6459; }
-  .spec-head .arrow { font-size: .8rem; color: #a8a094; }
+  .spec-head .arrow { font-size: .8rem; color: #6b6459; }
   .spec-head .allo { font-family: var(--ipa-font); font-size: 1.15rem;
     color: var(--accent); font-weight: 600; }
   .spec-head .lab { font-size: .7rem; text-transform: uppercase;
-    letter-spacing: .05em; color: #8a8275; }
+    letter-spacing: .05em; color: #6b6459; }
   .spec-derivcap { font-size: .78rem; color: #6b6459; margin: .3rem 0 0; }
   .spec-derivcap .ipa { font-size: .82rem; }
   /* .deffoot (notation note) is in shared.css, so this page and the Allophones
@@ -35,7 +35,7 @@
   .spec-canvas { width: 100%; height: auto; display: block; border-radius: 6px;
     background: #fbf9f5; }
   .spec-legend { display: flex; flex-wrap: wrap; gap: .1rem 1.1rem;
-    font-size: .74rem; color: #8a8275; margin-top: .4rem; }
+    font-size: .74rem; color: #6b6459; margin-top: .4rem; }
   .spec-legend .k { display: inline-flex; align-items: center; gap: .35rem; }
   .spec-legend .sw { width: 1.6em; height: .55em; border-radius: 2px; }
   .spec-legend .sw.burst { background: #c1553a; }
@@ -67,7 +67,7 @@
   .meter-fill { height: 100%; width: 0; background: #bfb7a8;
     transition: width .06s linear; }
   .meter-fill.live { background: var(--l1); }
-  .meter-label { font-size: .74rem; color: #a8a094; }
+  .meter-label { font-size: .74rem; color: #6b6459; }
   /* Stacked, not side by side: squeezing both into one row made each too narrow
      to read. Each panel gets the full column width and a sensible max. */
   .vowelstack { display: grid; gap: 1.6rem; }
@@ -78,12 +78,19 @@
   #vowelCanvas, #liveSpec { width: 100%; height: auto; display: block;
     border: 1px solid #e0d9cc; border-radius: 8px; background: #fbf9f5; }
   #vowelCanvas { cursor: pointer; }
-  #vowelCanvas:focus-visible { outline: 3px solid var(--accent);
+  .vowel-buttons { display: flex; flex-wrap: wrap; gap: .35rem;
+    margin: .55rem 0 .2rem; }
+  .vowel-buttons button { min-width: 2.35rem; min-height: 2.35rem;
+    border: 1px solid #aaa296; border-radius: 999px; background: #fff;
+    color: var(--ink); font-family: var(--ipa-font); font-size: 1rem;
+    cursor: pointer; }
+  .vowel-buttons button:hover { background: #f0ece4; }
+  .vowel-buttons button:focus-visible { outline: 3px solid var(--accent);
     outline-offset: 2px; }
   .readout { font-size: .82rem; color: #6b6459; margin-top: .4rem;
     font-variant-numeric: tabular-nums; }
   .readout b { color: var(--accent); }
-  .readout .dim { color: #a8a094; }
+  .readout .dim { color: #6b6459; }
 </style>
 </head>
 <body data-nav="spectrograms">
@@ -91,12 +98,9 @@
 <h1>Seeing sounds</h1>
 <p class="subtitle">A spectrogram is a picture of sound: time runs left to right,
 frequency runs bottom to top, and darker means more energy at that frequency and moment.
-This page uses one to measure a difference the
-<a href="allophones.html">Sound Variants page</a> asks you to hear —
-<strong>two allophones of the single phoneme <span class="ipa">/t/</span></strong>,
-the <em>t</em> of <em>top</em> against the <em>t</em> of <em>stop</em>.</p>
+</p>
 
-<h2 class="section">Two allophones of one phoneme, measured</h2>
+<h2 class="section">Two allophones of one phoneme, visualized</h2>
 
 <div class="block">
   <h3>The puff of air you can see</h3>
@@ -104,15 +108,14 @@ the <em>t</em> of <em>top</em> against the <em>t</em> of <em>stop</em>.</p>
   <span class="ipa">/t/</span> — but the mouth produces a different sound in
   each.</strong> Those two sounds are <strong>allophones</strong> of
   <span class="ipa">/t/</span>: alternative pronunciations that never distinguish
-  two English words, so most English speakers hear them as one <em>t</em>. The
-  <a href="allophones.html">Sound Variants page</a> introduces the idea and lets you
-  hear all three; this page visualizes two of them.</p>
+  two English words in these contexts. English organizes them as one <em>t</em>
+  category, and many speakers do not notice the difference until it is pointed out. </p>
   <p class="deffoot">The notation is the quickest way to keep the two levels
   apart. <span class="ipa">/slashes/</span> mark a <strong>phoneme</strong>, the
   category the language stores. <span class="ipa">[brackets]</span> mark an
-  <strong>allophone</strong>, what a mouth actually did. So each card below reads
-  <span class="ipa">/t/</span> &rarr; <span class="ipa">[tʰ]</span>: one phoneme
-  in, one allophone out.</p>
+  <strong>allophone</strong>, what a mouth actually did. Each card below reads
+  <span class="ipa">/t/</span> &rarr; <span class="ipa">[tʰ]</span>: phoneme →
+   allophone</p>
   <p>In <em>top</em> the release of the <span class="ipa">[tʰ]</span> is followed
   by a stretch of noisy, high-frequency energy — the aspiration — before the vowel
   starts. In <em>stop</em> that stretch is almost absent, because a preceding
@@ -131,12 +134,12 @@ the <em>t</em> of <em>top</em> against the <em>t</em> of <em>stop</em>.</p>
 <h2 class="section">Your own voice</h2>
 
 <div class="block">
-  <h3>Where your vowel actually lands</h3>
+  <h3>A rough acoustic estimate of your vowel</h3>
   <p>A vowel's first resonance (<strong>F1</strong>) broadly tracks vowel
   height (and therefore mouth opening), while the second (<strong>F2</strong>)
   broadly tracks tongue frontness; lip rounding and vocal-tract shape also affect
-  them. Estimating both from a microphone puts your vowel at a point on that same
-  chart.</p>
+  them. A simple estimate of both can place a moving point on that chart. It is
+  useful for exploration, but it is not a direct measurement of tongue position.</p>
   <p>Hold a steady vowel — <em>ee</em>, <em>ah</em>, <em>oo</em> — for about a
   second. Your position appears as a moving dot against the reference vowels.
   Audio is analysed in your browser and never uploaded or stored.</p>
@@ -152,28 +155,26 @@ the <em>t</em> of <em>top</em> against the <em>t</em> of <em>stop</em>.</p>
 
   <div class="vowelstack">
     <figure>
-      <figcaption><b>Vowel chart.</b> Click any reference vowel to hear it, then
-        try to match it — your live position appears as an orange dot.</figcaption>
-      <canvas id="vowelCanvas" width="680" height="470" tabindex="0"
-        aria-label="Vowel chart. Reference vowels are clickable to hear each sound; your live tongue position is plotted against them."></canvas>
+      <figcaption><b>Vowel chart.</b> Click any reference vowel, or use the buttons
+        below, to hear it. Then try to match it — the rough estimate appears as an
+        orange dot.</figcaption>
+      <canvas id="vowelCanvas" width="680" height="470" role="img"
+        aria-label="Vowel chart showing reference vowel positions. A rough acoustic estimate of your vowel is plotted against them."></canvas>
+      <div class="vowel-buttons" id="vowelButtons"
+        aria-label="Play a reference vowel"></div>
       <p class="readout" id="vowelReadout">
         <span class="dim">No signal yet.</span></p>
     </figure>
     <figure>
       <figcaption><b>Live spectrogram.</b> Same axes as the two cards above,
         scrolling right to left as you speak.</figcaption>
-      <canvas id="liveSpec" width="680" height="300"
-        aria-label="Live spectrogram of your microphone input"></canvas>
+      <canvas id="liveSpec" width="680" height="300" role="img"
+        aria-label="Live spectrogram of your microphone input">A live picture of
+        the microphone signal appears here when the microphone is on.</canvas>
       <p class="readout" id="specReadout"><span class="dim">Start the microphone
         to see your own voice here.</span></p>
     </figure>
   </div>
-
-  <div class="caveat" style="margin-top:1rem">
-    <strong>There is no score here, on purpose.</strong> 
-Treat the position as approximate. Estimates vary with voice, hardware, and other factors. 
-  </div>
-</div>
 
 <p class="note" id="spec-notes"></p>
 
@@ -183,9 +184,9 @@ Treat the position as approximate. Estimates vary with voice, hardware, and othe
   <a href="history.html">History of English &rarr;</a>
 </div>
 
-<script src="data.js?v=c5c3b09e"></script>
+<script src="data.js?v=11e8f5a3"></script>
 <script src="spectro.js?v=58aa17ce"></script>
-<script src="spectrograms.js?v=414d6525"></script>
-<script src="nav.js?v=3651bfbb"></script>
+<script src="spectrograms.js?v=aabff5d6"></script>
+<script src="nav.js?v=94828a95"></script>
 </body>
 </html>

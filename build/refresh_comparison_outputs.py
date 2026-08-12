@@ -3,14 +3,14 @@
 
 Run after ``build_chart_data.py`` from the build directory.  This intentionally
 does not rebuild geographic shapes, speaker estimates, or the chart-cell rarity
-analysis.  It replaces only the fields whose unit is a one-to-one entry inside
-the broad, length-collapsed segmental comparison groups:
+analysis. It replaces only the fields whose unit is an occupied broad sound area
+inside the length-collapsed comparison groups:
 
-* worldwide broad-category and additional-contrast frequencies;
+* worldwide broad sound-area frequencies;
 * plain and rarity-weighted pair overlap; and
 * directional learner inventory gaps.
 
-Existing ``prototype/rarity.js`` and ``prototype/mapdata.js`` bundles are updated
+Existing ``docs/rarity.js`` and ``docs/mapdata.js`` bundles are updated
 in place so those large, independently sourced payloads do not require unavailable
 geography inputs merely because the comparison policy changed.
 """
@@ -25,27 +25,20 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_chart_data import TONE_CHARS, comparison_groups, comparison_segment
 
 PHOIBLE = Path("data/phoible.csv")
-DATA_JS = Path("prototype/data.js")
-RARITY_JS = Path("prototype/rarity.js")
-MAPDATA_JS = Path("prototype/mapdata.js")
+DATA_JS = Path("docs/data.js")
+RARITY_JS = Path("docs/rarity.js")
+MAPDATA_JS = Path("docs/mapdata.js")
 ANALYSIS_JSON = Path("comparison_analysis.json")
 
 COMPARISON_UNIT = (
-    "one-to-one inventory entries grouped inside broad IPA categories after "
-    "length collapse; standalone tone rows excluded"
+    "one occupied broad IPA sound area per language after length collapse; "
+    "standalone tone rows excluded; source detail retained qualitatively"
 )
 
 
 def group_units(groups):
-    """Stable internal ids: one base category plus any additional contrasts."""
-    units = set()
-    for category, entries in groups.items():
-        if not entries:
-            continue
-        units.add(category)
-        for rank in range(2, len(entries) + 1):
-            units.add(f"{category}#contrast{rank}")
-    return units
+    """The comparison universe: one id for each occupied broad sound area."""
+    return {category for category, entries in groups.items() if entries}
 
 
 def read_const(path, declaration):

@@ -1,6 +1,6 @@
 # Family vs sound-similarity analysis + UPGMA clustering + heatmap ordering.
 # Tests: language family != sound-system similarity.
-# Emits prototype/analysis.js (families, heatmap order, headline stats).
+# Emits docs/analysis.js (families, heatmap order, headline stats).
 import json
 import statistics
 from itertools import combinations
@@ -24,7 +24,7 @@ FAMILIES = {
 
 
 def load():
-    raw = open("prototype/data.js", encoding="utf-8").read()
+    raw = open("docs/data.js", encoding="utf-8").read()
     return json.loads(raw[len("const DATA = "):-2])
 
 
@@ -45,7 +45,7 @@ def build_tree(names, merges):
         # Reordering for visual tidiness desynchronises the tree's leaf order
         # from `heatmapOrder`, which is derived from the same merge sequence — and
         # then the two visuals silently disagree about which languages are
-        # adjacent. smoke_test.mjs asserts the two orders are identical.
+        # adjacent. Any future tree renderer should assert the orders agree.
         na, nb = node_of[a[0]], node_of[b[0]]
         node = {"sim": round(s, 4),
                 "children": [na, nb],
@@ -187,13 +187,13 @@ def main():
         "nLanguages": len(names),
         "soundClusters": clusters,
     }
-    with open("prototype/analysis.js", "w", encoding="utf-8") as f:
+    with open("docs/analysis.js", "w", encoding="utf-8") as f:
         f.write("const ANALYSIS = ")
         json.dump(out, f, ensure_ascii=False)
         f.write(";\n")
     print(f"\nheatmap order: {' '.join(order[:8])} ...")
     print(f"sound clusters at cut {CUT}: {clusters}")
-    print("wrote prototype/analysis.js")
+    print("wrote docs/analysis.js")
 
 
 def mds_2d(names, sim, iters=3000, lr=0.05, seed=7):

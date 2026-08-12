@@ -221,7 +221,7 @@ def main():
     print(f"\nbridges — Hindi phonemes English has only as a variant: {rep['b_bridges']}")
     print(f"bridges — English phonemes Hindi has only as a variant:  {rep['a_bridges']}")
     print("bridge candidates are qualitative only; they receive no overlap or "
-          "learner-difficulty credit")
+          "learner difficulty score")
     print("\nsample realization splits (same phoneme, different variants):")
     for d in rep["diverged"][:12]:
         print(f"  /{d['phoneme']}/  English: {' '.join(d['a_variants']) or '—':<22}"
@@ -252,7 +252,7 @@ def main():
         print(f"{n1 + ' + ' + n2:<38} {r['jaccard']:>7.0%} "
               f"{r['divergence_rate']:>11.0%} {r['shared']:>7}")
 
-    # ---- emit for the prototype ----
+    # ---- emit for the deployed static site ----
     out = {
         "coverage": {
             "total": len(langs), "with_allophones": len(usable),

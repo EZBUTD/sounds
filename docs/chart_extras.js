@@ -33,7 +33,7 @@
   function rarityPhrase(sym, freqMap) {
     const f = freqMap[sym];
     if (f == null) return "";
-    return `in ${f < 0.01 ? "<1" : pct(f)}% of the world's languages`;
+    return `recorded in ${f < 0.01 ? "<1" : pct(f)}% of the PHOIBLE sample`;
   }
 
   function chip(sym, cls, langs, freqMap = comparisonFreq, freqKind = "comparison") {
@@ -53,30 +53,21 @@
       `aria-label="${label.replace(/"/g, "&quot;")}. ${hasAudio ? "Click to hear." : "No exact recording available."}">${sym}</button>`;
   }
 
-  function groupChip(group, cls, langs, count, kind) {
+  function groupChip(group, cls, langs, kind) {
     const sym = group.key;
     const freqMap = chartFreq[sym] == null ? comparisonFreq : chartFreq;
     const freqKind = freqMap === chartFreq ? "chart" : "comparison";
     const tier = rarityTier(sym, freqMap);
     const hasAudio = !!DATA.audio[sym];
-    const existsOnBothSides = group.source1.length && group.source2.length;
-    let suffix = "";
-    if (kind !== "shared" && existsOnBothSides) {
-      suffix = `<span class="mult">+${count} contrast${count === 1 ? "" : "s"}</span>`;
-    } else if (count > 1) {
-      suffix = `<span class="mult">×${count}</span>`;
-    }
     const description = kind === "shared"
-      ? `${count} source ${count === 1 ? "entry matches" : "entries match"} one-for-one under broad /${sym}/`
-      : existsOnBothSides
-        ? `${count} additional ${count === 1 ? "contrast" : "contrasts"} in ${kind === "only1" ? langs[0] : langs[1]} under broad /${sym}/`
-        : `broad /${sym}/ recorded only for ${kind === "only1" ? langs[0] : langs[1]}`;
+      ? `the broad ${sym} sound area is recorded for both selected sources`
+      : `the broad ${sym} sound area is recorded only for ${kind === "only1" ? langs[0] : langs[1]}`;
     return `<button class="vchip ${cls}${tier ? " t-" + tier : ""}${hasAudio ? "" : " no-audio"}" ` +
       `data-sym="${sym}" data-langs="${langs.join("|")}" data-group-chip="1" ` +
-      `data-count-kind="${kind}" data-count="${count}" ` +
+      `data-count-kind="${kind}" ` +
       `data-audio="${hasAudio ? 1 : 0}" data-freq-kind="${freqKind}" ` +
       `aria-label="${description}. ${hasAudio ? "Click to hear the broad reference sound." : "No reference recording available."}">` +
-      `${sym}${suffix}</button>`;
+      `${sym}</button>`;
   }
 
   // ---------- rich tooltip (mirrors the main chart's behaviour) ----------
@@ -93,7 +84,7 @@
     if (btn.dataset.groupChip === "1") {
       const freqMap = btn.dataset.freqKind === "chart" ? chartFreq : comparisonFreq;
       const rare = rarityPhrase(sym, freqMap);
-      let html = `<strong class="ipa">/${sym}/</strong> ` +
+      let html = `<strong class="ipa">${sym}</strong> ` +
         `<span style="opacity:.8">broad comparison category</span><br>` +
         (rare ? `<span style="opacity:.8">${rare}</span><br>` : "");
       for (const languageName of langs) {
@@ -107,16 +98,16 @@
         const word = wordFor(sym, languageName);
         if (word) html += `${languageName} example: ${word.text}` +
           (word.mined ? ` <span style="opacity:.55">(via Wiktionary)</span>` : "") + `<br>`;
+        if (entries.length > 1) {
+          html += `<span style="opacity:.75">This source records more than one distinction in this area. The overlap score still counts the area once.</span><br>`;
+        }
       }
-      if (btn.dataset.countKind !== "shared") {
+      if (btn.dataset.countKind === "shared") {
+        html += `<span style="opacity:.75">Sharing this broad area does not mean the languages pronounce it identically.</span><br>`;
+      } else {
         const ownerIndex = btn.dataset.countKind === "only1" ? 0 : 1;
-        const owner = langs[ownerIndex];
         const other = langs[1 - ownerIndex];
-        const otherHasCategory = !!(byName[other] &&
-          window.SOUND_COMPARISON.groupsFor(byName[other])[sym]);
-        html += otherHasCategory
-          ? `<span style="opacity:.75">${owner}'s source records ${btn.dataset.count} additional contrast${btn.dataset.count === "1" ? "" : "s"} inside this broad category.</span><br>`
-          : `<span style="opacity:.75">This broad category is not recorded for ${other}.</span><br>`;
+        html += `<span style="opacity:.75">This broad area is not recorded for ${other} in the selected source.</span><br>`;
       }
       html += btn.dataset.audio === "1"
         ? `<span style="opacity:.55">Click to hear the broad reference sound.</span>`
@@ -160,19 +151,18 @@
 
     if (solo) {
       const ranked = Object.entries(groups1).map(([key, entries]) => ({
-        key, source1: entries, source2: [], shared: entries.length,
+        key, source1: entries, source2: [], shared: 1,
         only1: 0, only2: 0
       })).sort((a, b) =>
         ((chartFreq[a.key] ?? comparisonFreq[a.key]) ?? 1) -
         ((chartFreq[b.key] ?? comparisonFreq[b.key]) ?? 1));
-      const units = ranked.reduce((sum, group) => sum + group.source1.length, 0);
       wrap.innerHTML =
         `<p class="sub" style="margin:0 0 .6rem">Pick a second language above to
          compare inventories. For now, here is <strong>${n1}</strong>'s
-         ${units} recorded categories and contrasts, grouped into ${ranked.length}
-         broad positions and ordered rarest first.</p>` +
+         ${ranked.length} broad sound areas, ordered rarest first. Point to or
+         focus a symbol to see the source's more detailed labels.</p>` +
         `<div class="vgroup solo">${ranked.map(group =>
-          groupChip(group, "l1", [n1], group.source1.length, "shared")).join("")}</div>`;
+          groupChip(group, "l1", [n1], "shared")).join("")}</div>`;
       $("vennLegend").innerHTML = rarityLegend();
       bindChips();
       return;
@@ -197,36 +187,35 @@
            <h4 class="c1">Additional in ${n1} <span>${result.only1}</span></h4>
            <div class="vmeter"><i class="m1" style="width:${share(result.only1)}%"></i></div>
            <div class="vgroup">${only1.map(group =>
-             groupChip(group, "l1", [n1, n2], group.only1, "only1")).join("") || '<span class="vnone">none</span>'}</div>
+             groupChip(group, "l1", [n1, n2], "only1")).join("") || '<span class="vnone">none</span>'}</div>
          </div>
          <div class="vcol">
            <h4 class="cb">Broadly shared <span>${result.shared}</span></h4>
            <div class="vmeter"><i class="mb" style="width:${share(result.shared)}%"></i></div>
            <div class="vgroup">${shared.map(group =>
-             groupChip(group, "both", [n1, n2], group.shared, "shared")).join("") || '<span class="vnone">none</span>'}</div>
+             groupChip(group, "both", [n1, n2], "shared")).join("") || '<span class="vnone">none</span>'}</div>
          </div>
          <div class="vcol">
            <h4 class="c2">Additional in ${n2} <span>${result.only2}</span></h4>
            <div class="vmeter"><i class="m2" style="width:${share(result.only2)}%"></i></div>
            <div class="vgroup">${only2.map(group =>
-             groupChip(group, "l2", [n1, n2], group.only2, "only2")).join("") || '<span class="vnone">none</span>'}</div>
+             groupChip(group, "l2", [n1, n2], "only2")).join("") || '<span class="vnone">none</span>'}</div>
          </div>
        </div>
-       <p class="sub">Bars show each group as a share of the ${total} distinct
-       broad categories and contrastive distinctions the two sources have between
-       them. Hover a category to see each source's original transcription.</p>`;
+       <p class="sub">Bars show each group as a share of the ${total} broad sound
+       areas recorded across the two selected sources. </p>`;
     $("vennLegend").innerHTML = rarityLegend();
 
     bindChips();
   }
 
   function rarityLegend() {
-    return `<span class="rl">Outline shows how rare the broad category is worldwide:</span>` +
+    return `<span class="rl">Outline shows how often PHOIBLE records the sound:</span>` +
       `<span class="rkey"><i class="t-very-rare"></i>under 5%</span>` +
-      `<span class="rkey"><i class="t-rare"></i>5–15%</span>` +
-      `<span class="rkey"><i class="t-uncommon"></i>15–50%</span>` +
+      `<span class="rkey"><i class="t-rare"></i>5 to 15%</span>` +
+      `<span class="rkey"><i class="t-uncommon"></i>15 to 50%</span>` +
       `<span class="rkey"><i class="t-common"></i>over 50%</span>` +
-      `<span class="rl">Playable entries have an exact recording.</span>`;
+      `<span class="rl"></span>`;
   }
 
   // reuse the chart's audio: clicking a chip plays that symbol
@@ -296,8 +285,8 @@
 
     $("raretable").innerHTML =
       `<table class="data"><thead><tr><th>Sound</th>` +
-      `<th class="num">Share of world languages</th>` +
-      `<th>A signature sound of…</th></tr></thead><tbody>` +
+      `<th class="num">Share of PHOIBLE sample</th>` +
+      `<th>Shown here for…</th></tr></thead><tbody>` +
       rareRows.map(r =>
         // This table is global, not a statement about the selected pair. Keep
         // the fill neutral; the outline alone carries the rarity tier.
@@ -305,9 +294,7 @@
         `<td class="num">${r.share < 0.01 ? "<1" : pct(r.share)}%</td>` +
         `<td>${r.owners.join(", ")}</td></tr>`).join("") +
       `</tbody></table>` +
-      `<p class="sub">Click a sound to hear it, or hover for an example word.
-       Ranked rarest first, keeping one row per language so a single language's
-       inventory doesn't fill the table.</p>`;
+      `<p class="sub">Click a sound to hear it</p>`;
     // English cards
     const WORD = { "θ": "think", "ð": "this", "ɹ": "red", "æ": "cat", "ʌ": "cup",
       "ɜ": "bird", "ɒ": "hot", "ɑ": "father", "ŋ": "sing", "ʒ": "vision",
@@ -320,12 +307,7 @@
       `<div class="card"><h4>${chip(d.sym, "neutral", ["English"], chartFreq, "chart")} ` +
       `<span style="font-weight:400;color:#6b6459">as in “${WORD[d.sym]}”</span></h4>` +
       `<div class="big">${d.worldShare < 0.01 ? "<1" : pct(d.worldShare)}%</div>` +
-      `<p>of the world's languages have this sound</p></div>`).join("");
-
-    const ranked = Object.entries(RARITY.signature)
-      .sort((a, b) => b[1].meanRarity - a[1].meanRarity).map(([n]) => n);
-    const r = ranked.indexOf("English") + 1;
-    $("engRank").textContent = r === 1 ? "single" : r === 2 ? "second" : r + "th";
+      `<p>of the PHOIBLE sample records this broad sound area</p></div>`).join("");
 
     // Give readers the endpoints of the ordinary overlap measure. The previous
     // table added a rarity-weighted score, but it changed little in the ordering
@@ -342,7 +324,7 @@
       `${x.a}|${x.b}`.localeCompare(`${y.a}|${y.b}`));
     $("overlaptable").innerHTML =
       `<table class="data"><thead><tr><th>Pair</th>` +
-       `<th class="num">Broad matches</th><th class="num">Overlap</th></tr></thead><tbody>` +
+       `<th class="num">Shared areas</th><th class="num">Overlap</th></tr></thead><tbody>` +
       `<tr><th colspan="3" style="padding-top:.6rem">Highest overlap ` +
       `<span style="font-weight:400;color:#8a8275">— top 5 of ${pairs.length} pairs</span></th></tr>` +
       tbl(byOverlap.slice(0, 5)) +

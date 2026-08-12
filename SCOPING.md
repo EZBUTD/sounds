@@ -136,11 +136,11 @@ moraic /ɴ/
          transcription w/ diphthongs + /ɹ/). SPA inv 160 rejected:
          idiosyncratic vowels (e̞ o̞ː ɐ) + marginal x/ʍ/ʔ.
        - Dedup rule = per language, inventory with most allophone-bearing rows.
-       - Historical prototype rule stripped every modifier. Exact-string matching
+       - An early rule stripped every modifier. Exact-string matching
          then replaced it, but made source detail look like a language difference
          (English pʰ vs Spanish p). Current rule: group entries by broad IPA
-         reference category and match them one-for-one; extra entries within a
-         category preserve contrast multiplicity.
+         reference area and count each occupied area once; extra entries remain
+         visible as qualitative source detail.
 2. [x] Top-30+ L1 list picked (34 langs; Urdu/Marathi/Yoruba flagged 2-state,
        no allophone data in any source)
 3. [x] matrix.csv (1,496 rows) + matrix_summary.csv generated
@@ -168,9 +168,9 @@ moraic /ɴ/
        - TODO before publish: fetch per-file author/license from Commons API
          into manifest (license_note column is the placeholder).
 6. [ ] Curate substitution stories for top 15 L1s with citations
-7. [x] Prototype v0 built — prototype/index.html (self-contained; data via
+7. [x] Initial chart built; the current static site is in `docs/` (data via
        data.js global so file:// works; audio/ symlinked)
-       - build_chart_data.py regenerates prototype/data.js from matrix.csv +
+       - build_chart_data.py regenerates docs/data.js from matrix.csv +
          audio_manifest.csv; includes IPA-chart layout (7 groups), plain-language
          labels + anchor words per phoneme, and hand-written VARIANT_STORIES /
          ABSENT_STORIES dicts (extend these per spotlight language)
@@ -183,7 +183,7 @@ moraic /ɴ/
          aria-live headline, prefers-reduced-motion honored
        - Verified: node smoke_test.mjs (DOM-stub run of the inline script:
          data coverage, script executes, Japanese=23 absent/2 variant headline,
-         Urdu triggers warning). Serve with: python3 -m http.server in prototype/
+         Urdu triggers warning). Serve with: python3 -m http.server in docs/
 8. [x] **v2 REDESIGN — full IPA chart as the universe** (user decision):
        chart = all human speech sounds; every language (English included) is
        just a subset lighting up cells. Two language selectors; pair states
@@ -307,7 +307,7 @@ Systematic sweep for dialect/register/quality issues across the roster:
 
 ## FINDINGS SECTION (built 2026-08, on page below chart)
 
-analyze_families.py → prototype/analysis.js: family metadata (11 top-level
+analyze_families.py → docs/analysis.js: family metadata (11 top-level
 families for the 36 langs), family-vs-similarity stats, UPGMA leaf order for
 the heatmap, sound clusters at 0.60 jaccard cut.
 
@@ -347,14 +347,17 @@ Remaining future ideas:
 ## ALLOPHONE LAYER + LOST IN TRANSLATION (built 2026-08-10)
 
 analyze_allophones.py → why same-inventory languages still sound different.
+The figures below record an earlier analysis and are not published by the current
+site; sparse source annotation made them too easy to overread.
 - **English–Hindi share 27 phonemes but 92% are realized differently.** That
   divergence, not the inventory gap, is what an accent mostly is.
 - Historical base-cell result: Hindi+Punjabi showed 65% overlap and **100%**
   documented realization divergence. This is qualitative evidence only and is
   not the current broad-category overlap score.
 - Overlap does NOT predict divergence (scatter is flat) — 465 usable pairs.
-- **Bridges**: sounds that are phonemes in L2 but allophones in L1 → the learner
-  already produces them. Eng–Hindi overlap 52%→61% crediting bridges at half.
+- **Bridges**: sounds that are phonemes in one language but allophones in another
+  can be useful listening examples. The former 52%→61% "half credit" figure was
+  removed; the current page treats these examples qualitatively.
 - Coverage: 32/34 languages have allophone data. Marathi+Yoruba have none in ANY
   PHOIBLE inventory (excluded from these metrics, still on chart). English's
   pinned inv 2252 has none → supplemented from SPA inv 160 (agrees on 32/51).
@@ -377,9 +380,8 @@ analyze_mergers.py → "Lost in translation", generalizing food/hood → フー�
 > truth, and 9 passing anchors proved compatible with being wrong across 11,792
 > words. Full account in GENAI_LOG.md and on the About page.
 > Deleted: `analyze_mergers.py`, `build_native_script.py`,
-> `test_native_script.py`, `merger_analysis.json`, `prototype/translation.html`,
-> `prototype/nativescript.js`, `DEEP.mergers`. `smoke_pages.mjs` fails if any of
-> them returns.
+> `test_native_script.py`, `merger_analysis.json`, the former translation page,
+> the former native-script helper, and `DEEP.mergers`.
 
 - Model: map each English phoneme to nearest sound the target HAS (38 PHOIBLE
   features, weighted Hamming, class-guarded) → apply to 11.8k common English
@@ -403,7 +405,7 @@ analyze_mergers.py → "Lost in translation", generalizing food/hood → フー�
 
 ## GEOGRAPHY / RARITY / L2 — "More to explore" page (built 2026-08-10)
 
-New companion page prototype/explore.html for material that's interesting but
+The former companion Explore page held material that was interesting but
 off the main narrative spine. Linked from the end of the findings section.
 
 Data added: Glottolog CLDF languages.csv (coords, CC BY), Ethnologue-2026
@@ -418,49 +420,47 @@ same gotcha as the audio pipeline; fetch_geo_speakers.py shells out to curl.
   anchors, NOT territory. Glottolog's English coordinate sits in the West-Germanic
   dialect continuum, so English/Spanish/Portuguese/French/MSA homelands are
   pinned by hand (flagged `pinnedHomeland`).
-- **Signature sounds** = rarest phonemes per language, computed over 2,177
+- **Signature sounds** = source labels whose broad sound areas are least often
+  recorded for each language, computed over 2,177
   languages (one inventory per Glottocode to avoid over-weighting well-studied
   languages). Zulu clicks kǁ kǃ kǀ, MSA pharyngeals ʕ ħ, Hausa implosives ɓ ɗ,
   Yoruba co-articulated ɡb kp.
   ⚠️ Diphthongs/clusters EXCLUDED from rarity: sources disagree whether to list
   them at all, so including them ranked English /əʊ/ among the world's rarest
   sounds — a notation artifact, not articulation.
-- **English is the weird one** (old backlog item, now built): /θ/ 4% of world
-  languages, /ð/ 6%, /ɹ/ 6%; English has the 2nd-most-unusual inventory of 34.
-- **Rarity-weighted overlap**: weighting can only LOWER a pair's score (everyone
-  shares the universals), so the signal is the SIZE of the drop. Japanese+Korean
-  48%→16% (overlap was all common sounds); Russian+Ukrainian 77%→69% (they
-  genuinely share rare ones).
+- **English has less commonly recorded areas too**: /θ/, /ð/ and /ɹ/ were useful
+  examples for challenging the idea that familiar means universal. The public
+  page no longer ranks English or colours these examples as belonging to either
+  selected language.
+- **Rarity-weighted overlap (retired from the public narrative)**: it changed the
+  ordinary overlap ordering too little to justify a second score. The current
+  page gives the five highest and five lowest ordinary-overlap pairs instead.
 - **L2 story**: English 75% learners, MSA ~100% (no native register), Swahili 96%.
 - ⚠️ **A wrong claim I made and then had to retract**: drafted "no correlation
   between sound rarity and learner counts." Actual r = +0.56, significant
   (t=3.24). analyze_l2_drivers.py resolves it: rarity correlates 0.88 with
-  inventory SIZE (more sounds ⇒ more unusual ones), and controlling for size the
-  effect collapses to 0.16. Meanwhile lingua-franca status predicts learners at
-  0.71 while being uncorrelated with rarity (0.02); median 77M learners vs 8M.
-  Honest conclusion: **sound difficulty doesn't predict learner numbers; history
-  does.** Smoke test now FAILS if the copy ever says "no correlation" again.
+  inventory SIZE (more sounds ⇒ more chances to include unusual ones). Holding
+  size steadier leaves a partial association of 0.16. In this small roster,
+  lingua-franca status correlates with learner estimates at 0.71 and with this
+  rarity measure at 0.02. The supported conclusion is descriptive: learner
+  numbers align more closely with social reach than with this sound-rarity
+  measure here; the analysis does not establish a cause.
 
 ## ASYMMETRIC DIFFICULTY (analyze_asymmetry.py, 2026-08-10)
 
-Overlap is symmetric; learning is not. Strongest finding of the session:
-- Eng speaker → Japanese: **4** new sounds. Japanese speaker → English: **28**.
-- Averaged over the roster: English speakers meet **9.5** new sounds going out,
-  speakers coming toward English meet **23.3**. English is the harder direction
-  for **32 of 33** languages.
-- ⚠️ Checked whether this is English exceptionalism: it is NOT. Rank by this
-  advantage and you get inventory size in order — Dutch (46) beats English (44),
-  then Bengali, Telugu, German. Framed on the page as arithmetic, not prestige.
-- Refinements: rarity-weighted load, plus bridge credit (half weight for sounds
-  the learner already produces as a variant).
-- ⚠️ Caveat on page: sound count is a small part of difficulty. Cantonese needs
-  just 1 new sound from English yet is hard (tone); Japanese speakers struggle
-  with English clusters where every sound is shared.
+Overlap is symmetric; the set of broad areas absent from each side is not. Earlier
+drafts labelled those differences "new sounds" and turned them into a difficulty
+ranking. The current page calls them **potentially unfamiliar areas**, derives them
+from the same occupied-area rule as the Sound Chart, and avoids claims about what
+speakers will find hard. The rarity-weighted load and arbitrary half-credit for
+allophone "bridges" were removed; bridges remain qualitative listening examples.
+Tone, rhythm and sound combinations are named as important dimensions this count
+does not include.
 
 ## NAVIGATION RESTRUCTURE — shared nav (2026-08-10; now 7 pages)
 
 User asked for a top nav bar and content grouped into categories. Result:
-prototype/{index,map,allophones,translation,history,difficulty,about}.html,
+The current pages live in `docs/`.
 each loading only
 the data it needs (chart page no longer pays for the 200KB map bundle).
 
@@ -468,7 +468,7 @@ the data it needs (chart page no longer pays for the 200KB map bundle).
   `data-nav` on <body> and the script marks the current item (`aria-current`).
 - `shared.css` — theme vars + nav + shared blocks/tables/tooltip, so the pages
   can't drift apart visually.
-- `build_rarity_data.py` → `prototype/rarity.js` (43KB): carves just the rarity
+- `build_rarity_data.py` → `docs/rarity.js`: carves just the rarity
   fields out of geo_analysis so the chart page gets rare-sounds material
   without the map bundle.
 - Grouping: Sound Chart (chart + Venn/groups + RARE SOUNDS, moved here per
@@ -502,7 +502,7 @@ only /x/. Writing "German has the ich-Laut and the ach-Laut" from memory would
 have contradicted the very inventory the rest of the site charts. The page
 instead states which analysis it follows and notes the question is contested.
 
-`prototype/history.html`, slotted between Lost in Translation and Difficulty.
+`docs/history.html`, now slotted between Seeing Sounds and Language Learners.
 
 **This is the only page not backed by PHOIBLE, and that changes its obligations.**
 PHOIBLE records languages as spoken now; it has no Old or Middle English entry.
@@ -516,9 +516,10 @@ are PHOIBLE and are read from `data.js` at render time rather than typed in.
 
 Timeline covers, each tagged gained / lost / shifted so the spine is scannable:
 West Germanic split · Old English sc→/ʃ/ · Old Norse reintroducing /sk/
-(shirt/skirt doublets) · 1066 and the French layer promoting /v z ð/ from
-allophones to phonemes · the Great Vowel Shift · loss of /x/ (the ⟨gh⟩ of
-*knight*) · Caxton 1476 freezing spelling mid-change · kn→n · /ʒ/ arriving late
+(shirt/skirt doublets) · 1066 and French loans helping /v z dʒ/ become established
+in more positions, alongside internal changes · the Great Vowel Shift · loss of
+/x/ (the ⟨gh⟩ of *knight*) · printing helping spelling conventions settle while
+pronunciation continued changing · kn→n · /ʒ/ developing by more than one route
 · global spread. Sounds are playable chips reusing the Sound Chart's
 chip/tooltip pattern.
 
@@ -558,7 +559,7 @@ timeline with branches flowing in and out of the main line, which represents
 english. we can denote the phonemes in those branches that are gained and lost, as
 well as the words associated with them, including the german, dutch, french."*
 
-`prototype/history_flow.js` draws exactly that: English is a single horizontal
+`docs/history_flow.js` draws exactly that: English is a single horizontal
 line from 400 to now, with era bands (Old / Middle / Modern English) behind it.
 Branches **above** arrive, branches **below** leave, each meeting the trunk at its
 year with an arrowhead for direction. Every branch carries its sound as a playable
@@ -583,7 +584,7 @@ Text is down to 1,241 chars of timeline + 1,425 of branch detail + 2,693 of page
 prose, from 2,812 + 3,605 at v1, with the diagram carrying the narrative.
 
 ### The branch ends are verified, not asserted
-`build_history_data.py` → `prototype/history_data.js`. The dates are editorial
+`build_history_data.py` → `docs/history_data.js`. The dates are editorial
 (published histories, cited on the page) but each branch END is a claim about the
 PRESENT, and a hand-authored claim about the present can silently contradict the
 inventories the rest of the site charts. So the build script checks all of them
@@ -673,14 +674,14 @@ problem is the IPA itself: PHOIBLE's variants are stacked combining diacritics
 (`b̚`, `d̪̤̚`, `t̪̚ʰ`) that most system fonts render as tofu/misaligned marks.
 Inherent to displaying that level of phonetic detail in a browser.
 - Per user's suggestion, replaced with a brief explanation + **audio contrasts**
-  from `prototype/demos.js` (6 curated cards: b/β, ɹ/r, h/ɸ, s/ɕ, ʈ/t, ɾ/t).
-  Every card = 2 genuinely different Commons recordings, both verified present in
-  DATA.audio by smoke_pages.mjs.
+  from `docs/demos.js` (6 curated cards: b/β, ɹ/r, h/ɸ, s/ɕ, ʈ/t, and [ɾ]
+  as a Hindi phoneme versus a contextual English allophone). Every card has two
+  real, different playback targets, verified by the current consistency test.
 - Page now leads with a plain-language phoneme-vs-allophone explanation (the
-  /t/ in top / cat / butter), which is the concept the whole page depends on and
+  /t/ in top / stop / butter), which is the concept the whole page depends on and
   was previously assumed.
-- Kept: the bridge overlap lift (52%→61%), which depends only on English's own
-  records and so is safe under uneven coverage.
+- Dropped: the bridge overlap lift (52%→61%). Its half credit was arbitrary, so
+  the page now presents possible bridges as qualitative listening examples.
 - Dropped: the per-pair "% realized differently" figure. It was computed from
   documentation depth as much as phonetics, and with English at 0% coverage the
   English side came from a substituted inventory anyway.
@@ -703,18 +704,12 @@ Also shortened the nav label "Allophones: Variations on Sounds" → "Allophones"
 
 ## TESTS + GENAI LOG
 
-- Four suites after the page split, all passing:
-  `smoke_test.mjs` (chart interactions, counting policy, examples),
-  `smoke_chart.mjs` (NEW — rarity coverage guard, click tiers, comparison groups,
-  chip tooltips/labels), `smoke_map.mjs` (was smoke_explore; geo + diaspora
-  augmentation + map controls), `smoke_pages.mjs` (NEW — nav wiring on all 5
-  pages + allophones/translation/difficulty inline scripts).
-- ⚠️ Process note: rewriting `smoke_explore.mjs` by line-filtering out moved
-  assertions broke it twice (orphaned refs, then broken syntax). Rewriting the
-  file cleanly took less time than the second patch attempt. Don't surgically
-  edit a test whose subject moved — restate it.
-- smoke_test.mjs extended to ~30 more assertions for the allophone/merger
-  sections. Assertions encode PROSE CLAIMS, so a finding going stale fails a test.
+- Two current Node suites:
+  `tests/comparison_consistency.mjs` checks the occupied-area policy across all
+  561 pairs, learner directions, the English/Spanish aspiration regression,
+  source-bounded prose and every listening-demo playback target;
+  `tests/site_integrity.mjs` compiles external and inline scripts, checks local
+  links and page structure, and verifies accessible alternatives for canvas data.
 - GENAI_LOG.md — required for the Best Use of GenAI category. Documents what the
   model wrote, the 8 factual errors caught (incl. the two the model caught in its
   own output via its own tests), rejected data sources, and the repro pipeline.
@@ -723,7 +718,7 @@ Also shortened the nav label "Allophones: Variations on Sounds" → "Allophones"
 ## COUNTING POLICY (user challenge: "online says Hindi 44-49, we showed 74")
 
 What goes into each number — consistent across ALL languages:
-- **Allophones: NEVER counted.** They only drive the ◐ variant badge. All
+- **Allophones: NEVER counted.** They only drive the V variant badge. All
   counts below use the Phoneme column only.
 - **Raw source count** = rows in the chosen PHOIBLE inventory. Sources differ
   in whether they list long/geminate consonants (bː, kʰː) as separate
@@ -754,12 +749,13 @@ What goes into each number — consistent across ALL languages:
        entries from the 35 reference cells they light; it also reports the 28
        long/doubled source rows collapsed by the counting policy.
        ⚠️ Current comparison policy (revised 2026-08-12): pair counts match
-       source entries one-for-one within broad IPA reference categories. English
-       pʰ and Spanish p can contribute one shared /p/ category. Hindi p and pʰ
-       remain two counted entries, so a comparison language with only one labial
-       stop category can match one while Hindi keeps an additional contrast.
-8. [ ] Accessibility: don't rely on color alone; alt text per cell; keyboard nav
-9. [ ] GenAI log: document Kiro/LLM usage throughout (Best Use of GenAI award)
+       each occupied broad IPA reference area counts once. English pʰ and Spanish
+       p contribute one shared p area. Hindi p and pʰ remain visible as two
+       source entries, but they do not create two inferred cross-language matches.
+8. [x] Accessibility: numbered state markers and rarity border styles supplement
+       colour; sound controls are buttons; canvas findings have text/table
+       alternatives; shared navigation supplies a skip link.
+9. [x] GenAI log: document Kiro/LLM usage throughout (Best Use of GenAI award)
 
 ## Design decisions
 
@@ -767,7 +763,7 @@ What goes into each number — consistent across ALL languages:
 - IPA-style clickable chart; click symbol → hear it (Wikimedia Commons audio)
 - Default = English highlighted; user selects a 2nd language → overlap display
 
-### DECIDED: Allophone handling — 3-state cells (2026-07)
+### SUPERSEDED: Allophone handling — original 3-state wording (2026-07)
 | State | Visual | UI label |
 |---|---|---|
 | Shared phoneme | Full color | "Core sound in both" |
@@ -784,6 +780,13 @@ What goes into each number — consistent across ALL languages:
   that's why 'Fuji' sounds right."
 - Hand-verify allophone state for top ~15 L1s (PHOIBLE Allophones column +
   Speech Accent Archive generalizations); other languages degrade to 2-state.
+
+Current policy (2026-08-12): the primary comparison counts occupied broad sound
+areas from one selected source per language. A **V** badge only reports that the
+selected source lists the chart phone as a pronunciation variant of another
+category; it is excluded from overlap and explicitly described as incomplete,
+because PHOIBLE's allophone coverage varies sharply by source. The Sound Variants
+page introduces phonemes and allophones with contextual audio.
 
 ### Open
 - [ ] Rows = languages sorted by... speaker count? # missing sounds? family?

@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>About &amp; Sources — Spoken Sounds Across the World</title>
-<link rel="stylesheet" href="shared.css?v=c0395948">
+<link rel="stylesheet" href="shared.css?v=f89d3be3">
 <style>
   .srctable { width: 100%; border-collapse: collapse; font-size: .84rem;
     margin: .9rem 0; }
   .srctable th, .srctable td { padding: .45rem .6rem; text-align: left;
     vertical-align: top; border-bottom: 1px solid #e8e2d7; }
-  .srctable th { color: #8a8275; font-weight: 600; white-space: nowrap; }
+  .srctable th { color: #6b6459; font-weight: 600; white-space: nowrap; }
   .srctable td.lic { white-space: nowrap; color: #6b6459; }
   .srctable .what { color: #6b6459; }
   .steps { counter-reset: s; list-style: none; padding: 0; max-width: 78ch; }
@@ -49,11 +49,11 @@
     differently by different communities — and spent a lot of time comparing notes
     with other learners about what makes a language hard to pick up.</p>
     <p>What sent me down this particular rabbit hole was a pattern in
-    Japanese loanwords. English words arrive in Japanese and sometimes collide:
+    Japanese loanwords. English words arrive in Japanese and are reshaped to fit
+    a different sound system, so they can sometimes collide:
     <strong>food</strong> and <strong>hood</strong> can both be said as フード
-    <em>fūdo</em> in Japanese. I wanted to know whether this was a coincidence or something
-    systematic that can happen across languages (more info on the
-    <a href="allophones.html">Sound Variants</a> page).</p>
+    <em>fūdo</em> in Japanese. I wanted to learn more about how systematic changes like
+    this happen across languages.</p>
   </div>
 </div>
 
@@ -63,7 +63,7 @@
   <p>Python for the data work (PHOIBLE and CLDR parsing, the acoustic analysis,
   the statistics), and vanilla JavaScript with canvas for the visualisations. Built with <a href="https://kiro.dev">Kiro</a> as a pair
   programmer; <a href="https://github.com/EZBUTD/sounds/blob/main/GENAI_LOG.md">GENAI_LOG.md</a> in the repository records what the model
-  wrote, along with the factual errors that surfaced along the way.</p>
+  wrote, along with the errors that surfaced along the way.</p>
 </div>
 
 <h2 class="section">The competition</h2>
@@ -83,23 +83,26 @@
   <tbody>
     <tr>
       <td><a href="https://phoible.org">PHOIBLE 2.0</a></td>
-      <td class="what">The backbone. Sound inventories for 2,177 languages
-      (3,020 inventories), each segment tagged with 38 articulatory features, plus
-      the allophone records. Every phoneme count, overlap figure and rarity
+      <td class="what">The backbone. PHOIBLE currently describes 3,020 inventories
+      covering 2,186 distinct languages, with each segment tagged with 38 features, plus
+      the allophone records. Every inventory count, overlap figure and rarity
       percentage traces back here.</td>
       <td class="lic">CC BY-SA 3.0</td>
     </tr>
     <tr>
       <td><a href="https://commons.wikimedia.org">Wikimedia Commons</a></td>
-      <td class="what">Audio for all 117 chart symbols. 109 are isolated reference-phone
-      recordings; the 8 English diphthongs are word examples, since Commons has no
+      <td class="what">Audio for 117 sound labels used by the site. 109 are isolated reference-phone
+      recordings; 8 English diphthong labels use word examples, since Commons has no
       systematic isolated recordings for those. Plus 3 whole-word recordings
       (<em>top</em>, <em>stop</em>, <em>butter</em>) by a single speaker,
       <a href="https://commons.wikimedia.org/wiki/User:Dvortygirl">Dvortygirl</a>,
       used on the Sound Variants page to demonstrate one phoneme with three
-      allophones — two of those allophones exist only inside a word. The same
-      <em>top</em> and <em>stop</em> recordings are analysed on the Seeing Sounds
-      page.</td>
+      context-shaped pronunciations. The word recordings let visitors hear each
+      pronunciation in the place where it occurs; the same <em>top</em> and
+      <em>stop</em> recordings are analysed on the Seeing Sounds page. File-by-file
+      titles, creators, source links and licences are listed in
+      the repository's <a href="https://github.com/EZBUTD/sounds/blob/main/audio_manifest.csv">sound manifest</a>
+      and <a href="https://github.com/EZBUTD/sounds/blob/main/audio_manifest_words.csv">word manifest</a>.</td>
       <td class="lic">CC BY-SA<br>(words: 3.0)</td>
     </tr>
     <tr>
@@ -110,9 +113,9 @@
     </tr>
     <tr>
       <td><a href="https://github.com/CUNY-CL/wikipron">WikiPron</a></td>
-      <td class="what">Word-to-IPA pairs scraped from Wiktionary. Used to find
-      real example words containing each sound in each language (~850 of the 915
-      example words).</td>
+      <td class="what">Word-to-IPA pairs scraped from Wiktionary. The build includes
+      an optional tool for finding candidate examples, but the current public bundle
+      ships hand-curated language-specific examples rather than mined WikiPron entries.</td>
       <td class="lic">CC BY-SA</td>
     </tr>
     <tr>
@@ -123,9 +126,10 @@
     </tr>
     <tr>
       <td><a href="https://cldr.unicode.org/">Unicode CLDR</a></td>
-      <td class="what">Per-country speaker estimates: which languages have a
-      documented community in each territory, and roughly how large. The base
-      layer for the map's country shading.</td>
+      <td class="what">Approximate per-country populations able to use a language
+      in a computing context. CLDR combines varied sources; these are not one
+      harmonized census measure and multilingual populations can overlap. This is
+      the base layer for the map's country shading.</td>
       <td class="lic">Unicode licence</td>
     </tr>
     <tr>
@@ -146,8 +150,9 @@
       <td>UK ONS 2021 · Statistics Canada 2021 · Australian Bureau of Statistics
       2021 · Japan / Korea / Taiwan immigration agencies</td>
       <td class="what">Hand-entered diaspora rows for the 16 languages CLDR covers
-      most thinly. Each row carries its own citation — hover any country on the
-      map to see which source its figure came from.</td>
+      most thinly. The measures differ by source — language at home, main language,
+      mother tongue or a community proxy — so they should not be treated as one
+      directly comparable census. Each row carries its own citation on the map.</td>
       <td class="lic">Open government</td>
     </tr>
     <tr>
@@ -163,6 +168,7 @@
       <a href="https://en.wikipedia.org/wiki/Great_Vowel_Shift">Great Vowel Shift</a>,
       <a href="https://en.wikipedia.org/wiki/Gh_(digraph)">the ⟨gh⟩ digraph</a>) ·
       <a href="https://www.britannica.com/topic/Great-Vowel-Shift">Britannica</a> ·
+      <a href="https://www.open.edu/openlearn/mod/oucontent/view.php?id=3980&amp;section=4">Open University on spelling standardization</a> ·
       <a href="https://cpercy.artsci.utoronto.ca/courses/MEPhonology.htm">U. of
       Toronto Middle English phonology notes</a> ·
       <a href="https://en.wiktionary.org/wiki/Appendix:English_doublets">Wiktionary
@@ -170,9 +176,11 @@
       <td class="what">PHOIBLE records
       languages as spoken today and has no Old or Middle English entry, so the
       History of English timeline — the Great Vowel Shift, the loss of the ⟨gh⟩
-      sound, the <em>kn</em> simplification, the French layer that made
-      <span class="ipa">v</span>/<span class="ipa">z</span> separate sounds — is
-      compiled from these published accounts and cited on the page itself. The
+      sound, the <em>kn</em> simplification, and the contact and internal changes
+      that helped establish <span class="ipa">v</span>/<span class="ipa">z</span>
+      as separate English sounds — is
+      compiled from these published accounts, with the overview sources linked on
+      the page itself. The
       present-day English/German comparison on that page is PHOIBLE, as
       elsewhere.</td>
       <td class="lic">CC BY-SA<br>(Britannica: quoted<br>facts only)</td>
@@ -186,38 +194,38 @@
   </tbody>
 </table>
 
-<h2 class="section">How it was built</h2>
+<h2 class="section" id="method">How it was built</h2>
 
 <ol class="steps">
-  <li><strong>Pick one inventory per language.</strong> PHOIBLE often has several
-  analyses of the same language, and they disagree — its Italian entries range
-  from 30 to 70 phonemes. For each language I take the inventory whose
-  length-collapsed count sits closest to the median of all its candidates: the
-  “typical” analysis rather than the most maximal one. English is pinned to the
-  Received Pronunciation inventory so its count matches the familiar 44.</li>
+  <li><strong>Pick one source per language.</strong> PHOIBLE often has several
+  descriptions of a language, and they disagree. Most selections follow a
+  repeatable rule: prefer a source with usable pronunciation-variant information,
+  then choose the broad count closest to the middle of that language's available
+  sources. This is a practical selection rule, <em>not</em> a claim that the chosen
+  accent or analysis is the single “typical” one. English is manually set to a
+  Received Pronunciation source.</li>
 
-  <li><strong>Compare broad categories without erasing contrasts.</strong> Source
-  entries are grouped by the IPA reference square they occupy and matched
-  one-for-one. English <code>pʰ</code> can therefore match Spanish <code>p</code>
-  under broad <code>/p/</code>. If a source records both <code>p</code> and
-  <code>pʰ</code> as distinct categories, its second entry remains an additional
-  contrast rather than disappearing. Entries without a chart square retain their
-  source label.</li>
+  <li><strong>Compare broad sound areas.</strong> Each occupied IPA reference area
+  counts once. English <code>pʰ</code> and Spanish <code>p</code> can therefore share
+  the broad <code>p</code> area. If a source records several distinctions in that area,
+  the tooltip keeps those labels as useful detail, but the overlap score does not
+  guess that they match another language's distinctions.</li>
 
-  <li><strong>Count consistently.</strong> Allophones aren't added to the phoneme
-  inventory, long and doubled forms are collapsed, and standalone tone rows are
-  excluded and flagged. The aim is a segmental figure comparable to the ones
-  textbooks quote: Hindi 46, English 44.</li>
+  <li><strong>Keep the comparison deliberately broad.</strong> Pronunciation
+  variants are shown but are not added as separate areas. Long and doubled forms
+  are folded into the same consonant or vowel quality, and tone is shown
+  separately. Length and tone can absolutely distinguish words; leaving them out
+  defines the scope of this visual rather than declaring them unimportant.</li>
 
-  <li><strong>Compare every pair.</strong> All 561 pairs get a shared-label count
+  <li><strong>Compare every pair.</strong> All 561 pairs get a shared-area count
   and a size-normalised overlap score. The Sound Chart shows the five highest and
   five lowest pairs to make the range tangible without turning it into a claim
   about identical pronunciation.</li>
 
-  <li><strong>Check the claims against the data.</strong> Six test suites run the
-  real page code and assert the figures quoted in the prose, so a finding that
-  stops being true fails a test. One of them exists specifically because an earlier
-  draft claimed “no correlation” where the data shows a moderate one.</li>
+  <li><strong>Check that the pages agree.</strong> An automated consistency test
+  verifies that the generated pair values, the Sound Chart and the directional
+  learner counts all use the same occupied-area rule. Syntax and local-link checks
+  catch broken scripts and missing assets.</li>
 </ol>
 
 <h2 class="section">What this can't tell you</h2>
@@ -230,30 +238,31 @@
     numbers here will not match every textbook.</li>
   <li><strong>A broad category match is not phonetic identity.</strong> Two
     languages can organize or pronounce the same reference category differently.
-    The one-to-one grouping also cannot determine that two language-specific
-    phonemes are functionally identical; it is an approximate comparison of
-    sound-system structure, with each source's original transcription retained
-    in the tooltips.</li>
-    <li><strong>2,177 languages is a sample, not a census</strong>, and
-    documentation is geographically uneven. Global rarity percentages carry real
-    uncertainty.</li>
+    Counting an occupied area once also cannot determine that two
+    language-specific phonemes are functionally identical. It is an approximate
+    comparison intended to reveal interesting places to listen, with the original
+    labels retained in the tooltips.</li>
+    <li><strong>The global rarity layer is a sample, not a census.</strong> It takes
+    one PHOIBLE inventory per Glottocode, producing 2,177 sampled
+    inventories. Documentation is geographically uneven, so percentages should be
+    read as “rarely recorded in this sample,” not exact facts about all languages.</li>
     <li><strong>34 languages is a small, deliberately skewed roster</strong> —
     mostly the world's largest languages, plus Zulu for its clicks. Findings
     describe this roster, not humanity.</li>
     <li><strong>Country shading is a floor, not a census.</strong> Unshaded means
     undocumented in these sources, not absent.</li>
-    <li><strong>Sound difficulty is one part of language difficulty.</strong>
-    Grammar, writing system and available material often matter more. Cantonese
-    requires one new sound from English and is still widely found difficult.</li>
-    <li><strong>These are correlations, not causes</strong></li>
+    <li><strong>Broad sound overlap is only one part of language learning.</strong>
+    Tone, rhythm, sound combinations, grammar, writing and access to teachers can
+    matter more. A high overlap is not a promise that a language will feel easy.</li>
+    <li><strong>These are correlations, not causes.</strong></li>
     <li><strong>The microphone tool does not score your pronunciation</strong>,
     deliberately. A single similarity number between a live microphone signal and
     a reference recording is dominated by pitch, vocal tract length, microphone
     and room rather than by how you articulated the sound; it would look precise
-    and measure the wrong thing. F1 and F2 are shown because each corresponds to
-    a checkable articulatory fact, but the estimator is a simple spectral
-    peak-picker rather than the LPC analysis phonetics software uses, so on a
-    high-pitched voice a harmonic can be misread as a formant.</li>
+    and measure the wrong thing. The two displayed resonances loosely relate to
+    mouth opening and tongue frontness, but the tool uses a simple spectral
+    estimate rather than laboratory phonetics software. Treat the moving point as
+    an exploration aid, not a direct picture of the tongue.</li>
   </ul>
 </div>
 
@@ -265,6 +274,6 @@
   <a href="index.html">Back to the Sound Chart &rarr;</a>
 </div>
 
-<script src="nav.js?v=3651bfbb"></script>
+<script src="nav.js?v=94828a95"></script>
 </body>
 </html>

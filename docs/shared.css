@@ -5,7 +5,7 @@
   --l2: #7b4bbf;         /* language 2 only */
   --both: #23558c;       /* in both */
   --none-bg: #f1ede6;    /* in neither */
-  --none-text: #a09a8e;
+  --none-text: #6b6459;
   --imposs: #dcd6cb;
   --bg: #faf8f4;
   --ink: #2b2620;
@@ -33,7 +33,7 @@ body {
 h1 { font-size: 1.85rem; margin: 0 0 .3rem; }
 .subtitle { color: #6b6459; margin: 0 0 1.4rem; max-width: 72ch; line-height: 1.55; }
 h2.section { font-size: .95rem; letter-spacing: .1em; text-transform: uppercase;
-  color: #8a8275; margin: 2.4rem 0 .6rem; }
+  color: #6b6459; margin: 2.4rem 0 .6rem; }
 a { color: var(--accent); }
 
 /* ---- top nav ---- */
@@ -41,7 +41,7 @@ a { color: var(--accent); }
   border-bottom: 1px solid #e2dcd0; background: #fffdfa;
   position: sticky; top: 0; z-index: 20; }
 .topnav .brand { display: block; font-size: .78rem; letter-spacing: .04em;
-  text-transform: uppercase; color: #8a8275; text-decoration: none;
+  text-transform: uppercase; color: #6b6459; text-decoration: none;
   margin-bottom: .45rem; }
 .topnav .brand:hover { color: var(--accent); }
 .topnav ul { list-style: none; display: flex; flex-wrap: wrap; gap: .3rem;
@@ -61,12 +61,12 @@ a { color: var(--accent); }
 .block, .finding { max-width: 78ch; margin-bottom: 1.6rem; }
 .block h3, .finding h3 { font-size: 1.15rem; margin: 0 0 .4rem; color: var(--accent); }
 .block p, .finding p { line-height: 1.6; margin: 0 0 .6rem; }
-.sub { font-size: .8rem; color: #8a8275; margin-top: .5rem; }
+.sub { font-size: .8rem; color: #6b6459; margin-top: .5rem; }
 .ipa, .ipa-inline { font-family: var(--ipa-font);
   background: #f0ece4; padding: 0 .25em; border-radius: 3px; }
 .takeaway { background: #eef3ec; border-left: 4px solid var(--l1);
   padding: 1rem 1.2rem; border-radius: 8px; }
-.note { font-size: .8rem; color: #8a8275; margin-top: 2.5rem; max-width: 78ch;
+.note { font-size: .8rem; color: #6b6459; margin-top: 2.5rem; max-width: 78ch;
   line-height: 1.55; }
 /* A terminology or notation note: sits with the prose it explains but visually set
    apart, so a reader scanning for "what does this label mean" can find it. Shared
@@ -89,12 +89,25 @@ a { color: var(--accent); }
 table.data { border-collapse: collapse; font-size: .84rem; margin: .8rem 0; }
 table.data th, table.data td { padding: .3rem .6rem; text-align: left;
   border-bottom: 1px solid #e8e2d7; }
-table.data th { color: #8a8275; font-weight: 600; }
+table.data th { color: #6b6459; font-weight: 600; }
 table.data td.num { text-align: right; font-variant-numeric: tabular-nums; }
 table.data .sym { font-family: var(--ipa-font); }
 .bar { display: inline-block; height: .7em; background: var(--both);
   border-radius: 2px; vertical-align: middle; }
 .bar.l2 { background: var(--l2); }
+
+/* keyboard and non-canvas access */
+.skip-link { position: fixed; left: .75rem; top: .5rem; z-index: 100;
+  transform: translateY(-180%); padding: .55rem .8rem; border-radius: 6px;
+  background: var(--ink); color: #fff; font-weight: 700; }
+.skip-link:focus { transform: translateY(0); }
+.data-details { max-width: 78ch; margin: .8rem 0; }
+.data-details summary { cursor: pointer; color: var(--accent); font-weight: 650;
+  padding: .35rem 0; }
+.data-details summary:focus-visible { outline: 3px solid var(--accent);
+  outline-offset: 3px; }
+.data-details p { margin-top: .45rem; }
+.table-scroll { overflow-x: auto; max-height: 32rem; overflow-y: auto; }
 
 /* next/prev page footer */
 .pagenav { display: flex; justify-content: space-between; gap: 1rem;

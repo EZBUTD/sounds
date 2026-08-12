@@ -29,10 +29,10 @@ def load_js(path, var):
 
 
 def main():
-    DATA = load_js("prototype/data.js", "DATA")
-    RARITY = load_js("prototype/rarity.js", "RARITY")
-    DEEP = load_js("prototype/deep.js", "DEEP")
-    MAP = load_js("prototype/mapdata.js", "MAPDATA")
+    DATA = load_js("docs/data.js", "DATA")
+    RARITY = load_js("docs/rarity.js", "RARITY")
+    DEEP = load_js("docs/deep.js", "DEEP")
+    MAP = load_js("docs/mapdata.js", "MAPDATA")
     langs = {l["name"]: l for l in DATA["languages"]}
     names = list(langs)
 

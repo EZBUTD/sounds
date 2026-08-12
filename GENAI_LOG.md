@@ -47,11 +47,11 @@ against known ground truth*, not by inspection.
 | Allophones treated as substitution targets, inventing a Korean coat/goat contrast | Same validation suite | Restricted targets to phonemes; documented why |
 | Wrong validation anchor: asserted Mandarin *thin/din* merge | Model's own failing test, re-checked against phonology | Corrected to *thin/sin* — the test was wrong, not the code |
 | Example words were dictionary junk (`ahi`, `ezh`, `bih`) | Reading the output | Added `wordfreq` Zipf filter |
-| Claimed "no correlation" between sound rarity and learner counts | Computed r = 0.56, contradicting the prose | Full confound analysis: effect collapses to 0.16 controlling inventory size; lingua-franca status predicts at 0.71 |
+| Claimed "no correlation" between sound rarity and learner counts | Computed r = 0.56, contradicting the prose | Confound check: the partial association is 0.16 controlling inventory size; lingua-franca status correlates at 0.71 in this small roster, without establishing cause |
 | Diphthongs ranked as "world's rarest sounds" (English /əʊ/ at 0%) | Implausible result | Excluded multi-segment symbols from rarity; documented as notation artifact |
 | Implied English is uniquely hard to learn | Checked whether it was an inventory-size effect | It is — Dutch ranks higher; reframed as arithmetic, not prestige |
 | Counted one-sided allophone documentation as "realized differently", reporting Hindi + Punjabi as diverging on 100% of shared sounds | Human read the stat as implausible; PHOIBLE check showed Punjabi has allophone records for 1 of 73 rows | Divergence now requires records on *both* sides; languages under 15% coverage gated out; the whole cross-pair metric pulled from the page |
-| Claimed an unreleased [t̚] in a recording of "cat" | Human listened to the file and heard a released stop | Word-final release is *optional* in English, so the recording need not contain it. Replaced with "stop", where post-/s/ de-aspiration is exceptionless; test now rejects any card citing a known-optional environment |
+| Claimed an unreleased [t̚] in a recording of "cat" | Human listened to the file and heard a released stop | Word-final release is *optional* in English, so the recording need not contain it. Replaced with "stop", where post-/s/ lack of aspiration is the regular pattern; test now rejects the known-optional environment |
 | Three successive voice-onset-time detectors returned wrong values (5 ms, 0 ms, then 174 ms for a ~26 ms interval) | Each contradicted the published range for English stops, and a frame-by-frame hand read of the audio | Anchored segmentation on the stop *closure* rather than on energy peaks; all three failures are written into the script so they are not retried |
 | Formant estimator silently returned nothing for back vowels like [u] | A test with synthetic spectra at planted F1/F2 values | F2 search began at max(900 Hz, F1+250), above the real F2 of [u] (~800 Hz). Now searches from just above F1 |
 | Set the vowel-label canvas font to `"600 15px var(--ipa-font), …"` | A test that reads back every font string the renderer assigns | A canvas font is not a CSS declaration: `var()` makes the shorthand invalid, so the assignment is *discarded* and the label falls back to 10 px sans-serif. Nothing throws. The stack is now resolved to literal font names before it reaches `ctx.font` |
@@ -131,20 +131,26 @@ coverage-metric error) and, like both of those, it was real.
 Removed: the overlap-vs-divergence scatter, the six per-pair comparison cards,
 the ranked bridge table, and every published divergence percentage.
 
-Kept, because they do not depend on that column being complete:
+Initially kept, because they did not depend on that column being complete:
 
 - **The bridge lift** (English–Hindi overlap 52% → 61%) reads only *English's*
-  variants, so sparse data can undercount it but never inflate it.
+  variants. It was later removed because awarding an arbitrary half point still
+  made a qualitative observation look like a measured improvement. The current
+  page keeps bridge examples qualitative.
 - **"Lost in translation"** never used the column at all — it mapped English
   phonemes onto each target inventory by 38 articulatory features and validated
   against 9 documented mergers. *(That page was later cut for an unrelated and
   worse reason; see "The second scope cut" below. The one allophone rule it cited
-  — Japanese /h/ → [ɸ] before /u/, giving food = hood — is hand-pinned from
-  reference grammars and survives on the Allophones page.)*
+  — Japanese /h/ is commonly [ɸ] before /ɯ/ — is hand-pinned from reference
+  grammars and survives on the Sound Variants page. The page now makes clear that
+  several loanword patterns, not that alternation alone, help <em>food</em> and
+  <em>hood</em> converge as <em>fūdo</em>.)*
 
-Replaced with: six curated A/B **listening demos** (`prototype/demos.js`) where
+Replaced with: six curated A/B **listening demos** (`docs/demos.js`) where
 the reader hears the difference instead of being handed a percentage. Each side
-plays a distinct real IPA recording. Two originally planned demos — English
+has a distinct real playback target; one bridge uses the contextual recording of
+<em>butter</em> because an isolated [t] would not demonstrate its [ɾ] allophone.
+Two originally planned demos — English
 alveolar /t/ vs Hindi dental /t̪/, and clear vs dark /l/ — were dropped because
 neither /t̪/ nor /ɫ/ exists in the 117-file audio set, and playing a plain /t/
 while labelling it "dental" would have been a fabricated comparison of exactly
@@ -203,13 +209,14 @@ compatible with being wrong across 11,792 words. A model whose only validation i
 the page was printing. Fixing the four known defects would have produced a model
 that was wrong in *unknown* ways instead of known ones.
 
-Deleted: `prototype/translation.html`, `prototype/nativescript.js`,
+Deleted: the legacy `translation.html` and `nativescript.js`,
 `build_native_script.py`, `test_native_script.py`, `analyze_mergers.py`,
 `merger_analysis.json`, and `DEEP.mergers` (deep.js fell from 10 KB to 1.9 KB).
 
-Kept: the single documented fact underneath it — Japanese /h/ → [ɸ] before /u/,
-giving *food* = *hood* — which lives on the Allophones page with audio, sourced to
-reference grammars rather than modelled.
+Kept: the documented alternation underneath it — Japanese /h/ is commonly [ɸ]
+before /ɯ/ — which lives on the Sound Variants page with audio, sourced to
+reference grammars rather than modelled. The revised copy does not present that
+single alternation as the cause of the *food*/*hood* loanword convergence.
 
 The removal is enforced rather than assumed. `smoke_pages.mjs` now fails if the
 page, the transliterator, `DEEP.mergers`, or any link to them reappears, and if
@@ -357,7 +364,7 @@ Three fixes, in order of how much they matter:
 2. **`stamp_assets.py`** appends a content hash to every local `src`/`href`
    (`analysis.js?v=807348e5`). Regenerating a bundle changes the URL, so a stale
    copy cannot be served. Run it after any build script.
-3. **`prototype/smoke_render.mjs`** — a real-browser suite. It loads every page in
+3. **A former real-browser smoke suite** loaded every page in
    Chromium, fails on any console error or uncaught exception, and reads back
    canvas pixels: minimum ink per canvas, bounding box spanning the expected width
    and height, label text present in the right-hand band, all word-audio files
@@ -418,27 +425,26 @@ shown to fail on the bug it targets isn't evidence of anything.
 The /t/ strip originally played isolated IPA segments and had to leave the middle
 cell silent, labelled "no isolated recording". The reader suggested Wikimedia
 Commons word recordings, which is the better answer: **two of the three
-realisations only exist inside a word.** An unreleased [t̚] is *defined* by its
-release never being made audible, so an isolated recording of it cannot exist, and
-the tap in "butter" is a positional variant of /t/ rather than a segment IPA
-references file under English.
+realisations need to be heard inside a word.** A contextual word recording shows
+why a pronunciation appears there; an isolated reference phone cannot do that on
+its own. The tap in "butter," for example, is a positional variant of English
+/t/, even though a generic [ɾ] reference recording also exists.
 
 Three files, fetched and licence-verified live against the Commons API by
-`download_word_audio.py` (never hand-transcribed): `En-us-top.ogg`,
-`En-us-cat.ogg`, `En-us-butter.ogg` — all by **Dvortygirl**, General American,
+`download_word_audio.py`: `En-us-top.ogg`, `En-us-stop.ogg`,
+`En-us-butter.ogg` — all by **Dvortygirl**, General American,
 **CC BY-SA 3.0**. One speaker across all three matters here: with three different
 voices the listener would be hearing speaker differences, not allophony.
 
-The strip now also shows **both transcriptions per word** — broad `/tɑp/` against
-narrow `[tʰɑp]`. Putting them side by side *is* the phoneme/allophone distinction
-in notation: the phonemic line is identical in the /t/ slot across all three words,
-the phonetic line is not. Attribution renders on the page; the manifest is
-`audio_manifest_words.csv`.
+The strip names the shared phoneme `/t/` once, then shows the different phonetic
+transcription on each card. This keeps the phoneme/allophone distinction visible
+without repeating a near-identical broad line three times. Attribution renders on
+the page; the manifest is `audio_manifest_words.csv`.
 
-Tests assert every cell plays a distinct file that exists on disk, that the three
-narrow realisations differ from each other, that each phonetic form differs from
-its own phonemic form (otherwise the cell demonstrates nothing), that both
-transcriptions render, and that the CC BY-SA credit is visible.
+The current consistency test asserts that every contextual word file exists and
+that each cross-language listening card has two different, real playback targets.
+The site-integrity test separately checks scripts, local links and accessible chart
+alternatives.
 
 ## A playable button with the wrong label on it (2026-08-10)
 
@@ -580,7 +586,7 @@ description of my own code rather than finding a bug in the page.
 Distinct from the data errors above: these are ways the *work* stalled, not ways
 the *numbers* were wrong.
 
-- **Never grep a minified / single-line data file.** `prototype/data.js` is 98 KB
+- **Never grep a minified / single-line data file.** `docs/data.js` is a large
   of JSON on one physical line. Searching it for a key that appears ~20 times
   returns the same multi-kilobyte line ~20 times — no new information per hit, and
   it swamps the context. Symptom: identical truncated output repeating. Instead,
@@ -590,7 +596,7 @@ the *numbers* were wrong.
   Grep is for source you intend to *read*; use a parser for data you intend to
   *query*. (Recorded once, then repeated immediately afterwards on `rarity.js` —
   the rule needs applying at the moment the include pattern is written, not
-  recalled after the output arrives. The generated `prototype/*.js` bundles are
+  recalled after the output arrives. The generated `docs/*.js` bundles are
   *all* single-line; only `chart_extras.js`, `nav.js`, `demos.js` and the HTML are
   human-written and safe to grep.)
 - **Don't build a one-off verification script and delete it.** The dendrogram's
@@ -736,34 +742,23 @@ Known gaps, in order of how much they have actually cost:
 ## Reproducing
 
 ```bash
-python3 select_inventories.py     # inventory choice per language
-python3 build_chart_data.py       # -> prototype/data.js
-python3 mine_examples.py          # WikiPron example words
-python3 analyze_pairs.py          # 561 pairwise overlaps
-python3 analyze_families.py       # -> prototype/analysis.js
-python3 analyze_allophones.py     # bridges + coverage audit (divergence unpublished)
-python3 analyze_spectrograms.py   # -> prototype/spectro.js (VOT + spectrograms)
-python3 build_deep_data.py        # -> prototype/deep.js
-python3 fetch_geo_speakers.py     # Glottolog + speaker counts
-python3 analyze_geography.py      # rarity + signature sounds
-python3 analyze_l2_drivers.py     # confound analysis
-python3 analyze_asymmetry.py      # directional difficulty
-python3 build_map_data.py         # -> prototype/mapdata.js
-python3 download_word_audio.py    # English /t/ word recordings + attribution
-python3 resolve_audio_attribution.py  # real author/licence per audio file, from Commons
-python3 build_history_data.py   # sound lineages -> prototype/history_data.js
-                                #   (verifies every endpoint against data.js)
-python3 stamp_assets.py           # cache-bust asset refs — run LAST, after any rebuild
+python3 build/select_inventories.py
+python3 build/build_chart_data.py       # -> docs/data.js
+python3 build/mine_examples.py          # optional WikiPron candidate examples
+python3 build/analyze_pairs.py          # 561 pairwise overlaps
+python3 build/analyze_families.py       # -> docs/analysis.js
+python3 build/analyze_allophones.py
+python3 build/analyze_spectrograms.py   # -> docs/spectro.js
+python3 build/build_deep_data.py        # -> docs/deep.js
+python3 build/fetch_geo_speakers.py
+python3 build/analyze_geography.py
+python3 build/analyze_l2_drivers.py
+python3 build/analyze_asymmetry.py
+python3 build/build_map_data.py         # -> docs/mapdata.js
+python3 build/build_history_data.py     # -> docs/history_data.js
+python3 build/stamp_assets.py           # cache-bust asset refs; run last
 
-node prototype/smoke_test.mjs     # chart page: data, interactions, tree structure
-node prototype/smoke_chart.mjs    # rarity sections + dendrogram layout geometry
-node prototype/smoke_map.mjs      # world map
-node prototype/smoke_pages.mjs    # allophones / history / difficulty / nav / removals
-node prototype/smoke_spectro.mjs  # VOT vs literature, formants, playhead, vowel chart
-node prototype/smoke_render.mjs   # REAL browser: console errors + canvas pixels
-python3 audit_coverage.py         # data-coverage audit (exits 1 on blocking gaps)
+node tests/comparison_consistency.mjs
+node tests/site_integrity.mjs
+python3 build/audit_coverage.py
 ```
-
-`smoke_render.mjs` needs Playwright (`npm install --no-save playwright &&
-npx playwright install chromium`); it skips with a message if absent. It is the
-only suite that can catch a chart that runs cleanly but draws nothing visible.

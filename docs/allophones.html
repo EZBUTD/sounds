@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sound Variants: Phonemes and Allophones — Spoken Sounds Across the World</title>
-<link rel="stylesheet" href="shared.css?v=c0395948">
+<link rel="stylesheet" href="shared.css?v=f89d3be3">
 <style>
   /* listening demos */
   .demos { display: grid; gap: .9rem; margin: 1rem 0;
@@ -12,13 +12,13 @@
   .demo { border: 1px solid #e0d9cc; border-radius: 10px; background: #fdfcfa;
     padding: .8rem .9rem; }
   .demo h4 { margin: 0; font-size: 1rem; }
-  .demo .sound { font-size: .78rem; color: #8a8275; margin-bottom: .6rem; }
+  .demo .sound { font-size: .78rem; color: #6b6459; margin-bottom: .6rem; }
   .demo .sides { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem;
     margin-bottom: .6rem; }
   .demo .side { border: 1px solid #e8e2d7; border-radius: 8px; padding: .5rem;
     background: #fff; text-align: center; }
   .demo .side .lg { font-size: .74rem; text-transform: uppercase;
-    letter-spacing: .05em; color: #8a8275; }
+    letter-spacing: .05em; color: #6b6459; }
   .demo button.pb { font-family: var(--ipa-font); font-size: 1.5rem;
     width: 2.1em; height: 2.1em; border-radius: 50%; cursor: pointer;
     border: 2px solid var(--both); background: #fff; color: var(--ink);
@@ -41,7 +41,7 @@
   .allo-strip .cell .ph { font-family: var(--ipa-font);
     font-size: .9rem; color: var(--accent); margin: .1rem 0 .35rem; }
   .allo-strip .cell .tag { font-size: .7rem; text-transform: uppercase;
-    letter-spacing: .05em; color: #8a8275; }
+    letter-spacing: .05em; color: #6b6459; }
   /* the allophone symbol itself — the thing the card is about, so it is the
      largest element rather than being buried in the narrow transcription */
   .allo-strip .cell .allo { margin: .4rem 0 .15rem; }
@@ -49,7 +49,7 @@
     font-size: 1.9rem; line-height: 1.1; color: var(--accent); font-weight: 600;
     display: block; }
   .allo-strip .cell .allo .cap { font-size: .68rem; text-transform: uppercase;
-    letter-spacing: .05em; color: #a8a094; }
+    letter-spacing: .05em; color: #6b6459; }
   .allo-strip .cell .inword { font-size: .74rem; color: #6b6459;
     margin: .1rem 0 .45rem; }
   .allo-strip .cell .inword .hl { color: var(--accent); font-weight: 700; }
@@ -67,10 +67,10 @@
     font-size: .78rem; }
   .allo-strip .trans .tl { display: inline-block; width: 4.9em; text-align: right;
     margin-right: .45rem; font-size: .66rem; text-transform: uppercase;
-    letter-spacing: .04em; color: #a8a094; }
+    letter-spacing: .04em; color: #6b6459; }
   .allo-strip .trans .ipa { font-family: var(--ipa-font); }
   .allo-strip .trans .ipa.narrow { color: var(--accent); font-weight: 600; }
-  .credit { font-size: .72rem; color: #a8a094; margin: .1rem 0 0; }
+  .credit { font-size: .72rem; color: #6b6459; margin: .1rem 0 0; }
   /* .deffoot (terminology note) now lives in shared.css — three pages use it */
 </style>
 </head>
@@ -94,7 +94,7 @@
 
   <p><strong>Example: one phoneme mapping to three allophones.</strong> Each
   word below contains the phoneme <span class="ipa">/t/</span>, read by the same
-  speaker in the same accent — but the <em>t</em> is pronounced differently in each.
+  General American speaker — but the <em>t</em> is pronounced differently in each.
   Many English speakers may not notice the
   difference until it's pointed out, because English doesn't use it to tell two
   words apart:</p>
@@ -108,9 +108,10 @@
   did, and it differs every time: <span class="ipa">[tʰ]</span> with a puff of air
   in <em>top</em>, plain <span class="ipa">[t]</span> in <em>stop</em> where the
   preceding <em>s</em> suppresses that puff, and <span class="ipa">[ɾ]</span> as a
-  single quick tap in <em>butter</em>. Substituting one allophone for another leaves
-  the word intact, which is the standard test for whether a difference is allophonic
-  rather than phonemic.</p>
+  single quick tap in <em>butter</em>. If a change affects the accent but not the
+  word a listener recognizes, that is one clue that the sounds are variants of the
+  same category. Linguists also look at where each version occurs and whether the
+  difference can ever change one word into another.</p>
 
   <p><strong>This is part of why two languages can light the same reference cell on the
   chart and still sound quite different:</strong> a shared cell means that the two
@@ -121,11 +122,9 @@
 <h2 class="section">Similar labels, different sounds — across two languages</h2>
 
 <div class="block">
-  <p>These cards show why a spelling letter or broad IPA label does not guarantee
+  <p>These cards show why a symbol or IPA label does not guarantee
   the same speech sound across languages. Phonemes belong to particular language
-  systems; the chart maps their source transcriptions onto IPA reference cells.
-  A generic recording demonstrates the phone named by a symbol, not every
-  language's exact realization of a phoneme.</p>
+  systems; the same phoneme can sound different in two languages.</p>
   <div id="demo-realization" class="demos"></div>
 </div>
 
@@ -141,14 +140,14 @@
 <p class="note" id="allo-notes"></p>
 
 <div class="pagenav">
-  <a href="map.html">&larr; World Map</a>
+  <a href="index.html">&larr; Sound Chart</a>
   <span class="spacer"></span>
   <a href="spectrograms.html">Seeing Sounds &rarr;</a>
 </div>
 
-<script src="data.js?v=c5c3b09e"></script>
+<script src="data.js?v=11e8f5a3"></script>
 <script src="deep.js?v=46fa87f9"></script>
-<script src="demos.js?v=2942cb39"></script>
+<script src="demos.js?v=a2b03588"></script>
 <script>
 (function () {
   const $ = id => document.getElementById(id);
@@ -160,6 +159,9 @@
   function play(sym, btn) {
     const a = DATA.audio[sym];
     if (!a) return;
+    if (currentWord) {
+      currentWord.a.pause(); currentWord.b.classList.remove("playing");
+    }
     if (current) { current.a.pause(); current.b.classList.remove("playing"); }
     const au = new Audio(a.file);
     current = { a: au, b: btn };
@@ -179,14 +181,15 @@
         `<div class="sides">` +
         d.sides.map(s =>
           `<div class="side"><div class="lg">${s.lang}</div>` +
-          `<button class="pb" data-sym="${s.symbol}" ` +
+          `<button class="pb" data-sym="${s.symbol}" data-file="${s.file || ""}" ` +
           `aria-label="Play ${s.lang} ${s.symbol}">${s.symbol}</button>` +
           `<div class="desc">${s.desc}</div>` +
           (s.word ? `<div class="word">${s.word}</div>` : "") + `</div>`).join("") +
         `</div><div class="why">${d.why}</div>`;
       host.appendChild(card);
       for (const b of card.querySelectorAll("button.pb")) {
-        b.addEventListener("click", () => play(b.dataset.sym, b));
+        b.addEventListener("click", () => b.dataset.file
+          ? playFile(b.dataset.file, b) : play(b.dataset.sym, b));
       }
     }
   }
@@ -257,6 +260,6 @@
 
 })();
 </script>
-<script src="nav.js?v=3651bfbb"></script>
+<script src="nav.js?v=94828a95"></script>
 </body>
 </html>

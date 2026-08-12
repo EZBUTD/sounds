@@ -1,15 +1,16 @@
-/* Broad, contrast-aware matching for the Sound Chart.
+/* Broad sound-area matching for the Sound Chart.
  *
  * PHOIBLE inventories inherit the transcription choices of their sources. A
  * source may write English pʰ where another writes Spanish p even though both
- * belong under the broad /p/ category. Exact string equality therefore makes
+ * belong in the broad p area. Exact string equality therefore makes
  * transcription detail look like a language difference.
  *
- * We group source entries by the reference IPA square they light, then match
- * them one-for-one. One English entry under p matches one Spanish entry under
- * p; a language with two entries there (for example contrastive /p/ and /pʰ/)
- * retains an additional distinction. Entries without a chart square keep their
- * source label as their broad key.
+ * We group source entries by the reference IPA square they light, then count an
+ * occupied square once. English pʰ and Spanish p therefore share the broad p
+ * area, while the tooltip retains both source labels. If one source records
+ * several distinctions in an area, that remains useful qualitative detail but
+ * does not create several inferred cross-language matches. Entries without a
+ * chart square keep their source label as their broad key.
  */
 (function (global) {
   "use strict";
@@ -52,14 +53,14 @@
       .sort((a, b) => a.localeCompare(b));
     const groups = keys.map(key => {
       const source1 = groups1[key] || [], source2 = groups2[key] || [];
-      const shared = Math.min(source1.length, source2.length);
+      const present1 = source1.length > 0, present2 = source2.length > 0;
       return {
         key,
         source1,
         source2,
-        shared,
-        only1: Math.max(0, source1.length - source2.length),
-        only2: Math.max(0, source2.length - source1.length)
+        shared: present1 && present2 ? 1 : 0,
+        only1: present1 && !present2 ? 1 : 0,
+        only2: present2 && !present1 ? 1 : 0
       };
     });
     const total = field => groups.reduce((sum, group) => sum + group[field], 0);

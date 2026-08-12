@@ -21,12 +21,12 @@
  * render legibly.
  *
  * So each contrast below is taken from standard descriptive accounts, and each
- * `symbol` is a real IPA segment that has its own audio file in DATA.audio —
- * the two sides of every pair are genuinely different recordings, never the
- * same file relabelled.
+ * `symbol` is a real IPA segment. Most sides use its isolated reference file in
+ * DATA.audio; a `file` override uses a contextual word recording when that is
+ * what the claim requires. The two sides never relabel the same recording.
  *
- * Invariant: every `symbol` must exist in DATA.audio, and the two symbols in a
- * pair must differ. smoke_test.mjs enforces both.
+ * Invariant: every side has a real playback target and the two targets differ.
+ * tests/comparison_consistency.mjs enforces both.
  */
 const DEMOS = {
   // ---------------------------------------------------------------------------
@@ -39,19 +39,19 @@ const DEMOS = {
   // word's meaning.
   //
   // Each variant plays a real recording of the WHOLE WORD, not an isolated IPA
-  // segment. That is the only honest way to demonstrate this: these allophones
-  // exist only in context. The [t] of "stop" is unaspirated BECAUSE of the
+  // segment. The claim depends on context: the [t] of "stop" is unaspirated
+  // because of the
   // preceding /s/, and the tap in "butter" is a positional allophone of /t/
   // rather than a segment any IPA reference files under English. Playing an
   // isolated /t/ and labelling it would be a fabricated comparison.
   //
-  // WORD CHOICE — prefer OBLIGATORY allophones. "cat" was used here for the
+  // WORD CHOICE — prefer dependable contextual patterns. "cat" was used here for the
   // unreleased [t̚] and was removed: word-final stop release in English is
   // OPTIONAL, so the recording did not dependably contain the allophone the card
   // claimed. (Caught by listening to the file, not by any test — the character
   // was in the markup either way.) "stop" replaces it because suppression of
-  // aspiration after /s/ is exceptionless in General American, so any competent
-  // recording demonstrates it. "top" vs "stop" is also a near-minimal pair, which
+  // aspiration after /s/ is the regular General American pattern. "top" vs
+  // "stop" is also a near-minimal pair, which
   // makes the contrast easier to hear than two unrelated words.
   //
   // All three files are by the SAME speaker (Dvortygirl, General American,
@@ -86,21 +86,21 @@ const DEMOS = {
   realization: [
     {
       title: "The letter b",
-      sound: "both have /b/",
+      sound: "English [b] and a common Spanish [β] pronunciation",
       sides: [
         { lang: "English", symbol: "b", desc: "full stop — lips close completely", word: "“a bit”" },
         { lang: "Spanish", symbol: "β", desc: "lips never quite meet, air keeps flowing", word: "“la Habana”" }
       ],
-      why: "Spanish /b/ is a hard stop at the start of an utterance but softens to a fricative between vowels, so <em>Habana</em> has no full lip closure at all. Both languages list /b/ on the chart, and Spanish speakers hear no difference between the two versions — but an English speaker pronouncing every /b/ as a hard stop is instantly identifiable. The same rule applies to Spanish /d/ and /g/."
+      why: "In many Spanish varieties, the same word category is pronounced with full lip closure [b] after a pause or nasal, and with a more open [β]-like sound between vowels. Spanish does not normally use that difference to distinguish words."
     },
     {
       title: "Two kinds of r",
       sound: "English /ɹ/ and Spanish /r/",
       sides: [
-        { lang: "English", symbol: "ɹ", desc: "approximant — tongue bunched, never touching", word: "“red”" },
+        { lang: "English", symbol: "ɹ", desc: "approximant — narrowed without a full closure", word: "“red”" },
         { lang: "Spanish", symbol: "r", desc: "trill — tongue tip vibrating on the ridge", word: "“perro” (dog)" }
       ],
-      why: "These occupy different chart cells and are different phonemes in their respective language systems: the selected English inventory uses the approximant /ɹ/, while Spanish /r/ is a trill. Spanish also contrasts it with the tap /ɾ/ — <em>perro</em> (dog) versus <em>pero</em> (but). Some broad English transcriptions write its rhotic phoneme as /r/, but that is a conventional label, not a claim that English speakers produce the trill [r]."
+      why: "These occupy different chart cells and are different phonemes in their respective language systems: the selected English inventory uses the approximant /ɹ/, while Spanish /r/ is a trill. Spanish also contrasts it with the tap /ɾ/ — <em>perro</em> (dog) versus <em>pero</em> (but). Some broad English transcriptions write its rhotic phoneme as /r/"
     },
     {
       title: "The letter h",
@@ -109,16 +109,16 @@ const DEMOS = {
         { lang: "English", symbol: "h", desc: "glottal — plain breath from the throat", word: "“hood”" },
         { lang: "Japanese", symbol: "ɸ", desc: "bilabial — breath forced between the lips", word: "フード “fūdo”" }
       ],
-      why: "Japanese /h/ becomes a bilabial fricative before /u/, which is why <em>hood</em> and <em>food</em> both arrive as フード — two English words that Japanese cannot keep apart. Unlike most of PHOIBLE's allophone records this rule appears in every reference grammar of Japanese, which is why it is quoted here as a fact rather than modelled."
+      why: "Japanese /h/ is commonly pronounced [ɸ] before /ɯ/, the vowel often written <em>u</em>. English <em>food</em> and <em>hood</em> can both be said as フード <em>fūdo</em>, in Japanese as a result of loanwords adapting to available Japanese sounds."
     },
     {
       title: "The letter s",
       sound: "both have /s/",
       sides: [
-        { lang: "English", symbol: "s", desc: "the same /s/ before every vowel", word: "“see”, “saw”" },
+        { lang: "English", symbol: "s", desc: "usually an alveolar hiss before a vowel", word: "“see”, “saw”" },
         { lang: "Japanese", symbol: "ɕ", desc: "palatalised before /i/", word: "し “shi”" }
       ],
-      why: "Japanese /s/ shifts to a palatal hiss before /i/ — which is why romanisation writes <em>sashimi</em> with an s but <em>shiitake</em> with sh, even though Japanese treats them as one sound. Japanese speakers do not hear two different consonants there; English speakers hear the contrast clearly, because in English /s/ and /ʃ/ distinguish “sip” from “ship”."
+      why: "Japanese /s/ shifts to a palatal hiss before /i/ — which is why romanisation writes <em>sashimi</em> with an s but <em>shiitake</em> with sh. Japanese normally treats [s] and [ɕ] as context-shaped versions of one category there, while English uses /s/ and /ʃ/ to distinguish words such as <em>sip</em> and <em>ship</em>."
     }
   ],
 
@@ -139,9 +139,10 @@ const DEMOS = {
       sound: "Hindi phoneme /ɾ/ · English allophone [ɾ]",
       sides: [
         { lang: "Hindi", symbol: "ɾ", desc: "a phoneme in its own right", word: "in most positions" },
-        { lang: "English", symbol: "t", desc: "/t/ becomes a tap between vowels", word: "“butter”, “water”" }
+        { lang: "English", symbol: "ɾ", file: "audio/en-us-butter.ogg",
+          desc: "/t/ becomes this tap between vowels", word: "“butter”" }
       ],
-      why: "Many North American English speakers realize /t/ in “butter” with an alveolar tap [ɾ], which can be a useful reference for Hindi /ɾ/. Familiarity in that English context does not by itself show that a learner can use the phone deliberately as a Hindi contrast."
+      why: "Many North American English speakers realize /t/ in “butter” with an alveolar tap [ɾ], which can be a useful reference for Hindi /ɾ/. Familiarity in that English context does not by itself show that a learner can use the phone deliberately as a Hindi contrast. The English button uses the contextual “butter” recording credited above."
     }
   ]
 };

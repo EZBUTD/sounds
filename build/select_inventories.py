@@ -8,7 +8,9 @@ Rule per language:
      (the textbook-comparable layer from the counting policy).
   2. Prefer inventories WITH allophone data (needed for variant badges).
   3. Among preferred, pick the one closest to the MEDIAN collapsed count of
-     all candidates (the "typical" analysis); tie-break = more allophone rows.
+     all candidates; tie-break = more allophone rows.
+This is a repeatable practical selection rule, not evidence that the selected
+doculect is uniquely representative or "typical" of the whole language.
 Outputs a proposed LANG_INVENTORIES dict + before/after comparison with
 sanity checks (Japanese ɸ-variant must survive, Zulu clicks, etc.).
 """

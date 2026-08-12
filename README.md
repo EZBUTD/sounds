@@ -18,7 +18,7 @@ Seven pages, all static HTML:
 | **Sound Variants** | Why matching broad IPA labels can still have different phonetic realizations |
 | **Seeing Sounds** | Spectrograms — what these sounds look like as sound |
 | **History of English** | A flow diagram of sounds entering and leaving English since 400 CE |
-| **Difficulty in Learning** | Whether an unfamiliar sound inventory predicts how many people learn a language (mostly, it doesn't) |
+| **Language Learners** | Potentially unfamiliar broad sound areas, and why they do not amount to a difficulty score |
 | **About & Sources** | Every dataset, licence, and known limitation |
 
 ## Data
@@ -26,11 +26,13 @@ Seven pages, all static HTML:
 Everything traces to public, citable sources. The full table with licences is on
 the [About page](https://ezbutd.github.io/sounds/about.html); in short:
 
-- **[PHOIBLE 2.0](https://phoible.org)** (CC BY-SA 3.0) — sound inventories for
-  2,177 languages, the backbone of every count and comparison here
-- **[Wikimedia Commons](https://commons.wikimedia.org)** — all 117 audio
-  recordings, each credited to its author in `audio_manifest.csv`
-- **[WikiPron](https://github.com/CUNY-CL/wikipron)** (CC BY-SA) — example words
+- **[PHOIBLE 2.0](https://phoible.org)** (CC BY-SA 3.0) — 3,020 inventories
+  covering 2,186 distinct languages; the rarity layer uses PHOIBLE's 2,177-entry
+  sample of one inventory per Glottocode
+- **[Wikimedia Commons](https://commons.wikimedia.org)** — 117 sound-label
+  recordings plus three whole-word examples, credited in the audio manifests
+- **[WikiPron](https://github.com/CUNY-CL/wikipron)** (CC BY-SA) — an optional
+  build input for candidate example words; no mined entries are in the public bundle
 - **[Glottolog](https://glottolog.org)** (CC BY 4.0) — classification, coordinates
 - **[Unicode CLDR](https://cldr.unicode.org/)**, US Census ACS, UK ONS, Statistics
   Canada, and others for speaker counts
@@ -41,15 +43,16 @@ the page itself.
 
 ## What this can't tell you
 
-PHOIBLE covers 2,177 of roughly 7,000 living languages, and its coverage is
-skewed toward languages that have received sustained academic attention. One
+PHOIBLE is a large convenience sample rather than a census of roughly 7,000
+living languages, and its coverage is skewed toward languages that have received
+sustained academic attention. One
 inventory is used per language, so "English" here means one analysis of Received
 Pronunciation rather than English in general. Where two sources disagree, the
 seams are documented rather than smoothed over — see
 [About & Sources](https://ezbutd.github.io/sounds/about.html) and `SCOPING.md`.
-The overlap score matches inventory entries one-for-one inside broad IPA categories.
-That reduces false differences caused by source transcription detail while retaining
-additional contrasts when a source records more than one entry in a category. It is
+The overlap score counts each occupied broad IPA area once. That reduces false
+differences caused by source transcription detail while retaining detailed labels
+in the tooltips as qualitative information. It is
 not a claim that two languages possess one cross-language phoneme or pronounce the
 matching categories identically.
 
@@ -66,6 +69,13 @@ python3 -m http.server 8000
 Opening `docs/index.html` directly as a `file://` URL mostly works, but some
 browsers block audio playback from the filesystem, so the local server is the
 safer option.
+
+The comparison invariant test requires only Node:
+
+```bash
+node tests/comparison_consistency.mjs
+node tests/site_integrity.mjs
+```
 
 ## Repository layout
 

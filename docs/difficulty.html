@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Language Learners — Spoken Sounds Across the World</title>
-<link rel="stylesheet" href="shared.css?v=c0395948">
+<link rel="stylesheet" href="shared.css?v=f89d3be3">
 <style>
   .controls { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
     margin: .8rem 0; font-size: .88rem; }
@@ -17,11 +17,10 @@
 <body data-nav="difficulty">
 
 <h1>Language learners</h1>
-<p class="subtitle">Sound-system overlap is symmetric: a pair has the same matching
-IPA sound labels in either direction. The sounds a learner may need to
-learn are not symmetric — they depend on the learner's first language. This page
-looks at that asymmetry, and then at whether unusual sounds correlate with how many
-people take a language up.
+<p class="subtitle">Two selected sources can share the same broad sound areas,
+yet the unfamiliar areas depend on which direction a learner is going. This page
+uses that simple comparison as a starting point, then asks a larger question:
+do unusual sounds actually stop people from learning a language?
 </p>
 
 <div class="deffoot" style="margin-bottom:1.2rem">
@@ -33,12 +32,12 @@ people take a language up.
 <h2 class="section">The two directions differ</h2>
 
 <div class="block">
-  <h3>The same pair of languages, two different amounts to learn</h3>
+  <h3>The same pair, two different sets of possible surprises</h3>
   <div class="caveat">
-  <strong>Sound count is a small part of difficulty.</strong> This counts individual
-  sounds only — not tone, rhythm, or syllable structure. For example, English
-  speakers usually find Cantonese tones hard to learn, which is not captured in
-  this chart.
+  <strong>Sound count is a small part of learning.</strong> This compares broad
+  consonant and vowel areas only — not tone, rhythm, or how sounds combine.
+  Cantonese, for example, uses pitch to distinguish words in a way this chart
+  does not capture.
 </div>
   <div class="controls">
     <label for="asymLang">Your language</label>
@@ -52,94 +51,90 @@ people take a language up.
 <h2 class="section">Do unusual sounds deter learners?</h2>
 
 <div class="block">
-  <h3>We do not see this in the data</h3>
-  <p>If unusual sounds put learners off, the languages with the rarest inventories
-  would have the fewest learners. Taken at face value the data points the other
-  way — <span id="corr-text"></span> — which would suggest languages with rarer
-  sounds attract <em>more</em> learners. That reading doesn't hold up, and it's
-  worth walking through why.</p>
-  <p><strong>Rarity is closely tied to inventory size</strong>
-  (r = <span id="corr-size"></span>): a language with more sounds will tend to
-  include more unusual ones, so the rarity score here partly reflects how many
-  sounds a language has. Holding inventory size constant, the relationship largely
-  disappears (r = <span id="corr-partial"></span>). One non-phonetic variable does
-  track learner numbers more closely: whether a language serves as a regional
-  lingua franca (r = <span id="corr-lf"></span>), which shows little relationship
-  to how rare its sounds are (r = <span id="corr-lfr"></span>).
-  <strong>Lingua francas in this set have a median of 77M learners; the others,
-  8M.</strong></p>
-  <p>From this exploration, it seems it isn't that unusual sounds attract learners, but that
-  <strong>how unusual a language's sounds are doesn't appear to predict learner
-  numbers in this sample</strong>, while historical and institutional factors —
-  trade, governance, schooling — line up with it more closely.</p>
+  <h3>Popularity has a social story</h3>
+  <p>If unusual sounds discouraged learners, languages with rarer sound areas
+  should consistently attract fewer of them. <strong>That pattern does not appear
+  in this small sample.</strong> Languages spread through trade, migration,
+  government, schooling and media. Those histories can shape how many people
+  learn a language more directly than a few unfamiliar consonants or vowels.</p>
+  <details class="data-details">
+    <summary>How the project checked this</summary>
+    <p>Taken at face value, <span id="corr-text"></span>. But languages with more
+    sounds also have more chances to include a rare one: rarity and inventory size
+    correlate at r = <span id="corr-size"></span>. Once size is held steadier, the
+    relationship with learner numbers becomes much smaller
+    (r = <span id="corr-partial"></span>). Regional lingua-franca status lines up
+    more closely with learner numbers (r = <span id="corr-lf"></span>) and barely
+    with sound rarity (r = <span id="corr-lfr"></span>). These are descriptive
+    correlations, not causes.</p>
+  </details>
   <div style="overflow-x:auto">
     <canvas id="scatterL2" width="900" height="380" style="max-width:100%"
-      aria-label="Scatter plot of consonant and vowel rarity against number of second-language speakers, showing no clear relationship once inventory size is accounted for"></canvas>
+      role="img" aria-label="Scatter plot of consonant and vowel rarity against published second-language speaker estimates for a 25-language sample; tone is not included"></canvas>
   </div>
   <div id="scatterTip" class="tooltip"></div>
   <p class="sub">Filled markers are languages that serve as a regional lingua
-  franca. They sit high regardless of where they fall on the rarity axis.
+  franca. Many sit high at different points along the rarity axis.
   Triangles mark tonal languages, whose position on this axis reflects only their
   consonants and vowels — see below.</p>
+  <details class="data-details">
+    <summary>View the scatterplot data as a table</summary>
+    <div id="scatterTable" class="table-scroll"></div>
+  </details>
 </div>
 
 <div class="caveat">
-  <strong>Small sample, blunt instrument.</strong> Only 25 of these languages
-  have a published learner estimate, and that set skews toward large,
-  politically prominent languages — exactly where lingua-franca status is common.
-  "Lingua franca" is hand-coded as yes/no, which flattens a continuum. These
-  numbers describe this roster, not the world, and none of them establish
+  <strong>Small sample</strong> Only 25 of these languages
+  have a published learner estimate. These
+  numbers describe this roster, not the world, and does not establish
   causation.
 </div>
 
-<h2 class="section">What the rarity axis can't see: tone</h2>
+<h2 class="section">Another way languages distinguish words: tone</h2>
 
 <div class="block">
-  <h3>A whole layer of contrast sits outside every number on this site</h3>
-  <p>Every figure here counts <strong>segments</strong> — consonants and vowels.
-  <strong>Pitch is a separate system, and it is excluded throughout.</strong>
-  PHOIBLE records standalone tone entries as their own category, and this project
-  drops those rows before computing anything because the chart grid has no axis
-  for pitch. Phoneme counts, overlap percentages and the rarity axis above are
-  therefore all segmental-only figures.</p>
-  <p>That matters most for exactly the languages where pitch does the most work.
+  <h3>This sound comparison does not score tone</h3>
+  <p>The Sound Chart compares broad consonant and vowel areas. Some languages
+  also use pitch patterns to tell words apart. PHOIBLE records some of those tone
+  patterns separately, but folding them into a consonant-and-vowel score would be
+  misleading. The overlap and rarity figures therefore leave tone out and show
+  the selected source's tone records here instead.</p>
+  <p>This separate view matters because pitch can carry important word contrasts.
   <span id="tone-lead"></span></p>
   <div id="tonetable"></div>
   <p class="sub" id="tone-note"></p>
 </div>
 
 <div class="caveat">
-  <strong>Why not just add tone to the counts?</strong> Tone inventories are not commensurable with segment
-  inventories — Cantonese's six tones combine with syllables rather than sitting
-  alongside consonants, so adding "+6 sounds" would misdescribe the system. And
-  PHOIBLE's tone coverage is thinner and less consistent than its segment
-  coverage: <span id="tone-gap"></span> Rather than build a
-  tone metric on that footing, this site measures segments and states the
-  boundary.
+  <strong>Why not just add tone to the counts?</strong> A tone pattern combines
+  with a syllable; it is not another consonant or vowel. Adding a language's tone
+  count to its consonant-and-vowel count would mix unlike things. PHOIBLE also
+  records tone less consistently than consonants and vowels:
+  <span id="tone-gap"></span> This page therefore shows tone as a separate part
+  of the story.
 </div>
 
 <h2 class="section">The takeaway</h2>
 
 <div class="block takeaway">
-  <h3>What to make of an unfamiliar sound system</h3>
-  <p>English and Spanish have one of the lower sound-system overlaps in this dataset, and
-  Spanish is also the language English speakers study most — a useful check on how
-  much weight sound distance deserves. It's a real factor, and largely what an
-  accent consists of, but vocabulary, grammar, writing system, shared loanwords and
-  regular exposure all contribute, and none of them are on this chart. Unfamiliar
-  sounds are learnable with practice, and people work through much larger gaps than
-  these routinely. A wide gap here is a reasonable guide to where the pronunciation
-  effort will go, not a measure of how hard the language will be overall.</p>
+  <h3>A map of where to listen, not a difficulty score</h3>
+  <p>An unfamiliar area can point to a useful place to practise, but it cannot say
+  how hard a whole language will be. Learners also meet rhythm, stress or tone,
+  sound combinations, vocabulary, grammar, writing, and different accents. Treat
+  this comparison as a conversation starter: it highlights possible surprises,
+  while practice and exposure help people bridge far larger differences every day.</p>
 </div>
 
 <h2 class="section">Who actually takes a language up</h2>
 
 <div class="block">
   <h3>Some languages are mostly spoken by people who learned them</h3>
-  <p>This table looks at how many learners <em>acquire</em> a language, and the balance varies a lot:
-  <strong>English has roughly three learners for every native speaker</strong>,
-  while Modern Standard Arabic has very few native speakers, since it's a formal
-  register learned alongside a home dialect rather than acquired first.</p>
+  <p>This table looks at published estimates of how many people learned each
+  language, and the balance varies a lot. In these estimates,
+  <strong>English has roughly three learners for every native speaker</strong>.
+  Modern Standard Arabic has comparatively few first-language speakers because
+  people generally grow up with a regional Arabic variety and learn the formal
+  standard alongside it.</p>
   <div id="l2table"></div>
   <p class="sub">Speaker estimates: Ethnologue 2026 figures as tabulated on
   Wikipedia. Bars are proportional within each column.</p>
@@ -151,14 +146,18 @@ people take a language up.
   <a href="map.html">World Map &rarr;</a>
 </div>
 
-<script src="mapdata.js?v=4919090d"></script>
+<script src="data.js?v=11e8f5a3"></script>
+<script src="comparison.js?v=3f6ce036"></script>
+<script src="mapdata.js?v=f27b48cc"></script>
 <script>
 (function () {
   const $ = id => document.getElementById(id);
   const pct = x => Math.round(100 * x);
   if (typeof MAPDATA === "undefined") return;
   const L = MAPDATA.languages, names = Object.keys(L);
-  const A = MAPDATA.asymmetry, D = MAPDATA.l2Drivers;
+  const D = MAPDATA.l2Drivers;
+  const inventoryByName = Object.fromEntries(DATA.languages.map(language =>
+    [language.name, language]));
   const fmtM = v => v == null ? "—"
     : v >= 1000 ? (v / 1000).toFixed(2) + "B"
     : v >= 1 ? Math.round(v) + "M" : Math.round(v * 1000) + "k";
@@ -176,8 +175,9 @@ people take a language up.
 
   function renderAsym(learner) {
     const rows = names.filter(n => n !== learner).map(t => {
-      const out = A.pairs[`${learner}|${t}`], back = A.pairs[`${t}|${learner}`];
-      return { t, out: out.newSounds, back: back.newSounds };
+      const out = SOUND_COMPARISON.pairSummary(inventoryByName[learner], inventoryByName[t]);
+      const back = SOUND_COMPARISON.pairSummary(inventoryByName[t], inventoryByName[learner]);
+      return { t, out: out.only2, back: back.only2 };
     }).sort((a, b) => a.out - b.out || a.t.localeCompare(b.t));
     const maxN = Math.max(...rows.map(r => Math.max(r.out, r.back)));
     const bar = (v, cls) =>
@@ -192,17 +192,16 @@ people take a language up.
     // own footnote to be readable at all. The allophone idea has its own page.
     $("asymPanel").innerHTML =
       `<table class="data"><thead><tr>` +
-      `<th>Learning…</th><th>New sounds for ${art} ${learner} speaker</th>` +
-      `<th>New sounds for them learning ${learner}</th>` +
+      `<th>Learning…</th><th>Potentially unfamiliar areas for ${art} ${learner} speaker</th>` +
+      `<th>Potentially unfamiliar areas in the other direction</th>` +
       `</tr></thead><tbody>` +
       rows.map(r =>
         `<tr><td>${r.t}</td>` +
         `<td>${bar(r.out, "")} ${r.out}</td>` +
         `<td>${bar(r.back, "l2")} ${r.back}</td></tr>`).join("") +
       `</tbody></table>` +
-      `<p class="sub">Sorted by the number of new IPA sound labels under the same counting rules, fewest first. ` +
-      `Pronunciation-variant matches are presented qualitatively on the Sound Variants page and ` +
-      `receive no numerical discount here.</p>`;
+      `<p class="sub">Sorted by broad consonant and vowel areas that appear in the target source but not the learner source. ` +
+      `An absent area is only a possible surprise: a learner may already make a similar sound as a pronunciation variant, and this does not include tone, rhythm, or sound combinations.</p>`;
   }
 
   // ---- rarity vs L2 scatter ----
@@ -235,7 +234,7 @@ people take a language up.
   x2.fillStyle = "#faf8f4"; x2.fillRect(0, 0, c.width, c.height);
   const xs = p => Lm + (p - rarMin) / (rarMax - rarMin || 1) * w;
   const ys = v => Tm + (1 - v / 3.1) * h;
-  x2.strokeStyle = "#e2ddd2"; x2.font = "11px sans-serif"; x2.fillStyle = "#8a8275";
+  x2.strokeStyle = "#e2ddd2"; x2.font = "11px sans-serif"; x2.fillStyle = "#6b6459";
   for (const tick of [0, 1, 2, 3]) {
     const y = ys(tick);
     x2.beginPath(); x2.moveTo(Lm, y); x2.lineTo(Lm + w, y); x2.stroke();
@@ -286,6 +285,17 @@ people take a language up.
     if (!["English", "Zulu", "Arabic (MSA)", "Swahili", "Japanese", "Korean"].includes(p.n)) continue;
     x2.fillText(p.n, p.X + 8, p.Y + 3);
   }
+  $("scatterTable").innerHTML =
+    `<table class="data"><thead><tr><th>Language</th>` +
+    `<th class="num">Consonant/vowel rarity</th>` +
+    `<th class="num">People who learned it</th><th>Notes</th></tr></thead><tbody>` +
+    drawn.slice().sort((a, b) => L[b.n].l2 - L[a.n].l2).map(p => {
+      const notes = [];
+      if (LF.has(p.n)) notes.push("regional lingua franca in this analysis");
+      if (p.tones) notes.push(`${p.tones} tone records, not scored`);
+      return `<tr><td>${p.n}</td><td class="num">${p.x.toFixed(2)}</td>` +
+        `<td class="num">${fmtM(L[p.n].l2)}</td><td>${notes.join("; ") || "—"}</td></tr>`;
+    }).join("") + `</tbody></table>`;
   const sTip = $("scatterTip");
   c.addEventListener("mousemove", e => {
     const rect = c.getBoundingClientRect(), s = c.width / rect.width;
@@ -346,13 +356,13 @@ people take a language up.
     const lowest = rows.slice().sort(
       (a, b) => rankOf(a[0]) - rankOf(b[0]))[0];
     $("tone-lead").innerHTML =
-      `<strong>${rows.length} of the ${T.nCharted} languages here carry lexical ` +
-      `tone</strong>, and their position on the axis above says nothing about it. ` +
+      `The selected sources for <strong>${rows.length} of the ${T.nCharted} languages ` +
+      `include standalone tone records</strong>, and their position on the axis above says nothing about them. ` +
       `${lowest[0]} ranks <strong>${rankOf(lowest[0])} of ${names.length}</strong> ` +
       `for unusual consonants and vowels — near the least unusual end — while ` +
       `using <strong>${lowest[1].nTones} distinct tones in this source</strong>, ` +
-      `none of which English has an equivalent for. Its low score is a fact about ` +
-      `its consonants and vowels, not a claim that it is easy.`;
+      `a kind of word contrast English does not use in the same way. Its low score ` +
+      `describes consonants and vowels, not the whole sound system or its difficulty.`;
 
     // No tone-symbol column. PHOIBLE's ˥˦˧˨˩ notation is precise but means
     // nothing to a reader who has not been taught it, and the point of this table
@@ -372,9 +382,9 @@ people take a language up.
     $("tone-note").innerHTML =
       `Rank 1 is the least unusual inventory on the roster. <strong>The tone ` +
       `counts are what this source records, not the canonical figure</strong> — ` +
-      `Cantonese is usually described as having six tones and this inventory ` +
-      `lists five, the same kind of source-dependent disagreement the phoneme ` +
-      `counts elsewhere have. None of these tones enter any figure on this site.`;
+      `Cantonese is usually described as having six tones and this data source ` +
+      `lists five. ` +
+      ``;
 
     const gaps = T.noToneRows || [];
     $("tone-gap").innerHTML = gaps.length
@@ -388,6 +398,6 @@ people take a language up.
   })();
 })();
 </script>
-<script src="nav.js?v=3651bfbb"></script>
+<script src="nav.js?v=94828a95"></script>
 </body>
 </html>

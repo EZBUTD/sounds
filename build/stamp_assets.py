@@ -23,8 +23,7 @@ import os
 import re
 
 # Resolve the deployed site relative to this script so the command works from
-# either the repository root or build/. The old "prototype" path belonged to an
-# earlier layout and silently stamped zero pages in the current repository.
+# either the repository root or build/.
 SITE = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "docs"))
 # only local assets we generate or edit; skip external URLs
 ASSET_RE = re.compile(

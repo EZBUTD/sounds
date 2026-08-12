@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Build prototype/data.js for the FULL-IPA-chart interactive visual.
+Build docs/data.js for the full IPA-style interactive visual.
 
 Design (v3): the IPA chart supplies reference-phone cells; every language
 projects its selected phoneme inventory onto those cells. Two selectable
@@ -27,8 +27,9 @@ PHOIBLE = "data/phoible.csv"
 
 # Inventory selection (see select_inventories.py): among a language's PHOIBLE
 # inventories, prefer allophone-bearing ones, then pick the one whose
-# LENGTH-COLLAPSED phoneme count is closest to the median of all candidates —
-# i.e. the "typical" analysis, not the maximalist one. Fixes Italian (was a
+# length-collapsed phoneme count is closest to the median of all candidates.
+# This is a repeatable source-selection rule, not evidence that the chosen
+# doculect is the language's single "typical" analysis. It fixes Italian (was a
 # 70-phoneme diphthong-splitting analysis -> now 30, matching textbooks),
 # Spanish (38->25), Korean (40->32), Japanese (27->21), French, Greek.
 # EXCEPTION — English pinned to EA RP inv 2252 (44): matches the famous
@@ -261,20 +262,20 @@ EXAMPLES_BY_LANG = {
 }
 
 STORIES = {
-    "Japanese|f": "Japanese has this as a variant of h before u — that's why 'Fuji' sounds right. It never distinguishes words, so 'food' and 'hood' both become fuudo.",
-    "Japanese|l": "Both l and r map to the Japanese tap ɾ — the most famous sound merger in English learning.",
-    "Japanese|ɹ": "Both l and r map to the Japanese tap ɾ — the most famous sound merger in English learning.",
-    "Japanese|θ": "Usually replaced with s: 'think' can sound like 'sink'.",
-    "Japanese|ð": "Usually replaced with z: 'this' can sound like 'zis'.",
-    "Spanish|ð": "Spanish speakers say this sound every day — it's the d in 'nada'. It's just never a separate sound from d.",
-    "Spanish|v": "Spanish b and v are the same sound — 'very' can sound like 'berry'.",
-    "Korean|f": "Usually replaced with p: 'coffee' becomes keopi.",
-    "French|θ": "Often replaced with s or f: 'think' → 'sink' or 'fink'.",
-    "French|h": "French h is silent — 'hungry' can sound like 'angry'.",
-    "German|w": "German w is pronounced v — 'wine' can sound like 'vine'.",
-    "Russian|θ": "Usually replaced with s or t.",
-    "Hindi|θ": "Usually replaced with the dental t̪ʰ — close, but a stop, not a fricative.",
-    "Mandarin Chinese|v": "Exists as a casual variant of w in some speech — but never contrasts with w.",
+    "Japanese|f": "Japanese /h/ is often pronounced [ɸ] before /ɯ/. English loanwords are reshaped by several Japanese sound patterns, which can make 'food' and 'hood' converge as fūdo.",
+    "Japanese|l": "English /l/ and /r/ are often adapted toward the Japanese tap /ɾ/ in loanwords. That is a language pattern, not a claim that individual listeners cannot hear a difference.",
+    "Japanese|ɹ": "English /l/ and /r/ are often adapted toward the Japanese tap /ɾ/ in loanwords. That is a language pattern, not a claim that individual listeners cannot hear a difference.",
+    "Japanese|θ": "English /θ/ is often adapted toward /s/ in Japanese loanwords. Individual learners' pronunciations vary.",
+    "Japanese|ð": "English /ð/ is often adapted toward /z/ or /d/ in Japanese loanwords. Individual learners' pronunciations vary.",
+    "Spanish|ð": "In many varieties, d can have a [ð]-like pronunciation between vowels, as in nada. Sources differ in how they label the underlying category and its variants.",
+    "Spanish|v": "Many Spanish varieties do not use an English-style /b/ versus /v/ contrast, even though both letters occur in spelling.",
+    "Korean|f": "English /f/ is often adapted with a Korean p sound in loanwords, as in keopi for 'coffee'. Individual learners can learn a different pronunciation.",
+    "French|θ": "Some French-accented English uses /s/ or /f/ where English has /θ/. Individual speakers vary.",
+    "French|h": "French usually does not pronounce written h in native words, so English /h/ can be an unfamiliar contrast for some learners.",
+    "German|w": "The German letter w usually represents /v/. That spelling difference can shape some learners' first attempts at English w.",
+    "Russian|θ": "Some Russian-accented English uses /s/ or /t/ where English has /θ/. Individual speakers vary.",
+    "Hindi|θ": "Hindi dental /t̪ʰ/ is made near English /θ/, but it stops the airflow instead of letting it continue.",
+    "Mandarin Chinese|v": "The selected source records [v] as a pronunciation variant rather than a separate category. Mandarin varieties and speakers differ.",
     "Zulu|ǃ": "A click — made with the tongue like the 'tsk' or horse-clop sound. Zulu uses clicks as ordinary consonants in everyday words.",
 }
 
@@ -287,8 +288,9 @@ CLICK_SYMBOLS = "ʘǀǃǂǁ"
 def comparison_segment(seg: str) -> str:
     """Return the segment used for inventory comparison.
 
-    Length/gemination is deliberately collapsed so inventory sizes remain close
-    to familiar textbook counts (for example Hindi 46). Every other feature
+    Length/gemination is deliberately collapsed because the public comparison
+    focuses on broad consonant and vowel qualities. This is a display choice,
+    not a claim that length is meaningless; it can distinguish words. Every other feature
     written by the selected source is preserved: aspiration, nasalization,
     dentality, breathy voice, palatalization, and so on. NFC keeps precomposed
     IPA bases such as ç intact.
@@ -368,7 +370,7 @@ def comparison_key(seg: str, onchart=None) -> str:
 
 
 def comparison_groups(segments, onchart=None):
-    """Group source entries by broad key while retaining contrast multiplicity."""
+    """Group source entries by broad key while retaining source detail."""
     onchart = onchart or chart_symbols()
     groups = defaultdict(set)
     for segment in segments:
@@ -377,12 +379,10 @@ def comparison_groups(segments, onchart=None):
 
 
 def broad_pair_metrics(groups_a, groups_b):
-    """Match entries one-for-one inside each broad category."""
-    keys = set(groups_a) | set(groups_b)
-    shared = sum(min(len(groups_a.get(k, ())), len(groups_b.get(k, ())))
-                 for k in keys)
-    union = sum(max(len(groups_a.get(k, ())), len(groups_b.get(k, ())))
-                for k in keys)
+    """Count each occupied broad sound area once."""
+    occupied_a, occupied_b = set(groups_a), set(groups_b)
+    shared = len(occupied_a & occupied_b)
+    union = len(occupied_a | occupied_b)
     return shared, (shared / union if union else 0)
 
 
@@ -468,9 +468,9 @@ def main():
             # tooltips. Phoneme categories themselves remain language-specific.
             "comparisonPhonemes": sorted(comparison_phonemes),
             # Source spellings grouped into broad comparison categories. Pair
-            # overlap matches the entries in each group one-for-one, so English
-            # pʰ can match Spanish p under /p/ without erasing a true two-way
-            # p/pʰ contrast in an inventory that records both.
+            # overlap counts an occupied area once, so English pʰ can share /p/
+            # with Spanish p. Multiple source distinctions stay in the tooltip
+            # as qualitative detail rather than becoming inferred matches.
             "comparisonGroups": broad_groups,
             # Coarse projections used only to light up the fixed chart cells.
             "chartPhonemes": sorted(phonemes & onchart),
@@ -504,9 +504,9 @@ def main():
             if r.get("commons_file") and r["commons_file"] != "(cached)":
                 names[r["phoneme"]] = r["commons_file"].rsplit(".", 1)[0]
 
-    # Pairwise overlap matches entries one-for-one inside broad IPA categories.
-    # A spelling difference alone cannot create an exclusive category, while
-    # multiple entries in one group preserve the source's contrast count.
+    # Pairwise overlap counts each occupied broad IPA area once. A spelling
+    # difference alone cannot create an exclusive category; multiple source
+    # entries remain available as qualitative detail.
     lang_groups = {l["name"]: l["comparisonGroups"] for l in languages}
     pair_overlap = {}
     lang_names_sorted = sorted(lang_groups)
@@ -528,7 +528,7 @@ def main():
         "examplesByLang": merged_examples(),
         "glossary": GLOSSARY,
         "stories": STORIES,
-        "pairOverlap": pair_overlap,  # broad one-to-one comparison -> [shared, jaccard]
+        "pairOverlap": pair_overlap,  # occupied broad areas -> [shared, jaccard]
     }
 
     # validate curated example keys map to sounds the language actually has
@@ -543,15 +543,11 @@ def main():
     if bad_examples:
         print("!! EXAMPLES_BY_LANG keys not matching language data:", bad_examples)
 
-    os.makedirs("prototype", exist_ok=True)
-    with open("prototype/data.js", "w", encoding="utf-8") as f:
+    os.makedirs("docs", exist_ok=True)
+    with open("docs/data.js", "w", encoding="utf-8") as f:
         f.write("const DATA = ")
         json.dump(data, f, ensure_ascii=False)
         f.write(";\n")
-
-    link = "prototype/audio"
-    if not os.path.islink(link) and not os.path.exists(link):
-        os.symlink(os.path.abspath("audio"), link)
 
     n_chart = len(onchart)
     eng = next(l for l in languages if l["name"] == "English")

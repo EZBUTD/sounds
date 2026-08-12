@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Emit prototype/deep.js — the data behind the Allophones page:
+Emit docs/deep.js — the data behind the Sound Variants page:
 
   DEEP.allophones : why same-inventory languages still sound different
 
@@ -20,7 +20,7 @@ else.
 import json
 
 ALLO_IN = "allophone_analysis.json"
-OUT = "prototype/deep.js"
+OUT = "docs/deep.js"
 
 def main():
     allo = json.load(open(ALLO_IN, encoding="utf-8"))

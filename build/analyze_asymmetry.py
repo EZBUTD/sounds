@@ -1,35 +1,22 @@
 #!/usr/bin/env python3
 """
-Asymmetric difficulty: learning is a one-way street.
+Directional broad sound-area gaps for learners.
 
-Overlap is symmetric -- English and Japanese share the same 16 sounds in either
-direction. But LEARNING is not. What matters to a learner is the sounds in the
-target language that their own language never gave them, and that count differs
-sharply by direction:
+Overlap is symmetric, but potentially unfamiliar areas depend on the direction
+of learning. The target source can occupy broad areas absent from the learner's
+source, and that count can differ by direction.
 
-    English speaker learning Japanese : Japanese has 4 sounds English lacks
-    Japanese speaker learning English : English has 20 sounds Japanese lacks
-
-Same pair, five times the phonetic workload one way versus the other. This is
-the backlog's "hardest language pair / asymmetric gaps" item, and it reframes
-the project's takeaway: when a language feels hard to English speakers, that is
-often a small gap being felt from the easy side of a steep hill.
-
-NEW-SOUND LOAD weights each missing sound by how rare it is worldwide, since a
-sound almost no language has is likely to be unfamiliar rather than merely absent
-from one inventory. Allophone matches are kept as qualitative examples elsewhere;
-they receive no numerical credit here because an inventory entry does not measure
-a learner's perception or deliberate control of a contrast.
+This is a descriptive starting point, not a workload or difficulty score. A
+learner may already produce a related pronunciation variant, and an inventory
+does not measure individual perception or control.
 
 CAVEATS
-  - Phonetic workload is ONE component of difficulty, and not the largest.
-    Grammar, writing system, vocabulary distance and available study material
-    usually dominate. This measures the sound layer only, and says nothing about
-    tone, prosody, syllable structure or phonotactics -- Japanese speakers find
-    English consonant clusters hard even where every individual sound is shared.
-  - Counts use the same one-to-one broad-category groups as the main comparison.
-    Additional entries within a group remain additional contrasts; length follows
-    the declared counting policy.
+  - This measures one part of the sound layer only. Grammar, writing system,
+    vocabulary distance, study access, tone, prosody, syllable structure and
+    phonotactics can all change a learner's experience.
+  - Counts use the same one-occupied-area rule as the main comparison. Detailed
+    source entries remain qualitative information; length follows the declared
+    broad display policy.
 """
 import csv
 import json
@@ -43,14 +30,7 @@ COMPARISON = "comparison_analysis.json"
 
 
 def group_units(groups):
-    units = set()
-    for category, entries in groups.items():
-        if not entries:
-            continue
-        units.add(category)
-        units.update(f"{category}#contrast{rank}"
-                     for rank in range(2, len(entries) + 1))
-    return units
+    return {category for category, entries in groups.items() if entries}
 
 
 def main():
@@ -91,7 +71,7 @@ def main():
         by_pair[(r["learner"], r["target"])] = r
 
     print("=" * 78)
-    print("MOST LOPSIDED PAIRS (one direction far harder than the other)")
+    print("MOST LOPSIDED PAIRS (one direction has a larger broad-area gap)")
     print("=" * 78)
     seen, lop = set(), []
     for a in names:
@@ -103,38 +83,38 @@ def main():
             lop.append((abs(f["newSounds"] - g["newSounds"]), a, b, f, g))
     print(f"{'pair':<36} {'→ direction':<34} {'gap':>4}")
     for diff, a, b, f, g in sorted(lop, reverse=True)[:10]:
-        easy, hard = (f, g) if f["newSounds"] < g["newSounds"] else (g, f)
+        smaller, larger = (f, g) if f["newSounds"] < g["newSounds"] else (g, f)
         print(f"{a + ' / ' + b:<36} "
-              f"{easy['learner']}→{easy['target']} {easy['newSounds']} new vs "
-              f"{hard['learner']}→{hard['target']} {hard['newSounds']}   {diff:>4}")
+              f"{smaller['learner']}→{smaller['target']} {smaller['newSounds']} areas vs "
+              f"{larger['learner']}→{larger['target']} {larger['newSounds']}   {diff:>4}")
 
     print("\n" + "=" * 78)
-    print("FROM AN ENGLISH SPEAKER'S SIDE — sound workload, easiest first")
+    print("FROM THE ENGLISH SOURCE — FEWEST POTENTIALLY UNFAMILIAR AREAS FIRST")
     print("=" * 78)
     eng = sorted((r for r in rows if r["learner"] == "English"),
                  key=lambda r: r["load"])
-    print(f"{'target':<20} {'new sounds':>10} {'load':>7}  reverse")
+    print(f"{'target':<20} {'new areas':>10} {'rarity weight':>13}  reverse")
     for r in eng[:8] + [None] + eng[-6:]:
         if r is None:
             print(f"{'…':<20}")
             continue
         rev = by_pair[(r["target"], "English")]
         print(f"{r['target']:<20} {r['newSounds']:>10} "
-              f"{r['load']:>7.1f}  (they need {rev['newSounds']} of ours)")
+              f"{r['load']:>13.1f}  (reverse gap {rev['newSounds']})")
 
     print("\n" + "=" * 78)
-    print("THE ENGLISH ADVANTAGE")
+    print("THE ENGLISH SOURCE OCCUPIES MANY BROAD AREAS")
     print("=" * 78)
     out_load = [by_pair[("English", b)]["newSounds"] for b in names if b != "English"]
     in_load = [by_pair[(b, "English")]["newSounds"] for b in names if b != "English"]
-    print(f"English speakers need on average {sum(out_load)/len(out_load):.1f} new sounds "
-          f"to reach these languages")
-    print(f"Their speakers need on average  {sum(in_load)/len(in_load):.1f} new sounds "
-          f"to reach English")
+    print(f"Targets add an average {sum(out_load)/len(out_load):.1f} areas absent from "
+          f"the selected English source")
+    print(f"English adds an average {sum(in_load)/len(in_load):.1f} areas absent from "
+          f"the selected target source")
     harder_in = sum(1 for b in names if b != "English"
                     and by_pair[(b, "English")]["newSounds"] >
                         by_pair[("English", b)]["newSounds"])
-    print(f"English is the harder direction for {harder_in} of {len(names)-1} languages")
+    print(f"English is the larger source gap for {harder_in} of {len(names)-1} languages")
 
     # Sanity/honesty check: is this special to English, or just a big-inventory
     # effect? Rank every language by how lopsided its outward direction is.
@@ -145,11 +125,10 @@ def main():
         inn = [by_pair[(b, a)]["newSounds"] for b in names if b != a]
         adv.append((sum(inn) / len(inn) - sum(out) / len(out), a, len(sets[a])))
     for d, a, sz in sorted(adv, reverse=True)[:6]:
-        print(f"   {a:<18} {sz:>3} sounds   advantage {d:>+5.1f} "
-              f"(others need that many more of its sounds than it needs of theirs)")
+        print(f"   {a:<18} {sz:>3} areas   directional difference {d:>+5.1f}")
     big = sorted(adv, reverse=True)
-    print(f"   -> the top of this list is simply the biggest inventories: "
-          f"the more sounds a language has, the more its speakers already cover.")
+    print("   -> larger selected inventories tend to occupy more comparison areas; "
+          "this is a source-coverage pattern, not a learner advantage score.")
 
     payload = {
         "pairs": {f"{r['learner']}|{r['target']}": {

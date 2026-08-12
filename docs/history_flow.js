@@ -8,7 +8,7 @@
 // coordinate system, so "the label is at the year it describes" is arithmetic
 // rather than a CSS coincidence.
 //
-// Layout contract, checked by smoke_render.mjs against the real rendered output:
+// Layout contract for future rendered-page checks:
 //   * x is a single monotonic function of year, exported as window.__flowX
 //   * the trunk is one horizontal line at y = TRUNK_Y
 //   * an inflow leaves its donor row ABOVE and meets the trunk at its year
