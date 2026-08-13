@@ -158,7 +158,7 @@
         ((chartFreq[b.key] ?? comparisonFreq[b.key]) ?? 1));
       wrap.innerHTML =
         `<p class="sub" style="margin:0 0 .6rem">Pick a second language above to
-         compare inventories. For now, here is <strong>${n1}</strong>'s
+         compare inventories. For now, here are <strong>${n1}</strong>'s
          ${ranked.length} broad sound areas, ordered rarest first. Point to or
          focus a symbol to see the source's more detailed labels.</p>` +
         `<div class="vgroup solo">${ranked.map(group =>

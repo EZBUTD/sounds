@@ -232,7 +232,7 @@ EVENTS = [
         "kind": "shifted",
         "title": "Global spread",
         "body": "English is now learned as an additional language by more people "
-                "than speak it first, and every accent has its own inventory — "
+                "than speak it as a first language, and every accent has its own inventory — "
                 "so \"English sounds\" is a family, not a list. The Sound Chart "
                 "plots one variety, Received Pronunciation.",
     },
